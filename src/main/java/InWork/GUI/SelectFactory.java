@@ -2,6 +2,7 @@ package InWork.GUI;
 
 import InWork.DataBase.DataBaseAPI;
 import InWork.DataBase.DataStructure.DataKTWList;
+import InWork.DataBase.DataStructure.DataPPList;
 import InWork.DataBase.ExcelAPI;
 
 import javax.swing.*;
@@ -91,6 +92,24 @@ public class SelectFactory extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (DataKTWList.getInstance().ImpotrKTW())
+                    {
+                        JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
+                    } else {
+                        JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
+                    }
+                    recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
+                    LastInsert.setText(DataBaseAPI.getInstance().getKTWLastInsert().toString());
+                } catch (SQLException throwables) {
+                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
+                    throwables.printStackTrace();
+                }
+            }
+        });
+        LiveLoadPlan.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (DataPPList.getInstance().ImportPP())
                     {
                         JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
                     } else {

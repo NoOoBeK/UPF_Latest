@@ -45,7 +45,6 @@ public class ExcelAPI
             return ret;
         }
         XSSFSheet sheet = book.getSheetAt(1);
-
         DataKTW newRecord = new DataKTW();
         int source;
         XSSFCell cell;
@@ -101,16 +100,17 @@ public class ExcelAPI
         }
         return ret;
     }
-    static public boolean ImportPP(Component caller){
+    static public ArrayList<DataPP> ImportPP(Component caller){
         XSSFWorkbook book = null;
         File excelfile = ChoseFile(caller);
-        if (excelfile == null) {return false;};
+        ArrayList<DataPP> ret = new ArrayList<>();
+        if (excelfile == null) {return ret;};
         try {
             book = new XSSFWorkbook(excelfile);
-        } catch (IOException | InvalidFormatException var10) {
-            JOptionPane.showMessageDialog(null,"Błąd otwarcia pliku Excel");
-            var10.printStackTrace();
-            return false;
+        } catch (IOException | InvalidFormatException e) {
+            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            e.printStackTrace();
+            return ret ;
         }
         XSSFSheet sheet = book.getSheetAt(0);
         DataPP newRecord = new DataPP();
@@ -136,9 +136,9 @@ public class ExcelAPI
             newRecord.setQNT(cell.getNumericCellValue());
             cell = sheet.getRow(source).getCell(10);
             newRecord.setLane(cell.getStringCellValue());
-
+            ret.add(newRecord);
         }
 
-        return true;
+        return ret;
     }
 }

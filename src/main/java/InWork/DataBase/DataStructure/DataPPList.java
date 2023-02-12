@@ -1,47 +1,19 @@
 package InWork.DataBase.DataStructure;
 
-import InWork.DataBase.DataBaseAPI;
 
+
+import javax.swing.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DataPPList {
 
-    static public DataPPList Instance;
-
-    static public DataPPList getInstance(){
-        if (Instance==null){Instance=new DataPPList();}
-        return Instance;
+    public static DataPPList getInstance() {
+        return null;
     }
 
-    private ArrayList<DataPP> Datalist;
+    public boolean ImportPP() {
 
-    private DataPPList()
-    {
-        Instance = this;
-        Datalist = new ArrayList<>();
-    }
-    public void add(DataPP data)
-    {
-        DataList.add(data);
-    }
-
-    public void remove (int index)
-    {
-        DataList.remove(index);
-    }
-
-    public void remove (DataPP data)
-    {
-        DataList.remove(data);
-    }
-
-    public void replace (DataPP data, int index)
-    {
-        DataList.get(index).setAll(data);
-    }
-
-    public ArrayList<DataPP> getData()
-    {
-        return DataList;
+        return true;
     }
 }
