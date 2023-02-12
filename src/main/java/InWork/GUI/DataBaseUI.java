@@ -2,8 +2,6 @@ package InWork.GUI;
 
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
-import java.awt.*;
-import java.awt.event.WindowEvent;
 
 public class DataBaseUI extends JFrame {
 

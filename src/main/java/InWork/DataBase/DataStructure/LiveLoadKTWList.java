@@ -4,6 +4,7 @@ import InWork.DataBase.ExcelAPI;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class LiveLoadKTWList {
 
@@ -20,8 +21,10 @@ public class LiveLoadKTWList {
 
     public boolean CreatData()
     {
+        System.out.println("Start");
         DataKTW corrData;
         ArrayList<LiveLoadKTW> dane = new ArrayList<>();
+
         for (DataPP danePP : ExcelAPI.ImportPP(null)) {
             corrData = DataKTWList.getInstance().getKTW(danePP.getSKU());
             if (corrData == null) {
@@ -42,12 +45,16 @@ public class LiveLoadKTWList {
             newRecord.setDest(corrData.getDest());
             newRecord.setLine(danePP.getLane());
 
-            if (newRecord.getDest().contains("Fresh"))
+            if (newRecord.getDest().toLowerCase().contains("fresh"))
             {
                 System.out.println(newRecord.getDest() + "   test " + newRecord.getDest().indexOf("->"));
+            } else
+            {
+                //System.out.println("Not " + newRecord.getDest());
             }
             dane.add(newRecord);
         }
+        System.out.println("End");
         return true;
     }
 }

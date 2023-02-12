@@ -197,8 +197,6 @@ public class DataBaseAPI {
 
     public boolean delateKTW(DataKTW record) throws SQLException {
         String querry = "DELETE FROM KTW WHERE sku == ?;";
-        LocalDate newDate = LocalDate.now();
-        LocalDate latestDate = LocalDate.MIN;
         if (!conn.isValid(5)) {Connect();}
         PreparedStatement Pstmt = conn.prepareStatement(querry);
         Pstmt.setInt(1,record.getSKU());
@@ -206,8 +204,6 @@ public class DataBaseAPI {
     }
     public boolean delateKTW(int sku) throws SQLException {
         String querry = "DELETE FROM KTW WHERE sku == ?;";
-        LocalDate newDate = LocalDate.now();
-        LocalDate latestDate = LocalDate.MIN;
         if (!conn.isValid(5)) {Connect();}
         PreparedStatement Pstmt = conn.prepareStatement(querry);
         Pstmt.setInt(1,sku);

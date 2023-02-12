@@ -21,7 +21,6 @@ public class ExcelAPI
 
     static private File ChoseFile(Component caller)
     {
-        String ret = "";
         String Dir = System.getProperty("user.dir");
         JFileChooser file = new JFileChooser(Dir);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -38,7 +37,7 @@ public class ExcelAPI
         XSSFWorkbook book = null;
         File excelfile = ChoseFile(caller);
         ArrayList<DataKTW> ret = new ArrayList<>();
-        if (excelfile == null) {return ret;};
+        if (excelfile == null) {return ret;}
         try {
              book = new XSSFWorkbook(excelfile);
         } catch (IOException | InvalidFormatException e) {
@@ -47,13 +46,13 @@ public class ExcelAPI
             return ret;
         }
         XSSFSheet sheet = book.getSheetAt(1);
-        DataKTW newRecord = new DataKTW();
+        DataKTW newRecord;
         int source;
         XSSFCell cell;
         Double skudouble;
 
-        DataBaseAPI db = DataBaseAPI.getInstance();
         for(source = 1 ; source < sheet.getLastRowNum();++source) {
+            newRecord = new DataKTW();
             cell = sheet.getRow(source).getCell(0);
             skudouble = cell.getNumericCellValue();
             if (skudouble.intValue() < 1) {
@@ -106,7 +105,7 @@ public class ExcelAPI
         XSSFWorkbook book = null;
         File excelfile = ChoseFile(caller);
         ArrayList<DataPP> ret = new ArrayList<>();
-        if (excelfile == null) {return ret;};
+        if (excelfile == null) {return ret;}
         try {
             book = new XSSFWorkbook(excelfile);
         } catch (IOException | InvalidFormatException e) {
@@ -115,12 +114,13 @@ public class ExcelAPI
             return ret ;
         }
         XSSFSheet sheet = book.getSheetAt(0);
-        DataPP newRecord = new DataPP();
+        DataPP newRecord;
         int source;
         XSSFCell cell;
         Double skudouble;
 
         for(source = 1 ; source < sheet.getLastRowNum();++source) {
+            newRecord = new DataPP();
             cell = sheet.getRow(source).getCell(7);
             skudouble = cell.getNumericCellValue();
             if (skudouble.intValue() < 1) {
@@ -135,7 +135,10 @@ public class ExcelAPI
             cell = sheet.getRow(source).getCell(3);
             newRecord.setETime(cell.getNumericCellValue());
             cell = sheet.getRow(source).getCell(6);
-            newRecord.setQNT(Integer.getInteger(cell.getStringCellValue()));
+            String temp = cell.toString();
+            temp = temp.replace(".","");
+            temp = temp.replace(",",".");
+            newRecord.setQNT(Double.valueOf(temp));
             cell = sheet.getRow(source).getCell(10);
             newRecord.setLane(cell.getStringCellValue());
             ret.add(newRecord);

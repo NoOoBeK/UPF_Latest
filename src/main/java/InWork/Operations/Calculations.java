@@ -1,15 +1,5 @@
 package InWork.Operations;
 
-
-import InWork.DataBase.DataStructure.DataKTW;
-import InWork.DataBase.DataStructure.DataKTWList;
-import InWork.DataBase.DataStructure.DataPP;
-import InWork.DataBase.DataStructure.LiveLoadKTW;
-import InWork.DataBase.ExcelAPI;
-
-import javax.swing.*;
-import java.util.ArrayList;
-
 public class Calculations {
 
     // operacje na danych z import PP
@@ -30,12 +20,5 @@ public class Calculations {
     //czas produkcji jest to czas 1 palet powielona linie nowy czas sartu
 
     //STime max < 1
-
-    public static boolean LiveLoadCalculation()
-    {
-
-
-        return true;
-    }
 
 }
