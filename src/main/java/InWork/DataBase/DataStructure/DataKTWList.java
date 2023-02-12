@@ -56,6 +56,15 @@ public class DataKTWList {
         return DataList;
     }
 
+    public DataKTW getKTW(int sku)
+    {
+        for (DataKTW dane : DataList)
+        {
+            if (dane.getSKU() == sku) return dane;
+        }
+        return null;
+    }
+
     public boolean ImpotrKTW() throws SQLException {
         ArrayList<DataKTW> excelData = ExcelAPI.ImportKTW(null);
         if (excelData.size() < 1) {return false;}

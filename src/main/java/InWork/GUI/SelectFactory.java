@@ -2,21 +2,13 @@ package InWork.GUI;
 
 import InWork.DataBase.DataBaseAPI;
 import InWork.DataBase.DataStructure.DataKTWList;
-import InWork.DataBase.DataStructure.DataPP;
-import InWork.DataBase.DataStructure.DataPPList;
-import InWork.DataBase.ExcelAPI;
+import InWork.DataBase.DataStructure.LiveLoadKTWList;
 
 import javax.swing.*;
-import javax.swing.table.TableRowSorter;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class SelectFactory extends JFrame{
     private JButton exitButton;
@@ -110,7 +102,7 @@ public class SelectFactory extends JFrame{
         LiveLoadPlan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DataPPList.getInstance().ImportPP();
+                LiveLoadKTWList.getInstance().CreatData();
                 JOptionPane.showMessageDialog(thisframe, "Import Zkończony");
             }
         });

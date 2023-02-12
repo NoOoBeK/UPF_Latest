@@ -133,7 +133,7 @@ public class ExcelAPI
             cell = sheet.getRow(source).getCell(3);
             newRecord.setETime(cell.getNumericCellValue());
             cell = sheet.getRow(source).getCell(6);
-            newRecord.setQNT(cell.getNumericCellValue());
+            newRecord.setQNT(Integer.getInteger(cell.getStringCellValue()));
             cell = sheet.getRow(source).getCell(10);
             newRecord.setLane(cell.getStringCellValue());
             ret.add(newRecord);
