@@ -12,7 +12,7 @@ public class MainWorking {
     public static void main(String[] args) {
         SelectFactory Window = new SelectFactory();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Window.setSize(screenSize.width, screenSize.height);
+        Window.setSize(850, 700);
         Window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Window.setVisible(true);
 

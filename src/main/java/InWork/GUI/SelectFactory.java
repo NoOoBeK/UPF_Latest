@@ -23,6 +23,9 @@ public class SelectFactory extends JFrame{
     private JLabel recordCount;
     private JLabel LastInsert;
     private JButton ImportKTW;
+    private JLabel Logo;
+    private JLabel Cred;
+    private JButton LiveLoadPlan;
 
     public void setDataBaseTable(DataBaseUI dataBaseTable) {
         DataBaseTable = dataBaseTable;
@@ -85,7 +88,7 @@ public class SelectFactory extends JFrame{
                 }
             }
         });
-    }
 
+    }
 
 }
