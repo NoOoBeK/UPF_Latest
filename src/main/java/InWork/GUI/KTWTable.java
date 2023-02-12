@@ -1,18 +1,16 @@
 package InWork.GUI;
 
-import InWork.DataBase.DataBaseAPI;
-import InWork.DataBase.DataStructure.DataKTW;
+import InWork.DataBase.DataStructure.DataKTWList;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
 public class KTWTable extends AbstractTableModel {
     private ArrayList<String> columnNames;
-    private ArrayList<DataKTW> dane;
 
     public KTWTable() {
 
-        this.columnNames = new ArrayList<String>();
+        this.columnNames = new ArrayList<>();
         this.columnNames.add("SKU");
         this.columnNames.add("Name");
         this.columnNames.add("Gross");
@@ -22,7 +20,6 @@ public class KTWTable extends AbstractTableModel {
         this.columnNames.add("Paltype");
         this.columnNames.add("Qatime");
         this.columnNames.add("Dest");
-        dane = DataBaseAPI.getInstance().getKTW();
     }
 
     @Override
@@ -37,22 +34,22 @@ public class KTWTable extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return this.dane.size();
+        return DataKTWList.getInstance().getData().size();
     }
 
     @Override
     public Object getValueAt(int row, int col) {
         switch (col)
         {
-            case 0: return dane.get(row).getSKU();
-            case 1: return dane.get(row).getName();
-            case 2: return dane.get(row).getGross();
-            case 3: return dane.get(row).getNet();
-            case 4: return dane.get(row).getCs();
-            case 5: return dane.get(row).getHeight();
-            case 6: return dane.get(row).getPaltype();
-            case 7: return dane.get(row).getQatime();
-            case 8: return dane.get(row).getDest();
+            case 0: return DataKTWList.getInstance().getData().get(row).getSKU();
+            case 1: return DataKTWList.getInstance().getData().get(row).getName();
+            case 2: return DataKTWList.getInstance().getData().get(row).getGross();
+            case 3: return DataKTWList.getInstance().getData().get(row).getNet();
+            case 4: return DataKTWList.getInstance().getData().get(row).getCs();
+            case 5: return DataKTWList.getInstance().getData().get(row).getHeight();
+            case 6: return DataKTWList.getInstance().getData().get(row).getPaltype();
+            case 7: return DataKTWList.getInstance().getData().get(row).getQatime();
+            case 8: return DataKTWList.getInstance().getData().get(row).getDest();
         }
         return null;
     }

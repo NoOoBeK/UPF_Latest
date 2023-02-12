@@ -89,5 +89,29 @@ public class DataKTW {
         this.height = height;
     }
 
+    public void setAll (DataKTW data)
+    {
+        setSKU(data.getSKU());
+        setName(data.getName());
+        setGross(data.getGross());
+        setNet(data.getNet());
+        setCs(data.getCs());
+        setDest(data.getDest());
+        setPaltype(data.getPaltype());
+        setQatime(data.getQatime());
+        setHeight(data.getHeight());
+    }
+    public void setAll (int sku, String name, double gross, double net, double CS, String Dest, String Paltype, int Qatime, double Height)
+    {
+        setSKU(sku);
+        setName(name);
+        setGross(gross);
+        setNet(net);
+        setCs(CS);
+        setDest(Dest);
+        setPaltype(Paltype);
+        setQatime(Qatime);
+        setHeight(Height);
+    }
 
 }
