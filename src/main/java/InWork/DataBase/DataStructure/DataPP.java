@@ -71,7 +71,25 @@ public class DataPP {
     public void setLane(String lane) {
         Lane = lane;
     }
-
-
+    public void setAll (DataPP data)
+    {
+        setSKU(data.getSKU());
+        setSTime(data.getSTime());
+        setSDate(data.getSDate());
+        setEDate(data.getEDate());
+        setETime(data.getETime());
+        setQNT(data.getQNT());
+        setLane(data.getLane());
+    }
+    public void setAll (int sku, double STime, double SDate, double ETime, double EDate, double QNT, String Lane)
+    {
+        setSKU(sku);
+        setSTime(STime);
+        setSDate(SDate);
+        setETime(ETime);
+        setEDate(EDate);
+        setQNT(QNT);
+        setLane(Lane);
+    }
 
 }
