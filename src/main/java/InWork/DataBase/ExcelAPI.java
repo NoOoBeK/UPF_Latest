@@ -157,4 +157,12 @@ public class ExcelAPI
             var8.printStackTrace();
         }
     }
+    public void IrelandSplit(){
+        String name = "Ireland";
+        XSSFWorkbook book = new XSSFWorkbook();
+        XSSFSheet sheet = book.createSheet("Ireland");
+
+        FileOut(book,name);
+    }
+//    static public ProductionPlan(){FileOut(book,name);}
 }
