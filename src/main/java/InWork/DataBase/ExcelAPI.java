@@ -1,6 +1,7 @@
 package InWork.DataBase;
 
 import InWork.DataBase.DataStructure.DataKTW;
+import InWork.DataBase.DataStructure.DataPP;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -96,6 +97,46 @@ public class ExcelAPI
             }
             db.addKTW(newRecord);
         }
+        return true;
+    }
+    static public boolean ImportPP(Component caller){
+        XSSFWorkbook book = null;
+        File excelfile = ChoseFile(caller);
+        if (excelfile == null) {return false;};
+        try {
+            book = new XSSFWorkbook(excelfile);
+        } catch (IOException | InvalidFormatException var10) {
+            JOptionPane.showMessageDialog(null,"Błąd otwarcia pliku Excel");
+            var10.printStackTrace();
+            return false;
+        }
+        XSSFSheet sheet = book.getSheetAt(0);
+        DataPP newRecord = new DataPP();
+        int source;
+        XSSFCell cell;
+        Double skudouble;
+
+        for(source = 1 ; source < sheet.getLastRowNum();++source) {
+            cell = sheet.getRow(source).getCell(7);
+            skudouble = cell.getNumericCellValue();
+            if (skudouble.intValue() < 1) {
+                break;}
+            newRecord.setSKU(skudouble.intValue());
+            cell = sheet.getRow(source).getCell(0);
+            newRecord.setSDate(cell.getNumericCellValue());
+            cell = sheet.getRow(source).getCell(1);
+            newRecord.setSTime(cell.getNumericCellValue());
+            cell = sheet.getRow(source).getCell(2);
+            newRecord.setEDate(cell.getNumericCellValue());
+            cell = sheet.getRow(source).getCell(3);
+            newRecord.setETime(cell.getNumericCellValue());
+            cell = sheet.getRow(source).getCell(6);
+            newRecord.setQNT(cell.getNumericCellValue());
+            cell = sheet.getRow(source).getCell(10);
+            newRecord.setLane(cell.getStringCellValue());
+
+        }
+
         return true;
     }
 }
