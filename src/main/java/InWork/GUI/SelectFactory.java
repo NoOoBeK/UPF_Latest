@@ -2,6 +2,7 @@ package InWork.GUI;
 
 import InWork.DataBase.DataBaseAPI;
 import InWork.DataBase.DataStructure.DataKTWList;
+import InWork.DataBase.DataStructure.DataPP;
 import InWork.DataBase.DataStructure.DataPPList;
 import InWork.DataBase.ExcelAPI;
 
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class SelectFactory extends JFrame{
     private JButton exitButton;
@@ -108,19 +110,8 @@ public class SelectFactory extends JFrame{
         LiveLoadPlan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    if (DataPPList.getInstance().ImportPP())
-                    {
-                        JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
-                    } else {
-                        JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
-                    }
-                    recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
-                    LastInsert.setText(DataBaseAPI.getInstance().getKTWLastInsert().toString());
-                } catch (SQLException throwables) {
-                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
-                    throwables.printStackTrace();
-                }
+                DataPPList.getInstance().ImportPP();
+                JOptionPane.showMessageDialog(thisframe, "Import Zkończony");
             }
         });
 
