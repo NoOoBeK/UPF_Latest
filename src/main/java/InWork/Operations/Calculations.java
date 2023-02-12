@@ -13,6 +13,4 @@ public class Calculations {
     //Godzina startu z import pp
     //rynek docelowy = dest(database)
 
-
-
 }

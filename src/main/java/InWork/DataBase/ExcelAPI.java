@@ -11,6 +11,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -140,5 +142,19 @@ public class ExcelAPI
         }
 
         return ret;
+    }
+    public void FileOut(XSSFWorkbook book,String name){
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream("C:\\demo\\"+name+".xlsx");
+        } catch (FileNotFoundException var9) {
+            var9.printStackTrace();
+        }
+        try {
+            book.write(out);
+            out.close();
+        } catch (IOException var8) {
+            var8.printStackTrace();
+        }
     }
 }
