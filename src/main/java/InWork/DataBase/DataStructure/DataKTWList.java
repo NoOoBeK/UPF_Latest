@@ -1,23 +1,32 @@
 package InWork.DataBase.DataStructure;
 
 import InWork.DataBase.DataBaseAPI;
+import InWork.DataBase.ExcelAPI;
 
+import javax.swing.*;
+import java.io.Console;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DataKTWList {
 
     static public DataKTWList Instance;
 
-    static public DataKTWList getInstance()
-    {
-        if (Instance == null) {Instance = new DataKTWList();}
+    static public DataKTWList getInstance()  {
+        if (Instance == null) {
+            try {
+                Instance = new DataKTWList();
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(null, "Błąd Pobrania danych");
+                throwables.printStackTrace();
+            }
+        }
         return Instance;
     }
 
     private ArrayList<DataKTW> DataList;
 
-    private DataKTWList()
-    {
+    private DataKTWList() throws SQLException {
         Instance = this;
         DataList = DataBaseAPI.getInstance().getKTW();
     }
@@ -45,5 +54,27 @@ public class DataKTWList {
     public ArrayList<DataKTW> getData()
     {
         return DataList;
+    }
+
+    public boolean ImpotrKTW() throws SQLException {
+        ArrayList<DataKTW> excelData = ExcelAPI.ImportKTW(null);
+        if (excelData.size() < 1) {return false;}
+        DataKTW checkedSKU;
+
+        for(DataKTW record : excelData)
+        {
+            checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
+            if (checkedSKU != null)
+            {
+                if (!record.compare(checkedSKU))
+                {
+                    DataBaseAPI.getInstance().update(record);
+                }
+            } else {
+                DataBaseAPI.getInstance().addKTW(record);
+            }
+        }
+
+        return true;
     }
 }

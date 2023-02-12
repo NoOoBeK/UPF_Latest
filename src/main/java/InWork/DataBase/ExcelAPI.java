@@ -12,6 +12,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ExcelAPI
 {
@@ -31,16 +32,17 @@ public class ExcelAPI
         }
         return null;
     }
-    static public boolean ImportKTW(Component caller) {
+    static public ArrayList<DataKTW> ImportKTW(Component caller) {
         XSSFWorkbook book = null;
         File excelfile = ChoseFile(caller);
-        if (excelfile == null) {return false;};
+        ArrayList<DataKTW> ret = new ArrayList<>();
+        if (excelfile == null) {return ret;};
         try {
              book = new XSSFWorkbook(excelfile);
-        } catch (IOException | InvalidFormatException var10) {
-            JOptionPane.showMessageDialog(null,"Błąd otwarcia pliku Excel");
-            var10.printStackTrace();
-            return false;
+        } catch (IOException | InvalidFormatException e) {
+            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            e.printStackTrace();
+            return ret;
         }
         XSSFSheet sheet = book.getSheetAt(1);
 
@@ -95,9 +97,9 @@ public class ExcelAPI
             } else {
                 newRecord.setQatime(0);
             }
-            db.addKTW(newRecord);
+            ret.add(newRecord);
         }
-        return true;
+        return ret;
     }
     static public boolean ImportPP(Component caller){
         XSSFWorkbook book = null;

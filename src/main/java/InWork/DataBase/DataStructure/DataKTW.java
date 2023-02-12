@@ -114,4 +114,12 @@ public class DataKTW {
         setHeight(Height);
     }
 
+    public boolean compare(DataKTW comparData)
+    {
+        if (getSKU() == comparData.getSKU() && getName().equals(comparData.getName()) && getGross() == comparData.getGross()
+                && getNet() == comparData.getNet() && getCs() == comparData.getCs() && getDest().equals(comparData.getDest())
+                && getPaltype().equals(comparData.getPaltype()) && getQatime() == comparData.getQatime() && getHeight() == comparData.getHeight())
+        { return true;}
+        return false;
+    }
 }

@@ -1,6 +1,7 @@
 package InWork.GUI;
 
 import InWork.DataBase.DataBaseAPI;
+import InWork.DataBase.DataStructure.DataKTWList;
 import InWork.DataBase.ExcelAPI;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -43,8 +45,14 @@ public class SelectFactory extends JFrame{
         setContentPane(MainPanel);
         setTitle("UPF");
 
-        recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
-        LastInsert.setText(DataBaseAPI.getInstance().getKTWLastInsert().toString());
+        try {
+            recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
+            LastInsert.setText(DataBaseAPI.getInstance().getKTWLastInsert().toString());
+        } catch (SQLException throwables) {
+            JOptionPane.showMessageDialog(thisframe, "Błąd Bazy Danych");
+            throwables.printStackTrace();
+        }
+
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -80,11 +88,18 @@ public class SelectFactory extends JFrame{
         ImportKTW.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (ExcelAPI.ImportKTW(thisframe))
-                {
-                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
-                } else {
+                try {
+                    if (DataKTWList.getInstance().ImpotrKTW())
+                    {
+                        JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
+                    } else {
+                        JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
+                    }
+                    recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
+                    LastInsert.setText(DataBaseAPI.getInstance().getKTWLastInsert().toString());
+                } catch (SQLException throwables) {
                     JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
+                    throwables.printStackTrace();
                 }
             }
         });
