@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="UPF">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../../demo/UPF.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <excluded>
+      <root url="jar://$PROJECT_DIR$/../../../../demo/UPF.jar!/" />
+    </excluded>
+  </library>
+</component>

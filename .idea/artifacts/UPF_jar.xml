@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="UPF:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/UPF_jar</output-path>
+    <root id="archive" name="UPF.jar">
+      <element id="module-output" name="UPF" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/xerial/sqlite-jdbc/3.34.0/sqlite-jdbc-3.34.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../demo/UPF.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
