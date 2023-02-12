@@ -93,14 +93,14 @@ public class DataBaseAPI {
         pst.executeUpdate();
     }
 
-    public void cleanDB() throws SQLException {
+    public void cleanDBKTW() throws SQLException {
         String sql1 = "DELETE FROM KTW;";
         if (!conn.isValid(5)) {Connect();}
         Statement stmt = this.conn.createStatement();
         stmt.execute(sql1);
     }
 
-    public void update(DataKTW data) throws SQLException {
+    public void updateKTW(DataKTW data) throws SQLException {
         if (!conn.isValid(5)) {
             Connect();
         }
@@ -193,5 +193,24 @@ public class DataBaseAPI {
             if (newDate.isAfter(latestDate)) {latestDate = LocalDate.from(newDate);}
         }
         return latestDate;
+    }
+
+    public boolean delateKTW(DataKTW record) throws SQLException {
+        String querry = "DELETE FROM KTW WHERE sku == ?;";
+        LocalDate newDate = LocalDate.now();
+        LocalDate latestDate = LocalDate.MIN;
+        if (!conn.isValid(5)) {Connect();}
+        PreparedStatement Pstmt = conn.prepareStatement(querry);
+        Pstmt.setInt(1,record.getSKU());
+        return Pstmt.execute();
+    }
+    public boolean delateKTW(int sku) throws SQLException {
+        String querry = "DELETE FROM KTW WHERE sku == ?;";
+        LocalDate newDate = LocalDate.now();
+        LocalDate latestDate = LocalDate.MIN;
+        if (!conn.isValid(5)) {Connect();}
+        PreparedStatement Pstmt = conn.prepareStatement(querry);
+        Pstmt.setInt(1,sku);
+        return Pstmt.execute();
     }
 }

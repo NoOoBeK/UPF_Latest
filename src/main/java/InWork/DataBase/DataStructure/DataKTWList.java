@@ -61,6 +61,14 @@ public class DataKTWList {
         if (excelData.size() < 1) {return false;}
         DataKTW checkedSKU;
 
+        for (DataKTW record : DataList)
+        {
+            checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
+            if (checkedSKU != null)
+            {
+                DataBaseAPI.getInstance().delateKTW(record);
+            }
+        }
         for(DataKTW record : excelData)
         {
             checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
@@ -68,7 +76,7 @@ public class DataKTWList {
             {
                 if (!record.compare(checkedSKU))
                 {
-                    DataBaseAPI.getInstance().update(record);
+                    DataBaseAPI.getInstance().updateKTW(record);
                 }
             } else {
                 DataBaseAPI.getInstance().addKTW(record);

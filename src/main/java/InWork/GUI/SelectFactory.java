@@ -28,6 +28,7 @@ public class SelectFactory extends JFrame{
     private JLabel Logo;
     private JLabel Cred;
     private JButton LiveLoadPlan;
+    private JButton cleanDBButton;
 
     public void setDataBaseTable(DataBaseUI dataBaseTable) {
         DataBaseTable = dataBaseTable;
@@ -104,6 +105,17 @@ public class SelectFactory extends JFrame{
             }
         });
 
+        cleanDBButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    DataBaseAPI.getInstance().cleanDBKTW();
+                } catch (SQLException throwables) {
+                    JOptionPane.showMessageDialog(thisframe, "błąd czyszczenia bazy Katowic");
+                    throwables.printStackTrace();
+                }
+            }
+        });
     }
 
 }
