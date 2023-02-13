@@ -9,17 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LiveLoadKTWList {
-
-    private static final int[] PL = {2621};
-    private static final int[] DE = {1021,1022,3921,2221};
-    private static final int[] SE = {1921};
-    private static final int[] FR = {1221};
-    private static final int[] GR = {3421};
-    private static final int[] ES_PT = {2425,3522};
-    private static final int[] NL = {3722};
-    private static final int[] UK = {1121};
-    private static final int[] CEE = {2022/2121};
-    private static ArrayList<int[]> Clusters;
+    private static ArrayList<ArrayList<Integer>> Clusters;
 
     private static LiveLoadKTWList Instance;
     public static LiveLoadKTWList getInstance()
@@ -29,15 +19,16 @@ public class LiveLoadKTWList {
     }
 
     public LiveLoadKTWList() {
-        Clusters.add(PL);
-        Clusters.add(DE);
-        Clusters.add(SE);
-        Clusters.add(FR);
-        Clusters.add(GR);
-        Clusters.add(ES_PT);
-        Clusters.add(NL);
-        Clusters.add(UK);
-        Clusters.add(CEE);
+        Clusters = new ArrayList<>();
+        Clusters.add(new ArrayList(Arrays.asList(2621))); // PL
+        Clusters.add(new ArrayList(Arrays.asList(1021, 1022, 3921, 2221))); // DE
+        Clusters.add(new ArrayList(Arrays.asList(1921))); // SE
+        Clusters.add(new ArrayList(Arrays.asList(1221))); // FE
+        Clusters.add(new ArrayList(Arrays.asList(3421))); // GR
+        Clusters.add(new ArrayList(Arrays.asList(2425, 3522))); // ES/PT
+        Clusters.add(new ArrayList(Arrays.asList(3722))); // NL
+        Clusters.add(new ArrayList(Arrays.asList(1121))); // UK
+        Clusters.add(new ArrayList(Arrays.asList(2022, 2121))); // CEE
     }
 
     public ArrayList<ArrayList<LiveLoadKTW>> CreatData()
@@ -71,6 +62,7 @@ public class LiveLoadKTWList {
             Pattern p = Pattern.compile("-?\\d+");
             Matcher m = p.matcher(newRecord.getDest());
             int DestID = -1;
+            if (newRecord.getDest().toLowerCase().contains("fresh")) { m.find();}
             if( m.find() ) {
                 DestID = Integer.valueOf(m.group());
             }
@@ -86,10 +78,17 @@ public class LiveLoadKTWList {
                 }
                 if (index > -1) {break;}
             }
-            if (index == -1) {dane.get(Clusters.size()).add(newRecord);}
+            if (index == -1)
+            {
+                System.out.println(DestID);
+                System.out.println(newRecord.getDest());
+                dane.get(Clusters.size()).add(newRecord);
+            }
             else             {dane.get(index).add(newRecord);}
         }
-        System.out.println(dane);
+        for (ArrayList<LiveLoadKTW> test: dane) {
+            System.out.println(test);
+        }
         return dane;
     }
 }

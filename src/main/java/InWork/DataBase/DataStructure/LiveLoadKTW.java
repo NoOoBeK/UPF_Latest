@@ -79,4 +79,10 @@ public class LiveLoadKTW {
     public void setLine(String line) {
         Line = line;
     }
+
+    @Override
+    public String toString()
+    {
+        return  getDest();
+    }
 }
