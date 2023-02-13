@@ -4,9 +4,12 @@ import InWork.DataBase.ExcelAPI;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LiveLoadKTWList {
+    private static ArrayList<ArrayList<Integer>> Clusters;
 
     private static LiveLoadKTWList Instance;
     public static LiveLoadKTWList getInstance()
@@ -16,20 +19,30 @@ public class LiveLoadKTWList {
     }
 
     public LiveLoadKTWList() {
-
+        Clusters = new ArrayList<>();
+        Clusters.add(new ArrayList(Arrays.asList(2621))); // PL
+        Clusters.add(new ArrayList(Arrays.asList(1021, 1022, 3921, 2221))); // DE
+        Clusters.add(new ArrayList(Arrays.asList(1921))); // SE
+        Clusters.add(new ArrayList(Arrays.asList(1221))); // FE
+        Clusters.add(new ArrayList(Arrays.asList(3421))); // GR
+        Clusters.add(new ArrayList(Arrays.asList(2425, 3522))); // ES/PT
+        Clusters.add(new ArrayList(Arrays.asList(3722))); // NL
+        Clusters.add(new ArrayList(Arrays.asList(1121))); // UK
+        Clusters.add(new ArrayList(Arrays.asList(2022, 2121))); // CEE
     }
 
-    public boolean CreatData()
+    public ArrayList<ArrayList<LiveLoadKTW>> CreatData()
     {
-        System.out.println("Start");
         DataKTW corrData;
-        ArrayList<LiveLoadKTW> dane = new ArrayList<>();
-
+        ArrayList<ArrayList<LiveLoadKTW>> dane = new ArrayList<>();
+        for (int i = 0; i <= Clusters.size(); i++) {
+            dane.add(new ArrayList<>());
+        }
         for (DataPP danePP : ExcelAPI.ImportPP(null)) {
             corrData = DataKTWList.getInstance().getKTW(danePP.getSKU());
             if (corrData == null) {
                 JOptionPane.showMessageDialog(null, "Brak SKU w bazie danych Zaktualizuj Baze Danych");
-                return false;
+                return null;
             }
             LiveLoadKTW newRecord = new LiveLoadKTW();
             newRecord.setSku(danePP.getSKU());
@@ -45,16 +58,37 @@ public class LiveLoadKTWList {
             newRecord.setDest(corrData.getDest());
             newRecord.setLine(danePP.getLane());
 
-            if (newRecord.getDest().toLowerCase().contains("fresh"))
-            {
-                System.out.println(newRecord.getDest() + "   test " + newRecord.getDest().indexOf("->"));
-            } else
-            {
-                //System.out.println("Not " + newRecord.getDest());
+
+            Pattern p = Pattern.compile("-?\\d+");
+            Matcher m = p.matcher(newRecord.getDest());
+            int DestID = -1;
+            if (newRecord.getDest().toLowerCase().contains("fresh")) { m.find();}
+            if( m.find() ) {
+                DestID = Integer.valueOf(m.group());
             }
-            dane.add(newRecord);
+            int index = -1;
+            for (int i =0; i < Clusters.size(); i++) {
+                for (int CheckID : Clusters.get(i))
+                {
+                    if (DestID == CheckID)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index > -1) {break;}
+            }
+            if (index == -1)
+            {
+                System.out.println(DestID);
+                System.out.println(newRecord.getDest());
+                dane.get(Clusters.size()).add(newRecord);
+            }
+            else             {dane.get(index).add(newRecord);}
         }
-        System.out.println("End");
-        return true;
+        for (ArrayList<LiveLoadKTW> test: dane) {
+            System.out.println(test);
+        }
+        return dane;
     }
 }
