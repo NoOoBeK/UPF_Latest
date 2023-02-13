@@ -4,10 +4,22 @@ import InWork.DataBase.ExcelAPI;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LiveLoadKTWList {
+
+    private static final int[] PL = {2621};
+    private static final int[] DE = {1021,1022,3921,2221};
+    private static final int[] SE = {1921};
+    private static final int[] FR = {1221};
+    private static final int[] GR = {3421};
+    private static final int[] ES_PT = {2425,3522};
+    private static final int[] NL = {3722};
+    private static final int[] UK = {1121};
+    private static final int[] CEE = {2022/2121};
+    private static ArrayList<int[]> Clusters;
 
     private static LiveLoadKTWList Instance;
     public static LiveLoadKTWList getInstance()
@@ -17,20 +29,29 @@ public class LiveLoadKTWList {
     }
 
     public LiveLoadKTWList() {
-
+        Clusters.add(PL);
+        Clusters.add(DE);
+        Clusters.add(SE);
+        Clusters.add(FR);
+        Clusters.add(GR);
+        Clusters.add(ES_PT);
+        Clusters.add(NL);
+        Clusters.add(UK);
+        Clusters.add(CEE);
     }
 
-    public boolean CreatData()
+    public ArrayList<ArrayList<LiveLoadKTW>> CreatData()
     {
-        System.out.println("Start");
         DataKTW corrData;
-        ArrayList<LiveLoadKTW> dane = new ArrayList<>();
-
+        ArrayList<ArrayList<LiveLoadKTW>> dane = new ArrayList<>();
+        for (int i = 0; i <= Clusters.size(); i++) {
+            dane.add(new ArrayList<>());
+        }
         for (DataPP danePP : ExcelAPI.ImportPP(null)) {
             corrData = DataKTWList.getInstance().getKTW(danePP.getSKU());
             if (corrData == null) {
                 JOptionPane.showMessageDialog(null, "Brak SKU w bazie danych Zaktualizuj Baze Danych");
-                return false;
+                return null;
             }
             LiveLoadKTW newRecord = new LiveLoadKTW();
             newRecord.setSku(danePP.getSKU());
@@ -47,24 +68,28 @@ public class LiveLoadKTWList {
             newRecord.setLine(danePP.getLane());
 
 
-            Pattern p = Pattern.compile("is (-?\\d+(\\.\\d+)?)");
+            Pattern p = Pattern.compile("-?\\d+");
             Matcher m = p.matcher(newRecord.getDest());
-            String test = "";
-            while( m.find() ) {
-                test = " " + m.group();
+            int DestID = -1;
+            if( m.find() ) {
+                DestID = Integer.valueOf(m.group());
             }
-            System.out.println(newRecord.getDest());
-            System.out.println(test);
-            /*if (newRecord.getDest().toLowerCase().contains("fresh"))
-            {
-                System.out.println(newRecord.getDest() + "   test " + newRecord.getDest().indexOf("->"));
-            } else
-            {
-
-            }*/
-            dane.add(newRecord);
+            int index = -1;
+            for (int i =0; i < Clusters.size(); i++) {
+                for (int CheckID : Clusters.get(i))
+                {
+                    if (DestID == CheckID)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index > -1) {break;}
+            }
+            if (index == -1) {dane.get(Clusters.size()).add(newRecord);}
+            else             {dane.get(index).add(newRecord);}
         }
-        System.out.println("End");
-        return true;
+        System.out.println(dane);
+        return dane;
     }
 }
