@@ -86,9 +86,6 @@ public class LiveLoadKTWList {
             }
             else             {dane.get(index).add(newRecord);}
         }
-        for (ArrayList<LiveLoadKTW> test: dane) {
-            System.out.println(test);
-        }
         return dane;
     }
 }

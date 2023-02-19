@@ -2,13 +2,16 @@ package InWork.GUI;
 
 import InWork.DataBase.DataBaseAPI;
 import InWork.DataBase.DataStructure.DataKTWList;
+import InWork.DataBase.DataStructure.LiveLoadKTW;
 import InWork.DataBase.DataStructure.LiveLoadKTWList;
+import InWork.DataBase.ExcelAPI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class SelectFactory extends JFrame{
     private JButton exitButton;
@@ -102,8 +105,9 @@ public class SelectFactory extends JFrame{
         LiveLoadPlan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LiveLoadKTWList.getInstance().CreatData();
-                JOptionPane.showMessageDialog(thisframe, "Import Zkończony");
+                //LiveLoadKTWList.getInstance().CreatData();
+                //JOptionPane.showMessageDialog(thisframe, "Import Zkończony");
+                ExcelAPI.IrelandSplit(LiveLoadKTWList.getInstance().CreatData().get(7));
             }
         });
 

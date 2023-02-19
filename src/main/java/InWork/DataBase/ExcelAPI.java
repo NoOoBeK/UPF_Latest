@@ -2,10 +2,11 @@ package InWork.DataBase;
 
 import InWork.DataBase.DataStructure.DataKTW;
 import InWork.DataBase.DataStructure.DataPP;
+import InWork.DataBase.DataStructure.LiveLoadKTW;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.xssf.usermodel.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -15,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ExcelAPI
 {
@@ -146,7 +148,7 @@ public class ExcelAPI
 
         return ret;
     }
-    public void FileOut(XSSFWorkbook book,String name){
+    static public void FileOut(XSSFWorkbook book, String name){
         FileOutputStream out = null;
         try {
             out = new FileOutputStream("C:\\demo\\"+name+".xlsx");
@@ -158,14 +160,33 @@ public class ExcelAPI
             out.close();
         } catch (IOException var8) {
             var8.printStackTrace();
+
         }
     }
-    public void IrelandSplit(){
+        static public void IrelandSplit(ArrayList<LiveLoadKTW> Ireland){
         String name = "Ireland";
         XSSFWorkbook book = new XSSFWorkbook();
-        XSSFSheet sheet = book.createSheet("Ireland");
+        XSSFSheet sheet = book.createSheet("List");
+        int source;
+        for (source = 0; source<Ireland.size();source++){
+            XSSFRow row = sheet.createRow(source);
+            XSSFCell cell0 = row.createCell(0);
+            XSSFCell cell1 = row.createCell(1);
+            XSSFCell cell2 = row.createCell(2);
+            XSSFCell cell3 = row.createCell(3);
+            sheet.getRow(source).getCell(0).setCellValue(Ireland.get(source).getSku());
+            sheet.getRow(source).getCell(1).setCellValue(Ireland.get(source).getName());
+            sheet.getRow(source).getCell(2).setCellValue(Ireland.get(source).getPalletCount());
+            sheet.getRow(source).getCell(3).setCellValue(Ireland.get(source).getSDate());
+        }
+        FileOut(book,name);
+
+
+    }
+        static public void ProductionPlan(){
+            String name = "Plan";
+            XSSFWorkbook book = new XSSFWorkbook();
 
         FileOut(book,name);
     }
-//    static public ProductionPlan(){FileOut(book,name);}
 }
