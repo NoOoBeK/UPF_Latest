@@ -188,11 +188,10 @@ public class ExcelAPI
 
     }
 
-    static public void ProductionPlan(ArrayList<ArrayList<LiveLoadKTW>> all){
+    static public void ProductionPlan(ArrayList<LiveLoadKTW> Plan){
             String name = "Plan";
             XSSFWorkbook book = new XSSFWorkbook();
             XSSFSheet sheet = book.createSheet("Plan");
-            ArrayList<LiveLoadKTW> Plan = Calculations.ProductionPlan(all);
 
             int rowNum =0;
             int source;

@@ -5,6 +5,7 @@ import InWork.DataBase.DataStructure.DataKTWList;
 import InWork.DataBase.DataStructure.LiveLoadKTW;
 import InWork.DataBase.DataStructure.LiveLoadKTWList;
 import InWork.DataBase.ExcelAPI;
+import InWork.Operations.Calculations;
 import InWork.Settings;
 
 import javax.swing.*;
@@ -119,7 +120,8 @@ public class SelectFactory extends JFrame{
                     JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
                     ExcelAPI.IrelandSplit(data.get(7));
                     JOptionPane.showMessageDialog(thisframe, "Irlandia w Pliku");
-                    ExcelAPI.ProductionPlan(data);
+                    ArrayList<LiveLoadKTW> przetworzone = Calculations.ProductionPlan(data);
+                    ExcelAPI.ProductionPlan(przetworzone);
                     JOptionPane.showMessageDialog(thisframe, "Plan w Pliku");
                 } else
                 {

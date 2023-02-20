@@ -9,8 +9,7 @@ public class Settings implements java.io.Serializable {
     private String FileChoserPath;
 
     private static void LoadSettings () throws IOException, ClassNotFoundException {
-        FileInputStream fis
-                = new FileInputStream("Settings.ini");
+        FileInputStream fis = new FileInputStream("Settings.ini");
         ObjectInputStream ois = new ObjectInputStream(fis);
         Instance = (Settings) ois.readObject();
     }
@@ -25,6 +24,7 @@ public class Settings implements java.io.Serializable {
                 throw new RuntimeException(e);
             } finally {
                 if (Instance == null) Instance = new Settings();
+                return Instance;
             }
         }
         return Instance;
