@@ -42,14 +42,13 @@ public class Calculations {
         return Plan;
     }
 
-    static public ArrayList<LiveLoadPOL> PolandLiveLoad(ArrayList<LiveLoadKTW> list)
-    {
+    static public ArrayList<LiveLoadPOL> PolandLiveLoad(ArrayList<LiveLoadKTW> list) {
         int StartPalletCount = 0;
         ArrayList<LiveLoadPOL> ret = new ArrayList<>();
         Date Now = new Date();
         double Start = Now.getTime()/1000/86400+25569;
         //double Start = Math.abs((((Now.getTime() / 1000) / 60) / 60) / 24) + (Now.getHours() / 24);
-        if (Now.getMinutes() >= 60) Start += 0.04166667;
+        if (Now.getMinutes() >= 60) Start += 1.0/24;
 
         double End = Start+4;
 //        double checkenEnd = 0.0;
@@ -68,7 +67,7 @@ public class Calculations {
                 if (Start < (dane.getSDate() + dane.getSTime()) && Start > (dane.getEDate() + dane.getETime()))
                 {
                     double checkTime = (Start - (dane.getEDate() + dane.getETime()));
-                    if (checkTime > (0.04166667)) checkTime = 0.04166667;
+                    if (checkTime > (1.0/24)) checkTime = 1.0/24;
                     PalletCount += Math.abs(checkTime * dane.getProductionTime());
                 }
             }
@@ -82,13 +81,13 @@ public class Calculations {
                 StartPalletCount -= 30;
             }
             newRecord.setNeededTruck(NeddedTruck);
-            Start += 0.04166667;
+            Start += 1.0/24;
             ret.add(newRecord);
         }
-        for (int i=0;i<ret.size();i++){
-        System.out.println(ret.get(i).getPaletCoun());
-        }
-
+//        for (int i=0;i<ret.size();i++){
+//        System.out.println(ret.get(i).getPaletCoun());
+//        }
+        System.out.println(ret.size());
         return ret;
     }
 }
