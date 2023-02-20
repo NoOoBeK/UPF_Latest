@@ -3,6 +3,8 @@ package InWork.DataBase;
 import InWork.DataBase.DataStructure.DataKTW;
 import InWork.DataBase.DataStructure.DataPP;
 import InWork.DataBase.DataStructure.LiveLoadKTW;
+import InWork.DataBase.DataStructure.LiveLoadKTWList;
+import InWork.Operations.Calculations;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -163,7 +165,7 @@ public class ExcelAPI
 
         }
     }
-        static public void IrelandSplit(ArrayList<LiveLoadKTW> Ireland){
+    static public void IrelandSplit(ArrayList<LiveLoadKTW> Ireland){
         String name = "Ireland";
         XSSFWorkbook book = new XSSFWorkbook();
         XSSFSheet sheet = book.createSheet("List");
@@ -183,10 +185,37 @@ public class ExcelAPI
 
 
     }
-        static public void ProductionPlan(){
+        static public void ProductionPlan(ArrayList<ArrayList<LiveLoadKTW>> all){
             String name = "Plan";
             XSSFWorkbook book = new XSSFWorkbook();
-
+            XSSFSheet sheet = book.createSheet("Plan");
+            ArrayList<LiveLoadKTW> Plan = Calculations.ProductionPlan(all);
+            int rowNum =0;
+            int source;
+            int celnum;
+            for (source = 0; source<Plan.size();source++){
+                rowNum = rowNum +1;
+                if (Plan.get(source).getSku()!=Plan.get(source-1).getSku()){rowNum = rowNum +1;}
+                XSSFRow row = sheet.createRow(rowNum);
+                for (celnum=0;celnum<15;celnum++) {
+                    XSSFCell cell0 = row.createCell(celnum);
+                }
+                sheet.getRow(rowNum).getCell(0).setCellValue(Plan.get(source).getSku());
+                sheet.getRow(rowNum).getCell(1).setCellValue(Plan.get(source).getName());
+                if (Plan.get(rowNum).getPalletCount()/Plan.get(source).getMaxPallet()>0.9){sheet.getRow(source).getCell(2).setCellValue("Nieplanowane");}else {sheet.getRow(source).getCell(2).setCellValue("");}
+                sheet.getRow(rowNum).getCell(3).setCellValue(Plan.get(source).getPalletCount());
+                sheet.getRow(rowNum).getCell(4).setCellValue("PAL");
+                sheet.getRow(rowNum).getCell(5).setCellValue(Plan.get(source).getMaxPallet());
+                sheet.getRow(rowNum).getCell(6).setCellValue("");
+                sheet.getRow(rowNum).getCell(7).setCellValue("");
+                if (Plan.get(rowNum).getPalletCount()/Plan.get(source).getMaxPallet()<0.9){sheet.getRow(source).getCell(8).setCellValue("po produkcji do FRESH");}else {sheet.getRow(source).getCell(2).setCellValue("");}
+                sheet.getRow(rowNum).getCell(9).setCellValue("");
+                sheet.getRow(rowNum).getCell(10).setCellValue("");
+                sheet.getRow(rowNum).getCell(11).setCellValue(Plan.get(source).getSDate());
+                sheet.getRow(rowNum).getCell(12).setCellValue(Plan.get(source).getSTime());
+                sheet.getRow(rowNum).getCell(13).setCellValue(Plan.get(source).getProductionTime());
+                sheet.getRow(rowNum).getCell(14).setCellValue(Plan.get(source).getDest());
+            }
         FileOut(book,name);
     }
 }

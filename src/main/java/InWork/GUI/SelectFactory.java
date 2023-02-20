@@ -105,9 +105,12 @@ public class SelectFactory extends JFrame{
         LiveLoadPlan.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //LiveLoadKTWList.getInstance().CreatData();
-                //JOptionPane.showMessageDialog(thisframe, "Import Zkończony");
-                ExcelAPI.IrelandSplit(LiveLoadKTWList.getInstance().CreatData().get(7));
+                ArrayList<ArrayList<LiveLoadKTW>> data = LiveLoadKTWList.getInstance().CreatData();
+                JOptionPane.showMessageDialog(thisframe, "Import Zkończony");
+                ExcelAPI.IrelandSplit(data.get(7));
+                JOptionPane.showMessageDialog(thisframe, "Irlandia w Pliku");
+                ExcelAPI.ProductionPlan(data);
+                JOptionPane.showMessageDialog(thisframe, "Plan w Pliku");
             }
         });
 
