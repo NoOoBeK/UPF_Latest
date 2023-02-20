@@ -55,8 +55,7 @@ public class DataKTWList {
         return DataList;
     }
 
-    public DataKTW getKTW(int sku)
-    {
+    public DataKTW getKTW(int sku){
         for (DataKTW dane : DataList)
         {
             if (dane.getSKU() == sku) return dane;

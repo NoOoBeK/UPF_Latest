@@ -188,22 +188,26 @@ public class ExcelAPI
         String name = "Poland";
         XSSFWorkbook book = new XSSFWorkbook();
         XSSFSheet sheet = book.createSheet("Polska");
+        XSSFCellStyle data = date(book);
+        XSSFCellStyle time = time(book);
+        int rowNum = 0;
 
         for (int source = 0; source<list.size();source++) {
-            for (int rowNum = 0; list.get(source).getNeededTruck() > 0; rowNum++) {
+        if (list.get(source).getNeededTruck()>0){
+                rowNum++;
+            }
+
                 XSSFRow row = sheet.createRow(rowNum);
-                for (int celnum = 0; celnum < 3; celnum++) {
+                for (int celnum = 0; celnum < 4; celnum++) {
                     XSSFCell cell = row.createCell(celnum);
                 }
                 sheet.getRow(rowNum).getCell(0).setCellValue(list.get(source).getDate());
                 sheet.getRow(rowNum).getCell(1).setCellValue(list.get(source).getTime());
                 sheet.getRow(rowNum).getCell(2).setCellValue(list.get(source).getPaletCoun());
                 sheet.getRow(rowNum).getCell(3).setCellValue(list.get(source).getNeededTruck());
-                XSSFCellStyle data = date(book);
                 sheet.getRow(rowNum).getCell(0).setCellStyle(data);
-                XSSFCellStyle time = time(book);
                 sheet.getRow(rowNum).getCell(1).setCellStyle(time);
-            }
+
         }
         FileOut(book,name);
     }
@@ -211,6 +215,11 @@ public class ExcelAPI
             String name = "Plan";
             XSSFWorkbook book = new XSSFWorkbook();
             XSSFSheet sheet = book.createSheet("Plan");
+            XSSFCellStyle nieplanowany = style(book,255,153,204,128,0,128,true);
+            XSSFCellStyle FRESH= style(book,0,112,192,255,255,0,false);
+            XSSFCellStyle order= style(book,191,191,191,0,0,0,false);
+            XSSFCellStyle data = date(book);
+            XSSFCellStyle time = time(book);
 
         int rowNum =0;
             int source;
@@ -229,7 +238,6 @@ public class ExcelAPI
                 if (((double)Plan.get(source).getPalletCount()/(double)Plan.get(source).getMaxPallet())>0.9)
                 {
                     sheet.getRow(rowNum).getCell(2).setCellValue("NIEPLANOWANA");
-                    XSSFCellStyle nieplanowany = style(book,255,153,204,128,0,128,true);
                     sheet.getRow(rowNum).getCell(2).setCellStyle(nieplanowany);
                 }
                 else
@@ -244,7 +252,6 @@ public class ExcelAPI
                 if (((double)Plan.get(source).getPalletCount()/(double)Plan.get(source).getMaxPallet())<0.9)
                 {
                     sheet.getRow(rowNum).getCell(8).setCellValue("po produkcji do FRESH");
-                    XSSFCellStyle FRESH= style(book,0,112,192,255,255,0,false);
                     sheet.getRow(rowNum).getCell(8).setCellStyle(FRESH);
                 }
                 else
@@ -256,7 +263,6 @@ public class ExcelAPI
                 {
                     sheet.getRow(rowNum).getCell(10).setCellValue(ordernum);
                     ordernum=ordernum+1;
-                    XSSFCellStyle order= style(book,191,191,191,0,0,0,false);
                     sheet.getRow(rowNum).getCell(10).setCellStyle(order);
                 }
                 else
@@ -264,10 +270,8 @@ public class ExcelAPI
                     sheet.getRow(rowNum).getCell(10).setCellValue("");
                     }
                 sheet.getRow(rowNum).getCell(11).setCellValue(Plan.get(source).getSDate());
-                XSSFCellStyle data = date(book);
                 sheet.getRow(rowNum).getCell(11).setCellStyle(data);
                 sheet.getRow(rowNum).getCell(12).setCellValue(Plan.get(source).getSTime());
-                XSSFCellStyle time = time(book);
                 sheet.getRow(rowNum).getCell(12).setCellStyle(time);
                 sheet.getRow(rowNum).getCell(13).setCellValue(Plan.get(source).getProductionTime());
                 sheet.getRow(rowNum).getCell(14).setCellValue(Plan.get(source).getDest());

@@ -56,8 +56,7 @@ public class Calculations {
         return Plan;
     }
 
-    static public ArrayList<LiveLoadPOL> PolandLiveLoad(ArrayList<LiveLoadKTW> list)
-    {
+    static public ArrayList<LiveLoadPOL> PolandLiveLoad(ArrayList<LiveLoadKTW> list) {
         boolean wait = true;
         String input = "";
         while (wait)

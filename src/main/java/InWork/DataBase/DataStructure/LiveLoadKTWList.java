@@ -31,8 +31,7 @@ public class LiveLoadKTWList {
         Clusters.add(new ArrayList(Arrays.asList(2022, 2121))); // CEE
     }
 
-    public ArrayList<ArrayList<LiveLoadKTW>> CreatData()
-    {
+    public ArrayList<ArrayList<LiveLoadKTW>> CreatData(){
         DataKTW corrData;
         ArrayList<ArrayList<LiveLoadKTW>> dane = new ArrayList<>();
         for (int i = 0; i <= Clusters.size(); i++) {
