@@ -51,7 +51,7 @@ public class LiveLoadKTWList {
             newRecord.setPalletCount(temp.intValue());
             temp = Math.floor(22500 / corrData.getGross());
             newRecord.setMaxPallet(temp.intValue());
-            temp = (danePP.getSDate() + danePP.getSTime()) - (danePP.getEDate() + danePP.getETime());
+            temp = ((danePP.getEDate() + danePP.getETime()) - (danePP.getSDate() + danePP.getSTime())) / newRecord.getPalletCount();
             newRecord.setProductionTime(temp);
             newRecord.setSDate(danePP.getSDate());
             newRecord.setSTime(danePP.getSTime());

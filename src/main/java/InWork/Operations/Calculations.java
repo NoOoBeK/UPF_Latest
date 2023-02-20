@@ -8,8 +8,8 @@ public class Calculations {
 
     static public ArrayList<LiveLoadKTW> ProductionPlan(ArrayList<ArrayList<LiveLoadKTW>> all){
       ArrayList<LiveLoadKTW> Plan = new ArrayList<>();
-      for(ArrayList<LiveLoadKTW> list : all){
-          for (LiveLoadKTW dane : list){
+      for(int i = 1; i < all.size(); i++){
+          for (LiveLoadKTW dane : all.get(i)){
               int handlePallet = 0;
               double StartTime = dane.getSDate() + dane.getSTime();
               while (handlePallet < dane.getPalletCount())
@@ -24,8 +24,8 @@ public class Calculations {
                       StartTime += dane.getMaxPallet() * dane.getProductionTime();
                   } else
                   {
-                      handlePallet += dane.getPalletCount() - handlePallet;
                       newRecord.setPalletCount(dane.getPalletCount() - handlePallet);
+                      handlePallet += dane.getPalletCount() - handlePallet;
                       StartTime += (dane.getPalletCount() - handlePallet) * dane.getProductionTime();
                   }
                   Plan.add(newRecord);
