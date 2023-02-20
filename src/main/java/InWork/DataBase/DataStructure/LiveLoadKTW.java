@@ -9,6 +9,25 @@ public class LiveLoadKTW {
     private double ProductionTime;
     private double SDate;
     private double STime;
+
+    public double getEDate() {
+        return EDate;
+    }
+
+    public void setEDate(double EDate) {
+        this.EDate = EDate;
+    }
+
+    public double getETime() {
+        return ETime;
+    }
+
+    public void setETime(double ETime) {
+        this.ETime = ETime;
+    }
+
+    private double EDate;
+    private double ETime;
     private String Dest;
     private String Line;
 
