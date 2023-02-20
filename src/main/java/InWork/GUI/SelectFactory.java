@@ -123,15 +123,10 @@ public class SelectFactory extends JFrame{
                     count += list.size();
                 }
                 if (count > 0) {
-                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
-                    ExcelAPI.IrelandSplit(data.get(7));
-                    JOptionPane.showMessageDialog(thisframe, "Irlandia w Pliku");
-                    ArrayList<LiveLoadKTW> przetworzone = Calculations.ProductionPlan(data);
-                    ExcelAPI.ProductionPlan(przetworzone);
-                    JOptionPane.showMessageDialog(thisframe, "Plan w Pliku");
-                    ArrayList<LiveLoadPOL> polska = Calculations.PolandLiveLoad(data.get(0));
-                    ExcelAPI.Poland(polska);
-                    JOptionPane.showMessageDialog(thisframe, "Polska w Pliku");
+                    InWork.GUI.LiveLoadKTW form = new InWork.GUI.LiveLoadKTW(data);
+                    form.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    form.pack();
+                    form.setVisible(true);
                 } else
                 {
                     JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
@@ -163,7 +158,7 @@ public class SelectFactory extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 if (thisframe.SettingsUI == null) {
                     SettingsUI = new InWork.GUI.Settings();
-                    SettingsUI.setSize(800, 600);
+                    SettingsUI.pack();
                     SettingsUI.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
                     SettingsUI.setVisible(true);
                 } else {
