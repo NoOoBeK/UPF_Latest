@@ -7,13 +7,13 @@ import InWork.DataBase.DataStructure.LiveLoadKTWList;
 import InWork.Operations.Calculations;
 import InWork.Settings;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -187,35 +187,60 @@ public class ExcelAPI
 
 
     }
-        static public void ProductionPlan(ArrayList<ArrayList<LiveLoadKTW>> all){
+
+    static public void ProductionPlan(ArrayList<ArrayList<LiveLoadKTW>> all){
             String name = "Plan";
             XSSFWorkbook book = new XSSFWorkbook();
             XSSFSheet sheet = book.createSheet("Plan");
             ArrayList<LiveLoadKTW> Plan = Calculations.ProductionPlan(all);
+
             int rowNum =0;
             int source;
-            int celnum;
+            int ordernum=1;
+
             for (source = 0; source<Plan.size();source++){
                 rowNum = rowNum +1;
                 if ((source > 0) && (Plan.get(source).getSku()!=Plan.get(source-1).getSku())){rowNum = rowNum +1;}
                 XSSFRow row = sheet.createRow(rowNum);
-                for (celnum=0;celnum<15;celnum++) {
+                for (int celnum=0;celnum<15;celnum++)
+                {
                     XSSFCell cell0 = row.createCell(celnum);
                 }
                 sheet.getRow(rowNum).getCell(0).setCellValue(Plan.get(source).getSku());
                 sheet.getRow(rowNum).getCell(1).setCellValue(Plan.get(source).getName());
-                if (((double)Plan.get(source).getPalletCount()/(double)Plan.get(source).getMaxPallet())>0.9){
-                    sheet.getRow(rowNum).getCell(2).setCellValue("Nieplanowane");
-                }else {
-                    sheet.getRow(rowNum).getCell(2).setCellValue("");}
+                if (((double)Plan.get(source).getPalletCount()/(double)Plan.get(source).getMaxPallet())>0.9)
+                {
+                    sheet.getRow(rowNum).getCell(2).setCellValue("NIEPLANOWANA");
+                    XSSFCellStyle nieplanowany = style(book,255,153,204,128,0,128,true);
+                    sheet.getRow(rowNum).getCell(2).setCellStyle(nieplanowany);
+                }
+                else
+                    {
+                        sheet.getRow(rowNum).getCell(2).setCellValue("");
+                    }
                 sheet.getRow(rowNum).getCell(3).setCellValue(Plan.get(source).getPalletCount());
                 sheet.getRow(rowNum).getCell(4).setCellValue("PAL");
                 sheet.getRow(rowNum).getCell(5).setCellValue(Plan.get(source).getMaxPallet());
                 sheet.getRow(rowNum).getCell(6).setCellValue("");
                 sheet.getRow(rowNum).getCell(7).setCellValue("");
-                if (((double)Plan.get(source).getPalletCount()/(double)Plan.get(source).getMaxPallet())<0.9){sheet.getRow(rowNum).getCell(8).setCellValue("po produkcji do FRESH");}else {sheet.getRow(rowNum).getCell(2).setCellValue("");}
+                if (((double)Plan.get(source).getPalletCount()/(double)Plan.get(source).getMaxPallet())<0.9)
+                {
+                    sheet.getRow(rowNum).getCell(8).setCellValue("po produkcji do FRESH");
+                }
+                else
+                    {
+                        sheet.getRow(rowNum).getCell(8).setCellValue("");
+                    }
                 sheet.getRow(rowNum).getCell(9).setCellValue("");
-                sheet.getRow(rowNum).getCell(10).setCellValue("");
+                if(sheet.getRow(rowNum).getCell(8).getStringCellValue()=="")
+                {
+                    //sheet.getRow(rowNum).getCell(10).setCellValue(ordernum);
+                    //ordernum=ordernum+1;
+                }
+                else
+                    {
+                    sheet.getRow(rowNum).getCell(10).setCellValue("");
+                    }
                 sheet.getRow(rowNum).getCell(11).setCellValue(Plan.get(source).getSDate());
                 sheet.getRow(rowNum).getCell(12).setCellValue(Plan.get(source).getSTime());
                 sheet.getRow(rowNum).getCell(13).setCellValue(Plan.get(source).getProductionTime());
@@ -223,4 +248,17 @@ public class ExcelAPI
             }
         FileOut(book,name);
     }
+    static public XSSFCellStyle style(XSSFWorkbook book,int BR,int BG,int BB,int TR,int TG,int TB,boolean bold)
+    {
+        XSSFCellStyle NC = book.createCellStyle();
+        NC.setFillForegroundColor(new XSSFColor(new Color(BR,BG,BB),new DefaultIndexedColorMap()));
+        NC.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        XSSFFont NF = book.createFont();
+        NF.setColor(new XSSFColor(new Color(TR,TG,TB), new DefaultIndexedColorMap()));
+        NF.setBold(bold);
+        NC.setFont(NF);
+
+        return NC;
+    }
+
 }
