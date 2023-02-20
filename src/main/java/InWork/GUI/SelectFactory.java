@@ -117,7 +117,12 @@ public class SelectFactory extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 ArrayList<ArrayList<LiveLoadKTW>> data = LiveLoadKTWList.getInstance().CreatData();
-                if (data.size() > 0) {
+                int count = 0;
+                for (ArrayList<LiveLoadKTW> list : data)
+                {
+                    count += list.size();
+                }
+                if (count > 0) {
                     JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
                     ExcelAPI.IrelandSplit(data.get(7));
                     JOptionPane.showMessageDialog(thisframe, "Irlandia w Pliku");
