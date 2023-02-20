@@ -90,6 +90,7 @@ public class Calculations {
                 }
             }
             newRecord.setPaletCoun(PalletCount);
+            StartPalletCount += PalletCount;
 
             int NeddedTruck = 0;
             while (PalletCount >= 30)
