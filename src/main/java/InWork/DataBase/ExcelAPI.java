@@ -1,9 +1,6 @@
 package InWork.DataBase;
 
-import InWork.DataBase.DataStructure.DataKTW;
-import InWork.DataBase.DataStructure.DataPP;
-import InWork.DataBase.DataStructure.LiveLoadKTW;
-import InWork.DataBase.DataStructure.LiveLoadKTWList;
+import InWork.DataBase.DataStructure.*;
 import InWork.Operations.Calculations;
 import InWork.Settings;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -187,7 +184,25 @@ public class ExcelAPI
 
 
     }
+    static public void Poland(ArrayList<LiveLoadPOL> list){
+        String name = "Poland";
+        XSSFWorkbook book = new XSSFWorkbook();
+        XSSFSheet sheet = book.createSheet("Polska");
 
+        for (int source = 0; source<list.size();source++){
+            XSSFRow row = sheet.createRow(source);
+            for (int celnum=0;celnum<3;celnum++)
+            {
+                XSSFCell cell = row.createCell(celnum);
+            }
+            sheet.getRow(source).getCell(0).setCellValue(list.get(source).getDate());
+            sheet.getRow(source).getCell(1).setCellValue(list.get(source).getTime());
+            sheet.getRow(source).getCell(2).setCellValue(list.get(source).getPaletCoun());
+            sheet.getRow(source).getCell(3).setCellValue(list.get(source).getNeededTruck());
+        }
+
+        FileOut(book,name);
+    }
     static public void ProductionPlan(ArrayList<LiveLoadKTW> Plan){
             String name = "Plan";
             XSSFWorkbook book = new XSSFWorkbook();
@@ -225,6 +240,8 @@ public class ExcelAPI
                 if (((double)Plan.get(source).getPalletCount()/(double)Plan.get(source).getMaxPallet())<0.9)
                 {
                     sheet.getRow(rowNum).getCell(8).setCellValue("po produkcji do FRESH");
+                    XSSFCellStyle FRESH= style(book,0,112,192,255,255,0,false);
+                    sheet.getRow(rowNum).getCell(8).setCellStyle(FRESH);
                 }
                 else
                     {
@@ -233,8 +250,10 @@ public class ExcelAPI
                 sheet.getRow(rowNum).getCell(9).setCellValue("");
                 if(sheet.getRow(rowNum).getCell(8).getStringCellValue()=="")
                 {
-                    //sheet.getRow(rowNum).getCell(10).setCellValue(ordernum);
-                    //ordernum=ordernum+1;
+                    sheet.getRow(rowNum).getCell(10).setCellValue(ordernum);
+                    ordernum=ordernum+1;
+                    XSSFCellStyle order= style(book,191,191,191,0,0,0,false);
+                    sheet.getRow(rowNum).getCell(10).setCellStyle(order);
                 }
                 else
                     {
