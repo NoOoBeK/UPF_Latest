@@ -21,4 +21,10 @@ public class DataBaseUI extends JFrame {
         TableRowSorter<KTWTable> sorter = new TableRowSorter<KTWTable>(model);
         KTWJTable.setRowSorter(sorter);
     }
+@Override
+    public void setVisible(boolean Visable)
+    {
+        super.setVisible(Visable);
+        if (Visable) ((KTWTable)KTWJTable.getModel()).fireTableDataChanged();
+    }
 };

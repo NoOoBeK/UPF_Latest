@@ -69,28 +69,32 @@ public class DataKTWList {
         if (excelData.size() < 1) {return false;}
         DataKTW checkedSKU;
 
-        for (DataKTW record : DataList)
+        if (DataList.size() < 1)
         {
-            checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
-            if (checkedSKU != null)
-            {
-                DataBaseAPI.getInstance().delateKTW(record);
-            }
-        }
-        for(DataKTW record : excelData)
-        {
-            checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
-            if (checkedSKU != null)
-            {
-                if (!record.compare(checkedSKU))
-                {
-                    DataBaseAPI.getInstance().updateKTW(record);
+            DataList = excelData;
+        } else {
+            for (DataKTW record : DataList) {
+                checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
+                if (checkedSKU != null) {
+                    DataBaseAPI.getInstance().delateKTW(record);
                 }
-            } else {
-                DataBaseAPI.getInstance().addKTW(record);
+            }
+            for (DataKTW record : excelData) {
+                checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
+                if (checkedSKU != null) {
+                    if (!record.compare(checkedSKU)) {
+                        DataBaseAPI.getInstance().updateKTW(record);
+                    }
+                } else {
+                    DataBaseAPI.getInstance().addKTW(record);
+                }
             }
         }
-
         return true;
+    }
+
+    public void cleanList()
+    {
+        getData().clear();
     }
 }

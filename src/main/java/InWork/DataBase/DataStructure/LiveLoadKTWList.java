@@ -82,8 +82,6 @@ public class LiveLoadKTWList {
             }
             if (index == -1)
             {
-                System.out.println(DestID);
-                System.out.println(newRecord.getDest());
                 dane.get(Clusters.size()).add(newRecord);
             }
             else             {dane.get(index).add(newRecord);}

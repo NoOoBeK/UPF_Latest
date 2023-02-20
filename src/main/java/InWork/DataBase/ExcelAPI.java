@@ -5,6 +5,7 @@ import InWork.DataBase.DataStructure.DataPP;
 import InWork.DataBase.DataStructure.LiveLoadKTW;
 import InWork.DataBase.DataStructure.LiveLoadKTWList;
 import InWork.Operations.Calculations;
+import InWork.Settings;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -25,8 +26,7 @@ public class ExcelAPI
 
     static private File ChoseFile(Component caller)
     {
-        String Dir = System.getProperty("user.dir");
-        JFileChooser file = new JFileChooser(Dir);
+        JFileChooser file = new JFileChooser(Settings.getInstance().getFileChoserPath());
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "xlsx|xls|xlt","xlsx", "xls", "xlt");
         file.setFileFilter(filter);
@@ -79,7 +79,7 @@ public class ExcelAPI
             cell = sheet.getRow(source).getCell(58);
             String str = cell.getStringCellValue();
             str = str.replaceAll("\\s+","");
-            if (str.equals("1200/100")) {
+            if (str.equals("1200/1000")) {
                 newRecord.setPaltype("IND");
             } else {
                 newRecord.setPaltype("EUR");

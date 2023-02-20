@@ -5,13 +5,16 @@ import InWork.DataBase.DataStructure.DataKTWList;
 import InWork.DataBase.DataStructure.LiveLoadKTW;
 import InWork.DataBase.DataStructure.LiveLoadKTWList;
 import InWork.DataBase.ExcelAPI;
+import InWork.Settings;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SelectFactory extends JFrame{
     private JButton exitButton;
@@ -27,11 +30,9 @@ public class SelectFactory extends JFrame{
     private JLabel Cred;
     private JButton LiveLoadPlan;
     private JButton cleanDBButton;
+    private JButton settingsButton;
 
-    public void setDataBaseTable(DataBaseUI dataBaseTable) {
-        DataBaseTable = dataBaseTable;
-    }
-
+    private InWork.GUI.Settings SettingsUI;
     private DataBaseUI DataBaseTable;
 
     private SelectFactory thisframe;
@@ -40,17 +41,20 @@ public class SelectFactory extends JFrame{
 
         thisframe = this;
         DataBaseTable = null;
+        SettingsUI = null;
 
         setContentPane(MainPanel);
         setTitle("UPF");
 
         try {
             recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
-            LastInsert.setText(DataBaseAPI.getInstance().getKTWLastInsert().toString());
         } catch (SQLException throwables) {
             JOptionPane.showMessageDialog(thisframe, "Błąd Bazy Danych");
             throwables.printStackTrace();
         }
+        Date LastKTWImport = Settings.getInstance().getLastimportKTW();
+        if (LastKTWImport != null) LastInsert.setText(LastKTWImport.toString());
+        else                       LastInsert.setText("NULL");
 
         exitButton.addActionListener(new ActionListener() {
             @Override
@@ -91,14 +95,19 @@ public class SelectFactory extends JFrame{
                     if (DataKTWList.getInstance().ImpotrKTW())
                     {
                         JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
+                        Settings.getInstance().setLastimportKTW(new Date());
+                        LastInsert.setText(Settings.getInstance().getLastimportKTW().toString());
+                        Settings.getInstance().SaveSettings();
+                        recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
                     } else {
                         JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
                     }
-                    recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
-                    LastInsert.setText(DataBaseAPI.getInstance().getKTWLastInsert().toString());
                 } catch (SQLException throwables) {
                     JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
                     throwables.printStackTrace();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(thisframe, "Błąd z zapisaniem czasu ostatniego Importu");
+                    throw new RuntimeException(ex);
                 }
             }
         });
@@ -106,11 +115,16 @@ public class SelectFactory extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 ArrayList<ArrayList<LiveLoadKTW>> data = LiveLoadKTWList.getInstance().CreatData();
-                JOptionPane.showMessageDialog(thisframe, "Import Zkończony");
-                ExcelAPI.IrelandSplit(data.get(7));
-                JOptionPane.showMessageDialog(thisframe, "Irlandia w Pliku");
-                ExcelAPI.ProductionPlan(data);
-                JOptionPane.showMessageDialog(thisframe, "Plan w Pliku");
+                if (data.size() > 0) {
+                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
+                    ExcelAPI.IrelandSplit(data.get(7));
+                    JOptionPane.showMessageDialog(thisframe, "Irlandia w Pliku");
+                    ExcelAPI.ProductionPlan(data);
+                    JOptionPane.showMessageDialog(thisframe, "Plan w Pliku");
+                } else
+                {
+                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
+                }
             }
         });
 
@@ -119,9 +133,30 @@ public class SelectFactory extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                     DataBaseAPI.getInstance().cleanDBKTW();
+                    DataKTWList.getInstance().cleanList();
+                    Settings.getInstance().setLastimportKTW(null);
+                    Settings.getInstance().SaveSettings();
+                    LastInsert.setText("NULL");
+                    recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
                 } catch (SQLException throwables) {
                     JOptionPane.showMessageDialog(thisframe, "błąd czyszczenia bazy Katowic");
                     throwables.printStackTrace();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(thisframe, "Błąd z zapisaniem czasu ostatniego Importu");
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        settingsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (thisframe.SettingsUI == null) {
+                    SettingsUI = new InWork.GUI.Settings();
+                    SettingsUI.setSize(800, 600);
+                    SettingsUI.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+                    SettingsUI.setVisible(true);
+                } else {
+                    SettingsUI.setVisible(true);
                 }
             }
         });

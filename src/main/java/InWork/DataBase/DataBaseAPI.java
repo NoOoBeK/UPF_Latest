@@ -50,7 +50,6 @@ public class DataBaseAPI {
 
     private void Connect() throws SQLException {
         String url = "jdbc:sqlite:" + DatabasePath + "\\UPF_DB.db";
-        System.out.println(url);
         conn = DriverManager.getConnection(url);
         System.out.println("Connection to SQLite has been established.");
     }
@@ -66,8 +65,7 @@ public class DataBaseAPI {
             + "dest TEXT,\n"
             + "paltype TEXT,\n"
             + "qatime INTEGER,\n"
-            + "height REAL,\n"
-            + "InsertTime TEXT NOT NULL\n"
+            + "height REAL\n"
             + ");";
         if (!conn.isValid(5)) {Connect();}
         Statement stmt = conn.createStatement();stmt.execute(TableKTW);
@@ -79,7 +77,7 @@ public class DataBaseAPI {
             Connect();
         }
         PreparedStatement pst;
-        pst = conn.prepareStatement("INSERT INTO KTW(sku,name,gross,net,cs,dest,paltype,qatime,height,InsertTime)VALUES(?,?,?,?,?,?,?,?,?,?)");
+        pst = conn.prepareStatement("INSERT INTO KTW(sku,name,gross,net,cs,dest,paltype,qatime,height)VALUES(?,?,?,?,?,?,?,?,?)");
         pst.setInt   (1, data.getSKU());
         pst.setString(2, data.getName());
         pst.setDouble(3, data.getGross());
@@ -89,15 +87,16 @@ public class DataBaseAPI {
         pst.setString(7, data.getPaltype());
         pst.setInt   (8, data.getQatime());
         pst.setDouble(9, data.getHeight());
-        pst.setString(10,LocalDate.now().toString());
         pst.executeUpdate();
     }
 
     public void cleanDBKTW() throws SQLException {
-        String sql1 = "DELETE FROM KTW;";
+        String sql1 = "DROP TABLE KTW;";
+        conn.close();
         if (!conn.isValid(5)) {Connect();}
         Statement stmt = this.conn.createStatement();
         stmt.execute(sql1);
+        CreatTable();
     }
 
     public void updateKTW(DataKTW data) throws SQLException {
@@ -105,7 +104,7 @@ public class DataBaseAPI {
             Connect();
         }
         PreparedStatement pst;
-        pst = conn.prepareStatement("UPDATE KTW SET name = ?, gross = ?, net = ?, cs = ?, dest = ?, paltype = ?, qatime = ?, height = ?, InsertTime = ?) WHERE sku == ?;");
+        pst = conn.prepareStatement("UPDATE KTW SET name = ?, gross = ?, net = ?, cs = ?, dest = ?, paltype = ?, qatime = ?, height = ?) WHERE sku == ?;");
         pst.setString(1, data.getName());
         pst.setDouble(2, data.getGross());
         pst.setDouble(3, data.getNet());
@@ -114,7 +113,6 @@ public class DataBaseAPI {
         pst.setString(6, data.getPaltype());
         pst.setInt   (7, data.getQatime());
         pst.setDouble(8, data.getHeight());
-        pst.setString(9,LocalDate.now().toString());
 
         pst.setInt   (10, data.getSKU());
         pst.executeUpdate();
@@ -179,20 +177,6 @@ public class DataBaseAPI {
             ret.add(newRecord);
         }
         return ret;
-    }
-
-    public LocalDate getKTWLastInsert() throws SQLException {
-        String querry = "SELECT InsertTime FROM KTW;";
-        LocalDate newDate = LocalDate.now();
-        LocalDate latestDate = LocalDate.MIN;
-        if (!conn.isValid(5)) {Connect();}
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(querry);
-        while (rs.next()) {
-            newDate = LocalDate.parse(rs.getString(1));
-            if (newDate.isAfter(latestDate)) {latestDate = LocalDate.from(newDate);}
-        }
-        return latestDate;
     }
 
     public boolean delateKTW(DataKTW record) throws SQLException {
