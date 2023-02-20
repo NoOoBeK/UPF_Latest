@@ -27,7 +27,7 @@ public class DataKTWList {
 
     private DataKTWList() throws SQLException {
         Instance = this;
-        DataList = DataBaseAPI.getInstance().getKTW();
+        loadDataDB();
     }
 
     public void add(DataKTW data)
@@ -66,35 +66,36 @@ public class DataKTWList {
 
     public boolean ImpotrKTW() throws SQLException {
         ArrayList<DataKTW> excelData = ExcelAPI.ImportKTW(null);
-        if (excelData.size() < 1) {return false;}
+        if (excelData.size() < 1) {
+            return false;
+        }
         DataKTW checkedSKU;
 
-        if (DataList.size() < 1)
-        {
-            DataList = excelData;
-        } else {
-            for (DataKTW record : DataList) {
-                checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
-                if (checkedSKU != null) {
-                    DataBaseAPI.getInstance().delateKTW(record);
-                }
-            }
-            for (DataKTW record : excelData) {
-                checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
-                if (checkedSKU != null) {
-                    if (!record.compare(checkedSKU)) {
-                        DataBaseAPI.getInstance().updateKTW(record);
-                    }
-                } else {
-                    DataBaseAPI.getInstance().addKTW(record);
-                }
+        for (DataKTW record : DataList) {
+            checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
+            if (checkedSKU != null) {
+                DataBaseAPI.getInstance().delateKTW(record);
             }
         }
+        for (DataKTW record : excelData) {
+            checkedSKU = DataBaseAPI.getInstance().getKTW(record.getSKU());
+            if (checkedSKU != null) {
+                if (!record.compare(checkedSKU)) {
+                    DataBaseAPI.getInstance().updateKTW(record);
+                }
+            } else {
+                DataBaseAPI.getInstance().addKTW(record);
+            }
+        }
+        loadDataDB();
         return true;
     }
 
     public void cleanList()
     {
-        getData().clear();
+        Instance = null;
+    }
+    private void loadDataDB() throws SQLException {
+        DataList = DataBaseAPI.getInstance().getKTW();
     }
 }

@@ -2,6 +2,9 @@ package InWork.Operations;
 
 import InWork.DataBase.DataStructure.LiveLoadKTW;
 import InWork.DataBase.DataStructure.LiveLoadPOL;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -44,11 +47,17 @@ public class Calculations {
 
     static public ArrayList<LiveLoadPOL> PolandLiveLoad(ArrayList<LiveLoadKTW> list)
     {
-        int StartPalletCount = 0;
+        int PalletCount = 0;
         ArrayList<LiveLoadPOL> ret = new ArrayList<>();
         Date Now = new Date();
-        double Start = Math.abs((((Now.getTime() / 100) / 60) / 60) / 24) + (Now.getHours() / 24);
-        if (Now.getMinutes() >= 30) Start += 1/48;
+        if (Now.getMinutes() >= 30)
+        {
+            Now.setTime(Now.getTime() + (3600000));
+        }
+        Now.setMinutes(0);
+        Now.setSeconds(0);
+
+        double Start = DateUtil.getExcelDate(Now);
         double End = 0.0;
         double checkenEnd = 0.0;
         for (LiveLoadKTW dane : list)
@@ -61,27 +70,35 @@ public class Calculations {
             LiveLoadPOL newRecord = new LiveLoadPOL();
             newRecord.setDate(Math.floor(Start));
             newRecord.setTime(Start - Math.floor(Start));
-            int PalletCount = StartPalletCount;
+
             for (LiveLoadKTW dane : list)
             {
-                if (Start < (dane.getSDate() + dane.getSTime()) && Start > (dane.getEDate() + dane.getETime()))
+                double StartProduction =dane.getSDate() + dane.getSTime();
+                double EndProduction = dane.getEDate() + dane.getETime();
+                if (Start < StartProduction && StartProduction < (Start + (1.0 / 48.0)) )
                 {
-                    double checkTime = (Start - (dane.getEDate() + dane.getETime()));
-                    if (checkTime > (1 / 48)) checkTime = 1 / 48;
-                    PalletCount += Math.abs(checkTime * dane.getProductionTime());
+                    double productionTime = 0.0;
+                    if (EndProduction > (Start + (1.0 / 48.0))) productionTime = (Start + (1.0 / 48.0)) - StartProduction;
+                    else                                        productionTime = EndProduction - StartProduction;
+                    PalletCount += Math.abs(productionTime / dane.getProductionTime());
+                } else if (Start > StartProduction && EndProduction > Start)
+                {
+                    double productionTime = 0.0;
+                    if (EndProduction > (Start + (1.0 / 48.0))) productionTime = (1.0 / 48.0);
+                    else                                        productionTime = EndProduction - Start;
+                    PalletCount += Math.abs(productionTime / dane.getProductionTime());
                 }
             }
             newRecord.setPaletCoun(PalletCount);
-            StartPalletCount += PalletCount;
 
             int NeddedTruck = 0;
-            while (StartPalletCount >= 30)
+            while (PalletCount >= 30)
             {
                 NeddedTruck += 1;
-                StartPalletCount -= 30;
+                PalletCount -= 30;
             }
             newRecord.setNeededTruck(NeddedTruck);
-            Start += 1 / 48;
+            Start += (1.0 / 48.0);
             ret.add(newRecord);
         }
         System.out.println(ret.size());
