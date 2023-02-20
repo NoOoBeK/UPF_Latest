@@ -195,7 +195,7 @@ public class ExcelAPI
             int celnum;
             for (source = 0; source<Plan.size();source++){
                 rowNum = rowNum +1;
-                if (Plan.get(source).getSku()!=Plan.get(source-1).getSku()){rowNum = rowNum +1;}
+                if ((source > 0) && (Plan.get(source).getSku()!=Plan.get(source-1).getSku())){rowNum = rowNum +1;}
                 XSSFRow row = sheet.createRow(rowNum);
                 for (celnum=0;celnum<15;celnum++) {
                     XSSFCell cell0 = row.createCell(celnum);
