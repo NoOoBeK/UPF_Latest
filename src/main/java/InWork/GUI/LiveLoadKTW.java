@@ -3,13 +3,10 @@ package InWork.GUI;
 import InWork.DataBase.DataStructure.LiveLoadPOL;
 import InWork.DataBase.ExcelAPI;
 import InWork.Operations.Calculations;
-import InWork.Settings;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 
 public class LiveLoadKTW extends JFrame {

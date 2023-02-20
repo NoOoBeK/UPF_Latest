@@ -82,7 +82,7 @@ public class ExcelAPI
                 newRecord.setPaltype("EUR");
             }
             int temp;
-            if (newRecord.getDest().contains("FRESH")) {
+            if (newRecord.getDest().toLowerCase().contains("fresh")) {
                 temp = newRecord.getDest().charAt(0);
                 if (temp == 50) {
                     newRecord.setQatime(2);
