@@ -189,18 +189,18 @@ public class ExcelAPI
         XSSFWorkbook book = new XSSFWorkbook();
         XSSFSheet sheet = book.createSheet("Polska");
 
-        for (int source = 0; source<list.size();source++){
-            XSSFRow row = sheet.createRow(source);
-            for (int celnum=0;celnum<3;celnum++)
-            {
-                XSSFCell cell = row.createCell(celnum);
+        for (int source = 0; source<list.size();source++) {
+            for (int rownum = 0; list.get(source).getNeededTruck() > 0; rownum++) {
+                XSSFRow row = sheet.createRow(rownum);
+                for (int celnum = 0; celnum < 3; celnum++) {
+                    XSSFCell cell = row.createCell(celnum);
+                }
+                sheet.getRow(rownum).getCell(0).setCellValue(list.get(source).getDate());
+                sheet.getRow(rownum).getCell(1).setCellValue(list.get(source).getTime());
+                sheet.getRow(rownum).getCell(2).setCellValue(list.get(source).getPaletCoun());
+                sheet.getRow(rownum).getCell(3).setCellValue(list.get(source).getNeededTruck());
             }
-            sheet.getRow(source).getCell(0).setCellValue(list.get(source).getDate());
-            sheet.getRow(source).getCell(1).setCellValue(list.get(source).getTime());
-            sheet.getRow(source).getCell(2).setCellValue(list.get(source).getPaletCoun());
-            sheet.getRow(source).getCell(3).setCellValue(list.get(source).getNeededTruck());
         }
-
         FileOut(book,name);
     }
     static public void ProductionPlan(ArrayList<LiveLoadKTW> Plan){

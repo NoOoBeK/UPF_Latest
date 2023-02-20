@@ -47,18 +47,19 @@ public class Calculations {
         int StartPalletCount = 0;
         ArrayList<LiveLoadPOL> ret = new ArrayList<>();
         Date Now = new Date();
-        double Start = Math.abs((((Now.getTime() / 100) / 60) / 60) / 24) + (Now.getHours() / 24);
-        if (Now.getMinutes() >= 30) Start += 1/48;
-        double End = 0.0;
-        double checkenEnd = 0.0;
-        for (LiveLoadKTW dane : list)
-        {
-            checkenEnd = dane.getEDate() + dane.getETime();
-            if (End < checkenEnd) End = checkenEnd;
-        }
-        while (Start < End)
-        {
-            LiveLoadPOL newRecord = new LiveLoadPOL();
+        double Start = Now.getTime()/1000/86400+25569;
+        //double Start = Math.abs((((Now.getTime() / 1000) / 60) / 60) / 24) + (Now.getHours() / 24);
+        if (Now.getMinutes() >= 60) Start += 0.04166667;
+
+        double End = Start+4;
+//        double checkenEnd = 0.0;
+        //        for (LiveLoadKTW dane : list)
+//        {
+//            checkenEnd = dane.getEDate() + dane.getETime();
+//            if (End < checkenEnd) End = checkenEnd;
+//        }
+        while (Start < End) {
+                       LiveLoadPOL newRecord = new LiveLoadPOL();
             newRecord.setDate(Math.floor(Start));
             newRecord.setTime(Start - Math.floor(Start));
             int PalletCount = StartPalletCount;
@@ -67,7 +68,7 @@ public class Calculations {
                 if (Start < (dane.getSDate() + dane.getSTime()) && Start > (dane.getEDate() + dane.getETime()))
                 {
                     double checkTime = (Start - (dane.getEDate() + dane.getETime()));
-                    if (checkTime > (1 / 48)) checkTime = 1 / 48;
+                    if (checkTime > (0.04166667)) checkTime = 0.04166667;
                     PalletCount += Math.abs(checkTime * dane.getProductionTime());
                 }
             }
@@ -81,10 +82,13 @@ public class Calculations {
                 StartPalletCount -= 30;
             }
             newRecord.setNeededTruck(NeddedTruck);
-            Start += 1 / 48;
+            Start += 0.04166667;
             ret.add(newRecord);
         }
-        System.out.println(ret.size());
+        for (int i=0;i<ret.size();i++){
+        System.out.println(ret.get(i).getPaletCoun());
+        }
+
         return ret;
     }
 }
