@@ -77,7 +77,9 @@ public class ExcelAPI
             cell = sheet.getRow(source).getCell(54);
             newRecord.setDest(cell.getStringCellValue());
             cell = sheet.getRow(source).getCell(58);
-            if (cell.getStringCellValue().equals("1200/100")) {
+            String str = cell.getStringCellValue();
+            str = str.replaceAll("\\s+","");
+            if (str.equals("1200/100")) {
                 newRecord.setPaltype("IND");
             } else {
                 newRecord.setPaltype("EUR");
