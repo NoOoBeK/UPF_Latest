@@ -16,6 +16,18 @@ public class LiveLoadKTW {
     {
 
     }
+    public LiveLoadKTW(LiveLoadKTW source)
+    {
+        setSku(source.getSku());
+        setName(source.getName());
+        setPalletCount(source.getPalletCount());
+        setMaxPallet(source.getMaxPallet());
+        setProductionTime(source.getProductionTime());
+        setSDate(source.getSDate());
+        setSTime(source.STime);
+        setDest(source.getDest());
+        setLine(source.getLine());
+    }
 
     public String getDest() {
         return Dest;
