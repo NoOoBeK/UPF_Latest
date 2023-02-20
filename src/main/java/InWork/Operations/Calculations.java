@@ -71,6 +71,16 @@ public class Calculations {
                     PalletCount += Math.abs(checkTime * dane.getProductionTime());
                 }
             }
+            newRecord.setPaletCoun(PalletCount);
+            StartPalletCount += PalletCount;
+
+            int NeddedTruck = 0;
+            while (StartPalletCount >= 30)
+            {
+                NeddedTruck += 1;
+                StartPalletCount -= 30;
+            }
+            newRecord.setNeededTruck(NeddedTruck);
             Start += 1 / 48;
         }
         return ret;
