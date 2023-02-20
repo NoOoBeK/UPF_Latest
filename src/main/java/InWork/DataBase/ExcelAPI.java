@@ -190,15 +190,19 @@ public class ExcelAPI
         XSSFSheet sheet = book.createSheet("Polska");
 
         for (int source = 0; source<list.size();source++) {
-            for (int rownum = 0; list.get(source).getNeededTruck() > 0; rownum++) {
-                XSSFRow row = sheet.createRow(rownum);
+            for (int rowNum = 0; list.get(source).getNeededTruck() > 0; rowNum++) {
+                XSSFRow row = sheet.createRow(rowNum);
                 for (int celnum = 0; celnum < 3; celnum++) {
                     XSSFCell cell = row.createCell(celnum);
                 }
-                sheet.getRow(rownum).getCell(0).setCellValue(list.get(source).getDate());
-                sheet.getRow(rownum).getCell(1).setCellValue(list.get(source).getTime());
-                sheet.getRow(rownum).getCell(2).setCellValue(list.get(source).getPaletCoun());
-                sheet.getRow(rownum).getCell(3).setCellValue(list.get(source).getNeededTruck());
+                sheet.getRow(rowNum).getCell(0).setCellValue(list.get(source).getDate());
+                sheet.getRow(rowNum).getCell(1).setCellValue(list.get(source).getTime());
+                sheet.getRow(rowNum).getCell(2).setCellValue(list.get(source).getPaletCoun());
+                sheet.getRow(rowNum).getCell(3).setCellValue(list.get(source).getNeededTruck());
+                XSSFCellStyle data = date(book);
+                sheet.getRow(rowNum).getCell(0).setCellStyle(data);
+                XSSFCellStyle time = time(book);
+                sheet.getRow(rowNum).getCell(1).setCellStyle(time);
             }
         }
         FileOut(book,name);
@@ -208,7 +212,7 @@ public class ExcelAPI
             XSSFWorkbook book = new XSSFWorkbook();
             XSSFSheet sheet = book.createSheet("Plan");
 
-            int rowNum =0;
+        int rowNum =0;
             int source;
             int ordernum=1;
 
@@ -260,14 +264,17 @@ public class ExcelAPI
                     sheet.getRow(rowNum).getCell(10).setCellValue("");
                     }
                 sheet.getRow(rowNum).getCell(11).setCellValue(Plan.get(source).getSDate());
+                XSSFCellStyle data = date(book);
+                sheet.getRow(rowNum).getCell(11).setCellStyle(data);
                 sheet.getRow(rowNum).getCell(12).setCellValue(Plan.get(source).getSTime());
+                XSSFCellStyle time = time(book);
+                sheet.getRow(rowNum).getCell(12).setCellStyle(time);
                 sheet.getRow(rowNum).getCell(13).setCellValue(Plan.get(source).getProductionTime());
                 sheet.getRow(rowNum).getCell(14).setCellValue(Plan.get(source).getDest());
             }
         FileOut(book,name);
     }
-    static public XSSFCellStyle style(XSSFWorkbook book,int BR,int BG,int BB,int TR,int TG,int TB,boolean bold)
-    {
+    static public XSSFCellStyle style(XSSFWorkbook book,int BR,int BG,int BB,int TR,int TG,int TB,boolean bold) {
         XSSFCellStyle NC = book.createCellStyle();
         NC.setFillForegroundColor(new XSSFColor(new Color(BR,BG,BB),new DefaultIndexedColorMap()));
         NC.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -277,6 +284,18 @@ public class ExcelAPI
         NC.setFont(NF);
 
         return NC;
+    }
+    static public XSSFCellStyle date(XSSFWorkbook book) {
+        CreationHelper createHelper = book.getCreationHelper();
+        XSSFCellStyle cellStyle = book.createCellStyle();
+        cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/mm/yyyy"));
+        return cellStyle;
+    }
+    static public XSSFCellStyle time(XSSFWorkbook book) {
+        CreationHelper createHelper = book.getCreationHelper();
+        XSSFCellStyle cellStyle = book.createCellStyle();
+        cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("hh:mm:ss"));
+        return cellStyle;
     }
 
 }
