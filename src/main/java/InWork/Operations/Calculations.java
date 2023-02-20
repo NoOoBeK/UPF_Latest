@@ -12,6 +12,17 @@ import java.util.Date;
 
 public class Calculations {
 
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        return true;
+    }
+
     static public ArrayList<LiveLoadKTW> ProductionPlan(ArrayList<ArrayList<LiveLoadKTW>> all){
       ArrayList<LiveLoadKTW> Plan = new ArrayList<>();
       for(int i = 1; i < all.size(); i++){
@@ -47,7 +58,14 @@ public class Calculations {
 
     static public ArrayList<LiveLoadPOL> PolandLiveLoad(ArrayList<LiveLoadKTW> list)
     {
-        int PalletCount = 0;
+        boolean wait = true;
+        String input = "";
+        while (wait)
+        {
+            input = JOptionPane.showInputDialog(null,"Podaj początkową ilość palet", 0);
+            if (isInteger(input)) wait = false;
+        }
+        int PalletCount = Integer.valueOf(input);
         ArrayList<LiveLoadPOL> ret = new ArrayList<>();
         Date Now = new Date();
         if (Now.getMinutes() >= 30)
