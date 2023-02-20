@@ -4,9 +4,6 @@ import InWork.DataBase.DataBaseAPI;
 import InWork.DataBase.DataStructure.DataKTWList;
 import InWork.DataBase.DataStructure.LiveLoadKTW;
 import InWork.DataBase.DataStructure.LiveLoadKTWList;
-import InWork.DataBase.DataStructure.LiveLoadPOL;
-import InWork.DataBase.ExcelAPI;
-import InWork.Operations.Calculations;
 import InWork.Settings;
 
 import javax.swing.*;
@@ -58,114 +55,83 @@ public class SelectFactory extends JFrame{
         if (LastKTWImport != null) LastInsert.setText(LastKTWImport.toString());
         else                       LastInsert.setText("NULL");
 
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+        exitButton.addActionListener(e -> System.exit(0));
+        exitButton1.addActionListener(e -> System.exit(0));
+        exitButton2.addActionListener(e -> System.exit(0));
+        DataBaseView.addActionListener(e -> {
+            if (thisframe.DataBaseTable == null) {
+                DataBaseTable = new DataBaseUI();
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                DataBaseTable.setSize(screenSize.width, screenSize.height);
+                DataBaseTable.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+                DataBaseTable.setVisible(true);
+            } else {
+                DataBaseTable.setVisible(true);
             }
         });
-        exitButton1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        exitButton2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        DataBaseView.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (thisframe.DataBaseTable == null) {
-                    DataBaseTable = new DataBaseUI();
-                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-                    DataBaseTable.setSize(screenSize.width, screenSize.height);
-                    DataBaseTable.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-                    DataBaseTable.setVisible(true);
+        ImportKTW.addActionListener(e -> {
+            try {
+                if (DataKTWList.getInstance().ImpotrKTW())
+                {
+                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
+                    Settings.getInstance().setLastimportKTW(new Date());
+                    LastInsert.setText(Settings.getInstance().getLastimportKTW().toString());
+                    Settings.getInstance().SaveSettings();
+                    recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
                 } else {
-                    DataBaseTable.setVisible(true);
-                }
-            }
-        });
-        ImportKTW.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if (DataKTWList.getInstance().ImpotrKTW())
-                    {
-                        JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
-                        Settings.getInstance().setLastimportKTW(new Date());
-                        LastInsert.setText(Settings.getInstance().getLastimportKTW().toString());
-                        Settings.getInstance().SaveSettings();
-                        recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
-                    } else {
-                        JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
-                    }
-                } catch (SQLException throwables) {
-                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
-                    throwables.printStackTrace();
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(thisframe, "Błąd z zapisaniem czasu ostatniego Importu");
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-        LiveLoadPlan.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ArrayList<ArrayList<LiveLoadKTW>> data = LiveLoadKTWList.getInstance().CreatData();
-                int count = 0;
-                for (ArrayList<LiveLoadKTW> list : data)
-                {
-                    count += list.size();
-                }
-                if (count > 0) {
-                    InWork.GUI.LiveLoadKTW form = new InWork.GUI.LiveLoadKTW(data);
-                    form.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                    form.pack();
-                    form.setVisible(true);
-                } else
-                {
                     JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
                 }
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
+                throwables.printStackTrace();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(thisframe, "Błąd z zapisaniem czasu ostatniego Importu");
+                throw new RuntimeException(ex);
+            }
+        });
+        LiveLoadPlan.addActionListener(e -> {
+            ArrayList<ArrayList<LiveLoadKTW>> data = LiveLoadKTWList.getInstance().CreatData();
+            int count = 0;
+            for (ArrayList<LiveLoadKTW> list : data)
+            {
+                count += list.size();
+            }
+            if (count > 0) {
+                InWork.GUI.LiveLoadKTW form = new InWork.GUI.LiveLoadKTW(data);
+                form.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                form.pack();
+                form.setVisible(true);
+            } else
+            {
+                JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
             }
         });
 
-        cleanDBButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    DataBaseAPI.getInstance().cleanDBKTW();
-                    DataKTWList.getInstance().cleanList();
-                    Settings.getInstance().setLastimportKTW(null);
-                    Settings.getInstance().SaveSettings();
-                    LastInsert.setText("NULL");
-                    recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
-                } catch (SQLException throwables) {
-                    JOptionPane.showMessageDialog(thisframe, "błąd czyszczenia bazy Katowic");
-                    throwables.printStackTrace();
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(thisframe, "Błąd z zapisaniem czasu ostatniego Importu");
-                    throw new RuntimeException(ex);
-                }
+        cleanDBButton.addActionListener(e -> {
+            try {
+                DataBaseAPI.getInstance().cleanDBKTW();
+                DataKTWList.getInstance().cleanList();
+                Settings.getInstance().setLastimportKTW(null);
+                Settings.getInstance().SaveSettings();
+                LastInsert.setText("NULL");
+                recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(thisframe, "błąd czyszczenia bazy Katowic");
+                throwables.printStackTrace();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(thisframe, "Błąd z zapisaniem czasu ostatniego Importu");
+                throw new RuntimeException(ex);
             }
         });
-        settingsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (thisframe.SettingsUI == null) {
-                    SettingsUI = new InWork.GUI.Settings();
-                    SettingsUI.pack();
-                    SettingsUI.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-                    SettingsUI.setVisible(true);
-                } else {
-                    SettingsUI.setVisible(true);
-                }
+        settingsButton.addActionListener(e -> {
+            if (thisframe.SettingsUI == null) {
+                SettingsUI = new InWork.GUI.Settings();
+                SettingsUI.pack();
+                SettingsUI.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+                SettingsUI.setVisible(true);
+            } else {
+                SettingsUI.setVisible(true);
             }
         });
     }
-
 }
