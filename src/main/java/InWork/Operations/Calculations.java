@@ -82,7 +82,9 @@ public class Calculations {
             }
             newRecord.setNeededTruck(NeddedTruck);
             Start += 1 / 48;
+            ret.add(newRecord);
         }
+        System.out.println(ret.size());
         return ret;
     }
 }
