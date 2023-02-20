@@ -50,6 +50,8 @@ public class LiveLoadKTWList {
             Double temp = Math.ceil(danePP.getQNT() / corrData.getNet());
             newRecord.setPalletCount(temp.intValue());
             temp = Math.floor(22500 / corrData.getGross());
+            if (temp > 26 && corrData.getPaltype().equals("IND")) temp = 26.0;
+            else if (temp > 33 && corrData.getHeight() >= 1250) temp = 33.0;
             newRecord.setMaxPallet(temp.intValue());
             temp = ((danePP.getEDate() + danePP.getETime()) - (danePP.getSDate() + danePP.getSTime())) / newRecord.getPalletCount();
             newRecord.setProductionTime(temp);
