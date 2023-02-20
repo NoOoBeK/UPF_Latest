@@ -202,13 +202,13 @@ public class ExcelAPI
                 }
                 sheet.getRow(rowNum).getCell(0).setCellValue(Plan.get(source).getSku());
                 sheet.getRow(rowNum).getCell(1).setCellValue(Plan.get(source).getName());
-                if (Plan.get(rowNum).getPalletCount()/Plan.get(source).getMaxPallet()>0.9){sheet.getRow(source).getCell(2).setCellValue("Nieplanowane");}else {sheet.getRow(source).getCell(2).setCellValue("");}
+                if (((double)Plan.get(source).getPalletCount()/(double)Plan.get(source).getMaxPallet())>0.9){sheet.getRow(source).getCell(2).setCellValue("Nieplanowane");}else {sheet.getRow(source).getCell(2).setCellValue("");}
                 sheet.getRow(rowNum).getCell(3).setCellValue(Plan.get(source).getPalletCount());
                 sheet.getRow(rowNum).getCell(4).setCellValue("PAL");
                 sheet.getRow(rowNum).getCell(5).setCellValue(Plan.get(source).getMaxPallet());
                 sheet.getRow(rowNum).getCell(6).setCellValue("");
                 sheet.getRow(rowNum).getCell(7).setCellValue("");
-                if (Plan.get(rowNum).getPalletCount()/Plan.get(source).getMaxPallet()<0.9){sheet.getRow(source).getCell(8).setCellValue("po produkcji do FRESH");}else {sheet.getRow(source).getCell(2).setCellValue("");}
+                if (((double)Plan.get(source).getPalletCount()/(double)Plan.get(source).getMaxPallet())<0.9){sheet.getRow(source).getCell(8).setCellValue("po produkcji do FRESH");}else {sheet.getRow(source).getCell(2).setCellValue("");}
                 sheet.getRow(rowNum).getCell(9).setCellValue("");
                 sheet.getRow(rowNum).getCell(10).setCellValue("");
                 sheet.getRow(rowNum).getCell(11).setCellValue(Plan.get(source).getSDate());
