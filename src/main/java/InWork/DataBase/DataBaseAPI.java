@@ -50,6 +50,7 @@ public class DataBaseAPI {
 
     private void Connect() throws SQLException {
         String url = "jdbc:sqlite:" + DatabasePath + "\\UPF_DB.db";
+        //String url = DatabasePath + "\\UPF_DB.db";
         conn = DriverManager.getConnection(url);
         System.out.println("Connection to SQLite has been established.");
     }
