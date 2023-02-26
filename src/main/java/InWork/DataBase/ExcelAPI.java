@@ -21,8 +21,7 @@ import java.util.Calendar;
 public class ExcelAPI
 {
 
-    static private File ChoseFile(Component caller)
-    {
+    static private File ChoseFile(Component caller){
         JFileChooser file = new JFileChooser(Settings.getInstance().getFileChoserPath());
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "xlsx|xls|xlt","xlsx", "xls", "xlt");
@@ -152,6 +151,105 @@ public class ExcelAPI
 
         return ret;
     }
+    static public ArrayList<DataPrzewoznik> ImportPrzewoznik(Component caller){
+        XSSFWorkbook book = null;
+        File excelfile = ChoseFile(caller);
+        ArrayList<DataPrzewoznik> ret = new ArrayList<>();
+        if (excelfile == null) {return ret;}
+        try {
+            book = new XSSFWorkbook(excelfile);
+        } catch (IOException | InvalidFormatException e) {
+            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            e.printStackTrace();
+            return ret ;
+        }
+        XSSFSheet sheet = book.getSheetAt(0);
+        DataPrzewoznik newRecord;
+        int source;
+        XSSFCell cell;
+
+        for(source = 1 ; source < sheet.getLastRowNum();++source) {
+            newRecord = new DataPrzewoznik();
+            cell = sheet.getRow(source).getCell(0);
+            newRecord.setPrzewoznik(cell.getStringCellValue());
+            cell = sheet.getRow(source).getCell(1);
+            newRecord.setMail(cell.getStringCellValue());
+            ret.add(newRecord);
+        }
+        return ret;
+    }
+    static public ArrayList<DataOrders>ImportOrders(Component caller){
+        XSSFWorkbook book = null;
+        File excelfile = ChoseFile(caller);
+        ArrayList<DataOrders> ret = new ArrayList<>();
+        if (excelfile == null) {return ret;}
+        try {
+            book = new XSSFWorkbook(excelfile);
+        } catch (IOException | InvalidFormatException e) {
+            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            e.printStackTrace();
+            return ret ;
+        }
+        XSSFSheet sheet = book.getSheetAt(0);
+        DataOrders newRecord;
+        int source;
+        XSSFCell cell;
+
+        for(source = 1 ; source < sheet.getLastRowNum();++source) {
+            newRecord = new DataOrders();
+            ret.add(newRecord);
+        }
+        return ret;
+    }
+    static public ArrayList<DataOrdersUpdate>ImportOrdersUpdate(Component caller){
+        XSSFWorkbook book = null;
+        File excelfile = ChoseFile(caller);
+        ArrayList<DataOrdersUpdate> ret = new ArrayList<>();
+        if (excelfile == null) {return ret;}
+        try {
+            book = new XSSFWorkbook(excelfile);
+        } catch (IOException | InvalidFormatException e) {
+            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            e.printStackTrace();
+            return ret ;
+        }
+        XSSFSheet sheet = book.getSheetAt(0);
+        DataOrdersUpdate newRecord;
+        int source;
+        XSSFCell cell;
+
+        for(source = 1 ; source < sheet.getLastRowNum();++source) {
+            newRecord = new DataOrdersUpdate();
+            ret.add(newRecord);
+        }
+        return ret;
+
+    }
+    static public ArrayList<DataOrdersUpdate>Update(Component caller){
+        XSSFWorkbook book = null;
+        File excelfile = ChoseFile(caller);
+        ArrayList<DataOrdersUpdate> ret = new ArrayList<>();
+        if (excelfile == null) {return ret;}
+        try {
+            book = new XSSFWorkbook(excelfile);
+        } catch (IOException | InvalidFormatException e) {
+            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            e.printStackTrace();
+            return ret ;
+        }
+        XSSFSheet sheet = book.getSheetAt(0);
+        DataOrdersUpdate newRecord;
+        int source;
+        XSSFCell cell;
+
+        for(source = 1 ; source < sheet.getLastRowNum();++source) {
+            newRecord = new DataOrdersUpdate();
+            ret.add(newRecord);
+        }
+        return ret;
+
+    }
+
     static public void FileOut(XSSFWorkbook book, String name){
         FileOutputStream out = null;
         try {
@@ -280,6 +378,7 @@ public class ExcelAPI
             }
         FileOut(book,name);
     }
+
     static public XSSFCellStyle style(XSSFWorkbook book,int BR,int BG,int BB,int TR,int TG,int TB,boolean bold) {
         XSSFCellStyle NC = book.createCellStyle();
         NC.setFillForegroundColor(new XSSFColor(new Color(BR,BG,BB),new DefaultIndexedColorMap()));

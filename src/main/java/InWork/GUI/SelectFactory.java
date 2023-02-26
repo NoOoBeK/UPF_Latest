@@ -30,6 +30,13 @@ public class SelectFactory extends JFrame{
     private JButton LiveLoadPlan;
     private JButton cleanDBButton;
     private JButton settingsButton;
+    private JButton exitButton3;
+    private JButton ImportPrzewoznik;
+    private JButton ImportOrders;
+    private JButton BazaDanychPrzewoznik;
+    private JButton BazaDanychOrders;
+    private JButton ImportUpdate;
+    private JButton BazaDanychUpdate;
 
     private InWork.GUI.Settings SettingsUI;
     private DataBaseUI DataBaseTable;
@@ -58,6 +65,7 @@ public class SelectFactory extends JFrame{
         exitButton.addActionListener(e -> System.exit(0));
         exitButton1.addActionListener(e -> System.exit(0));
         exitButton2.addActionListener(e -> System.exit(0));
+        exitButton3.addActionListener(e -> System.exit(0));
         DataBaseView.addActionListener(e -> {
             if (thisframe.DataBaseTable == null) {
                 DataBaseTable = new DataBaseUI();
