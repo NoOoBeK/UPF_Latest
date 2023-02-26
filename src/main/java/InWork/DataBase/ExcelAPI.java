@@ -139,8 +139,11 @@ public class ExcelAPI
             newRecord.setETime(cell.getNumericCellValue());
             cell = sheet.getRow(source).getCell(6);
             String temp = cell.toString();
-            temp = temp.replace(".","");
-            temp = temp.replace(",",".");
+            if(temp.contains(",")==true)
+            {
+                temp = temp.replace(".","");
+                temp = temp.replace(",",".");
+            }
             newRecord.setQNT(Double.valueOf(temp));
             cell = sheet.getRow(source).getCell(10);
             newRecord.setLane(cell.getStringCellValue());
@@ -257,16 +260,16 @@ public class ExcelAPI
                     {
                         sheet.getRow(rowNum).getCell(8).setCellValue("");
                     }
-                sheet.getRow(rowNum).getCell(9).setCellValue("");
+                sheet.getRow(rowNum).getCell(10).setCellValue("");
                 if(sheet.getRow(rowNum).getCell(8).getStringCellValue()=="")
                 {
-                    sheet.getRow(rowNum).getCell(10).setCellValue(ordernum);
+                    sheet.getRow(rowNum).getCell(9).setCellValue(ordernum);
                     ordernum=ordernum+1;
-                    sheet.getRow(rowNum).getCell(10).setCellStyle(order);
+                    sheet.getRow(rowNum).getCell(9).setCellStyle(order);
                 }
                 else
                     {
-                    sheet.getRow(rowNum).getCell(10).setCellValue("");
+                    sheet.getRow(rowNum).getCell(9).setCellValue("");
                     }
                 sheet.getRow(rowNum).getCell(11).setCellValue(Plan.get(source).getSDate());
                 sheet.getRow(rowNum).getCell(11).setCellStyle(data);
