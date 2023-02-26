@@ -29,12 +29,10 @@ public class Settings implements java.io.Serializable {
         }
         return Instance;
     }
-    private Settings()
-    {
+    private Settings() {
         setLastimportKTW(null);
         setFileChoserPath(System.getProperty("user.dir"));
     }
-
     public String getFileChoserPath() {
         return FileChoserPath;
     }
@@ -44,12 +42,9 @@ public class Settings implements java.io.Serializable {
     public Date getLastimportKTW() {
         return LastimportKTW;
     }
-
     public void setLastimportKTW(Date lastimportKTW) {
         LastimportKTW = lastimportKTW;
     }
-
-
     public void SaveSettings () throws IOException {
         FileOutputStream fos
                 = new FileOutputStream("Settings.ini");

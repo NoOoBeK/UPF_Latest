@@ -37,6 +37,7 @@ public class SelectFactory extends JFrame{
     private JButton BazaDanychOrders;
     private JButton ImportUpdate;
     private JButton BazaDanychUpdate;
+    private JButton Gliwice;
 
     private InWork.GUI.Settings SettingsUI;
     private DataBaseUI DataBaseTable;
