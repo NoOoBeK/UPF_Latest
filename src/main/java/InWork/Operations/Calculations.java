@@ -79,13 +79,14 @@ public class Calculations {
         double End = 0.0;
         double checkenEnd = 0.0;
         for (LiveLoadKTW dane : list)
-        {
+        {   System.out.println(checkenEnd);
             if ((dane.getSDate() + dane.getSTime()) < Start)
             {
                 dane.setSDate(Math.floor(Start));
                 dane.setSTime(Start - Math.floor(Start));
             }
             checkenEnd = dane.getEDate() + dane.getETime();
+            System.out.println(checkenEnd);
             if (End < checkenEnd) End = checkenEnd;
         }
 
@@ -118,7 +119,7 @@ public class Calculations {
             newRecord.setPaletCoun(PalletCount);
 
             int NeddedTruck = 0;
-            while (PalletCount >= 30)
+            while (PalletCount >0)
             {
                 NeddedTruck += 1;
                 PalletCount -= 30;

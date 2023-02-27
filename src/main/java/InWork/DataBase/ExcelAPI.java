@@ -121,7 +121,7 @@ public class ExcelAPI
         XSSFCell cell;
         Double skudouble;
 
-        for(source = 1 ; source < sheet.getLastRowNum();++source) {
+        for(source = 1 ; source < sheet.getLastRowNum()+1;++source) {
             newRecord = new DataPP();
             cell = sheet.getRow(source).getCell(7);
             skudouble = cell.getNumericCellValue();
@@ -138,6 +138,8 @@ public class ExcelAPI
             newRecord.setETime(cell.getNumericCellValue());
             cell = sheet.getRow(source).getCell(6);
             String temp = cell.toString();
+
+
             if(temp.contains(",")==true)
             {
                 temp = temp.replace(".","");
@@ -270,16 +272,29 @@ public class ExcelAPI
         XSSFWorkbook book = new XSSFWorkbook();
         XSSFSheet sheet = book.createSheet("List");
         int source;
+        int rowNum =1;
+        XSSFCellStyle data = date(book);
+
+        XSSFRow rowt = sheet.createRow(0);
+        for (int celnum = 0; celnum < 4; celnum++) {
+            XSSFCell cell = rowt.createCell(celnum);
+        }
+        sheet.getRow(0).getCell(0).setCellValue("SKU");
+        sheet.getRow(0).getCell(1).setCellValue("Desc");
+        sheet.getRow(0).getCell(2).setCellValue("Palets");
+        sheet.getRow(0).getCell(3).setCellValue("Production Date");
+
         for (source = 0; source<Ireland.size();source++){
-            XSSFRow row = sheet.createRow(source);
-            XSSFCell cell0 = row.createCell(0);
-            XSSFCell cell1 = row.createCell(1);
-            XSSFCell cell2 = row.createCell(2);
-            XSSFCell cell3 = row.createCell(3);
-            sheet.getRow(source).getCell(0).setCellValue(Ireland.get(source).getSku());
-            sheet.getRow(source).getCell(1).setCellValue(Ireland.get(source).getName());
-            sheet.getRow(source).getCell(2).setCellValue(Ireland.get(source).getPalletCount());
-            sheet.getRow(source).getCell(3).setCellValue(Ireland.get(source).getSDate());
+            XSSFRow row = sheet.createRow(rowNum);
+            for (int celnum = 0; celnum < 4; celnum++) {
+                XSSFCell cell = row.createCell(celnum);
+            }
+            sheet.getRow(rowNum).getCell(0).setCellValue(Ireland.get(source).getSku());
+            sheet.getRow(rowNum).getCell(1).setCellValue(Ireland.get(source).getName());
+            sheet.getRow(rowNum).getCell(2).setCellValue(Ireland.get(source).getPalletCount());
+            sheet.getRow(rowNum).getCell(3).setCellValue(Ireland.get(source).getSDate());
+            sheet.getRow(rowNum).getCell(3).setCellStyle(data);
+            rowNum++;
         }
         FileOut(book,name);
 
@@ -291,14 +306,25 @@ public class ExcelAPI
         XSSFSheet sheet = book.createSheet("Polska");
         XSSFCellStyle data = date(book);
         XSSFCellStyle time = time(book);
-        int rowNum = 0;
+        int rowNum = 1;
+
+        XSSFRow row = sheet.createRow(0);
+        for (int celnum = 0; celnum < 6; celnum++) {
+            XSSFCell cell = row.createCell(celnum);
+        }
+        sheet.getRow(0).getCell(0).setCellValue("Data");
+        sheet.getRow(0).getCell(1).setCellValue("Godzina");
+        sheet.getRow(0).getCell(2).setCellValue("ilosc do zaladunku");
+        sheet.getRow(0).getCell(3).setCellValue("Ilosc aut na godzine");
+        sheet.getRow(0).getCell(4).setCellValue("FO");
+        sheet.getRow(0).getCell(5).setCellValue("Carrier");
 
         for (int source = 0; source<list.size();source++) {
             //if (list.get(source).getNeededTruck()>0){
 
-              XSSFRow row = sheet.createRow(rowNum);
+              XSSFRow row1 = sheet.createRow(rowNum);
                 for (int celnum = 0; celnum < 4; celnum++) {
-                    XSSFCell cell = row.createCell(celnum);
+                    XSSFCell cell = row1.createCell(celnum);
                 }
                 sheet.getRow(rowNum).getCell(0).setCellValue(list.get(source).getDate());
                 sheet.getRow(rowNum).getCell(1).setCellValue(list.get(source).getTime());
@@ -317,7 +343,7 @@ public class ExcelAPI
             XSSFSheet sheet = book.createSheet("Plan");
             XSSFCellStyle nieplanowany = style(book,255,153,204,128,0,128,true);
             XSSFCellStyle FRESH= style(book,0,112,192,255,255,0,false);
-            XSSFCellStyle order= style(book,191,191,191,0,0,0,false);
+            XSSFCellStyle order= style(book,223,159,225,0,0,0,false);
             XSSFCellStyle data = date(book);
             XSSFCellStyle time = time(book);
 
