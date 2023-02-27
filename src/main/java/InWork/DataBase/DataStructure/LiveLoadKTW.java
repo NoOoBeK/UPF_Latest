@@ -41,7 +41,6 @@ public class LiveLoadKTW {
         setName(source.getName());
         setPalletCount(source.getPalletCount());
         setMaxPallet(source.getMaxPallet());
-        setProductionTime(source.getProductionTime());
         setSDate(source.getSDate());
         setSTime(source.STime);
         setDest(source.getDest());
@@ -84,10 +83,7 @@ public class LiveLoadKTW {
     }
 
     public double getProductionTime() {
-        return ProductionTime;
-    }
-    public void setProductionTime(double productionTime) {
-        ProductionTime = productionTime;
+        return (((getEDate() + getETime()) - (getSDate() + getSTime())) / getPalletCount());
     }
 
     public double getSDate() {

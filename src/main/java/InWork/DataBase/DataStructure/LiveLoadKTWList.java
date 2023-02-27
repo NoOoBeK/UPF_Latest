@@ -52,8 +52,6 @@ public class LiveLoadKTWList {
             if (temp > 26 && corrData.getPaltype().equals("IND")) temp = 26.0;
             else if (temp > 33 && corrData.getHeight() >= 1250) temp = 33.0;
             newRecord.setMaxPallet(temp.intValue());
-            temp = ((danePP.getEDate() + danePP.getETime()) - (danePP.getSDate() + danePP.getSTime())) / newRecord.getPalletCount();
-            newRecord.setProductionTime(temp);
             newRecord.setEDate(danePP.getEDate());
             newRecord.setETime(danePP.getETime());
             newRecord.setSDate(danePP.getSDate());

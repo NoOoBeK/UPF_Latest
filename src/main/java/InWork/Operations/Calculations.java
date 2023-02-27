@@ -76,17 +76,14 @@ public class Calculations {
         System.out.println(Now);
 
         double Start = DateUtil.getExcelDate(Now);
-        double Begin = Start;
         double End = 0.0;
         double checkenEnd = 0.0;
         for (LiveLoadKTW dane : list)
         {
-            if ((dane.getSDate() + dane.getSTime()) < Begin)
+            if ((dane.getSDate() + dane.getSTime()) < Start)
             {
-                dane.setSDate(Math.floor(Begin));
-                dane.setSTime(Start - Math.floor(Begin));
-                double temp = ((dane.getEDate() + dane.getETime()) - (dane.getSDate() + dane.getSTime())) / dane.getPalletCount();
-                dane.setProductionTime(temp);
+                dane.setSDate(Math.floor(Start));
+                dane.setSTime(Start - Math.floor(Start));
             }
             checkenEnd = dane.getEDate() + dane.getETime();
             if (End < checkenEnd) End = checkenEnd;
