@@ -76,6 +76,7 @@ public class Calculations {
         System.out.println(Now);
 
         double Start = DateUtil.getExcelDate(Now);
+        double Begin = Start;
         double End = 0.0;
         double checkenEnd = 0.0;
         for (LiveLoadKTW dane : list)
@@ -83,6 +84,8 @@ public class Calculations {
             checkenEnd = dane.getEDate() + dane.getETime();
             if (End < checkenEnd) End = checkenEnd;
         }
+
+        double TimeLenght = 1.0/ 24.0;
         while (Start < End)
         {
             LiveLoadPOL newRecord = new LiveLoadPOL();
@@ -91,18 +94,25 @@ public class Calculations {
 
             for (LiveLoadKTW dane : list)
             {
-                double StartProduction =dane.getSDate() + dane.getSTime();
+                double StartProduction = dane.getSDate() + dane.getSTime();
                 double EndProduction = dane.getEDate() + dane.getETime();
-                if (Start < StartProduction && StartProduction < (Start + (1.0 / 24.0)) )
+                if (StartProduction < Begin)
+                {
+                    dane.setSDate(Math.floor(Start));
+                    dane.setSTime(Start - Math.floor(Start));
+                    double temp = ((dane.getEDate() + dane.getETime()) - (dane.getSDate() + dane.getSTime())) / dane.getPalletCount();
+                    dane.setProductionTime(temp);
+                }
+                if (Start <= StartProduction && StartProduction < (Start + TimeLenght) )
                 {
                     double productionTime = 0.0;
-                    if (EndProduction > (Start + (1.0 / 24.0))) productionTime = (Start + (1.0 / 24.0)) - StartProduction;
+                    if (EndProduction > (Start + TimeLenght)) productionTime = (Start + TimeLenght) - StartProduction;
                     else                                        productionTime = EndProduction - StartProduction;
                     PalletCount += Math.abs(productionTime / dane.getProductionTime());
                 } else if (Start > StartProduction && EndProduction > Start)
                 {
                     double productionTime = 0.0;
-                    if (EndProduction > (Start + (1.0 / 24.0))) productionTime = (1.0 / 24.0);
+                    if (EndProduction > (Start + TimeLenght)) productionTime = TimeLenght;
                     else                                        productionTime = EndProduction - Start;
                     PalletCount += Math.abs(productionTime / dane.getProductionTime());
                 }
@@ -116,7 +126,7 @@ public class Calculations {
                 PalletCount -= 30;
             }
             newRecord.setNeededTruck(NeddedTruck);
-            Start += (1.0 / 24.0);
+            Start += TimeLenght;
             ret.add(newRecord);
         }
         System.out.println(ret.size());
