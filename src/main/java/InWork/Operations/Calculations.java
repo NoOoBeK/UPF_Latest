@@ -80,7 +80,7 @@ public class Calculations {
         double checkenEnd = 0.0;
         for (LiveLoadKTW dane : list)
         {
-            if ((dane.getSDate() + dane.getSTime()) < Start)
+            if ((dane.getSDate() + dane.getSTime()) < Start && (dane.getEDate() + dane.getETime()) > Start)
             {
                 dane.setSDate(Math.floor(Start));
                 dane.setSTime(Start - Math.floor(Start));
