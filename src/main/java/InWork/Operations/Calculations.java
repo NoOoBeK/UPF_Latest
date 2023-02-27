@@ -73,6 +73,7 @@ public class Calculations {
         }
         Now.setMinutes(0);
         Now.setSeconds(0);
+        System.out.println(Now);
 
         double Start = DateUtil.getExcelDate(Now);
         double End = 0.0;
@@ -92,16 +93,16 @@ public class Calculations {
             {
                 double StartProduction =dane.getSDate() + dane.getSTime();
                 double EndProduction = dane.getEDate() + dane.getETime();
-                if (Start < StartProduction && StartProduction < (Start + (1.0 / 48.0)) )
+                if (Start < StartProduction && StartProduction < (Start + (1.0 / 24.0)) )
                 {
                     double productionTime = 0.0;
-                    if (EndProduction > (Start + (1.0 / 48.0))) productionTime = (Start + (1.0 / 48.0)) - StartProduction;
+                    if (EndProduction > (Start + (1.0 / 24.0))) productionTime = (Start + (1.0 / 24.0)) - StartProduction;
                     else                                        productionTime = EndProduction - StartProduction;
                     PalletCount += Math.abs(productionTime / dane.getProductionTime());
                 } else if (Start > StartProduction && EndProduction > Start)
                 {
                     double productionTime = 0.0;
-                    if (EndProduction > (Start + (1.0 / 48.0))) productionTime = (1.0 / 48.0);
+                    if (EndProduction > (Start + (1.0 / 24.0))) productionTime = (1.0 / 24.0);
                     else                                        productionTime = EndProduction - Start;
                     PalletCount += Math.abs(productionTime / dane.getProductionTime());
                 }
@@ -115,7 +116,7 @@ public class Calculations {
                 PalletCount -= 30;
             }
             newRecord.setNeededTruck(NeddedTruck);
-            Start += (1.0 / 48.0);
+            Start += (1.0 / 24.0);
             ret.add(newRecord);
         }
         System.out.println(ret.size());

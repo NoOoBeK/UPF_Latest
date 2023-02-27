@@ -255,7 +255,7 @@ public class ExcelAPI
         try {
             out = new FileOutputStream("C:\\demo\\"+name+".xlsx");
         } catch (FileNotFoundException var9) {
-            var9.printStackTrace();
+            JOptionPane.showMessageDialog(new Frame(),"Otwarty Plik " +name +" Zamknij i Powtórz operacje");
         }
         try {
             book.write(out);
@@ -294,21 +294,21 @@ public class ExcelAPI
         int rowNum = 0;
 
         for (int source = 0; source<list.size();source++) {
-        if (list.get(source).getNeededTruck()>0){
+            //if (list.get(source).getNeededTruck()>0){
 
-            XSSFRow row = sheet.createRow(rowNum);
-            for (int celnum = 0; celnum < 4; celnum++) {
-                XSSFCell cell = row.createCell(celnum);
-            }
-            sheet.getRow(rowNum).getCell(0).setCellValue(list.get(source).getDate());
-            sheet.getRow(rowNum).getCell(1).setCellValue(list.get(source).getTime());
-            sheet.getRow(rowNum).getCell(2).setCellValue(list.get(source).getPaletCoun());
-            sheet.getRow(rowNum).getCell(3).setCellValue(list.get(source).getNeededTruck());
-            sheet.getRow(rowNum).getCell(0).setCellStyle(data);
-            sheet.getRow(rowNum).getCell(1).setCellStyle(time);
-            rowNum++;
-            }
-        }
+              XSSFRow row = sheet.createRow(rowNum);
+                for (int celnum = 0; celnum < 4; celnum++) {
+                    XSSFCell cell = row.createCell(celnum);
+                }
+                sheet.getRow(rowNum).getCell(0).setCellValue(list.get(source).getDate());
+                sheet.getRow(rowNum).getCell(1).setCellValue(list.get(source).getTime());
+                sheet.getRow(rowNum).getCell(2).setCellValue(list.get(source).getPaletCoun());
+                sheet.getRow(rowNum).getCell(3).setCellValue(list.get(source).getNeededTruck());
+                sheet.getRow(rowNum).getCell(0).setCellStyle(data);
+                sheet.getRow(rowNum).getCell(1).setCellStyle(time);
+                rowNum++;
+       //     }
+       }
         FileOut(book,name);
     }
     static public void ProductionPlan(ArrayList<LiveLoadKTW> Plan){
