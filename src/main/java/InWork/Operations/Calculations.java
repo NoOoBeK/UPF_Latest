@@ -81,6 +81,13 @@ public class Calculations {
         double checkenEnd = 0.0;
         for (LiveLoadKTW dane : list)
         {
+            if ((dane.getSDate() + dane.getSTime()) < Begin)
+            {
+                dane.setSDate(Math.floor(Begin));
+                dane.setSTime(Start - Math.floor(Begin));
+                double temp = ((dane.getEDate() + dane.getETime()) - (dane.getSDate() + dane.getSTime())) / dane.getPalletCount();
+                dane.setProductionTime(temp);
+            }
             checkenEnd = dane.getEDate() + dane.getETime();
             if (End < checkenEnd) End = checkenEnd;
         }
@@ -96,13 +103,7 @@ public class Calculations {
             {
                 double StartProduction = dane.getSDate() + dane.getSTime();
                 double EndProduction = dane.getEDate() + dane.getETime();
-                if (StartProduction < Begin)
-                {
-                    dane.setSDate(Math.floor(Begin));
-                    dane.setSTime(Start - Math.floor(Begin));
-                    double temp = ((dane.getEDate() + dane.getETime()) - (dane.getSDate() + dane.getSTime())) / dane.getPalletCount();
-                    dane.setProductionTime(temp);
-                }
+
                 if (Start <= StartProduction && StartProduction < (Start + TimeLenght) )
                 {
                     double productionTime = 0.0;
