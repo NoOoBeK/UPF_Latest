@@ -98,8 +98,8 @@ public class Calculations {
                 double EndProduction = dane.getEDate() + dane.getETime();
                 if (StartProduction < Begin)
                 {
-                    dane.setSDate(Math.floor(Start));
-                    dane.setSTime(Start - Math.floor(Start));
+                    dane.setSDate(Math.floor(Begin));
+                    dane.setSTime(Start - Math.floor(Begin));
                     double temp = ((dane.getEDate() + dane.getETime()) - (dane.getSDate() + dane.getSTime())) / dane.getPalletCount();
                     dane.setProductionTime(temp);
                 }
