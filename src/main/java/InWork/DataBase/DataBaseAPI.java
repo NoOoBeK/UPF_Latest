@@ -286,8 +286,6 @@ public class DataBaseAPI {
                 + "fo INTEGER NOT NULL,\n"
                 + "przewoznikid INTEGER NOT NULL,\n"
                 + "destid INTEGER NOT NULL,\n"
-                + "date REAL NOT NULL,\n"
-                + "time REAL NOT NULL,\n"
                 + ");";
         if (!conn.isValid(5)) {
             Connect();
