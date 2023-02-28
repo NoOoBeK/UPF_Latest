@@ -214,17 +214,18 @@ public class DataBaseAPI {
         Statement stmt = conn.createStatement();
         stmt.execute(TablePrzewzonik);
     }
-    public DataPrzewoznik getPrzewoznik(String carrier) throws SQLException {
+    public DataPrzewoznik getPrzewoznik(int carrier) throws SQLException {
         DataPrzewoznik ret = null;
-        String querry = "SELECT * FROM PRZEWOZNIK WHERE przewoznik = ?;";
+        String querry = "SELECT * FROM PRZEWOZNIK WHERE przewoznikid = ?;";
         if (!conn.isValid(5)) {Connect();}
         PreparedStatement Pstmt = conn.prepareStatement(querry);
-        Pstmt.setString(1, carrier);
+        Pstmt.setInt(1, carrier);
         ResultSet rs = Pstmt.executeQuery();
         while (rs.next()) {
             DataPrzewoznik newRecord = new DataPrzewoznik();
-            newRecord.setPrzewoznik(rs.getString(1));
-            newRecord.setMail(rs.getString(2));
+            newRecord.setPrzewoznikID(rs.getInt(1));
+            newRecord.setPrzewoznik(rs.getString(2));
+            newRecord.setMail(rs.getString(3));
             ret = newRecord;
         }
         return ret;
@@ -237,17 +238,18 @@ public class DataBaseAPI {
         ResultSet rs = stmt.executeQuery(querry);
         while (rs.next()) {
             DataPrzewoznik newRecord = new DataPrzewoznik();
-            newRecord.setPrzewoznik(rs.getString(1));
-            newRecord.setMail(rs.getString(2));
+            newRecord.setPrzewoznikID(rs.getInt(1));
+            newRecord.setPrzewoznik(rs.getString(2));
+            newRecord.setMail(rs.getString(3));
             ret.add(newRecord);
         }
         return ret;
     }
     public boolean delatePrzewoznik(DataPrzewoznik record) throws SQLException {
-        String querry = "DELETE FROM PRZEWOZNIK WHERE przewoznik == ?;";
+        String querry = "DELETE FROM PRZEWOZNIK WHERE przewoznikid == ?;";
         if (!conn.isValid(5)) {Connect();}
         PreparedStatement Pstmt = conn.prepareStatement(querry);
-        Pstmt.setString(1,record.getPrzewoznik());
+        Pstmt.setInt(1,record.getPrzewoznikID());
         return Pstmt.execute();
     }
     public void updatePrzewoznik(DataPrzewoznik data) throws SQLException {
@@ -255,9 +257,10 @@ public class DataBaseAPI {
             Connect();
         }
         PreparedStatement pst;
-        pst = conn.prepareStatement("UPDATE PRZEWOZNIK SET mail = ?) WHERE przewoznik == ?;");
+        pst = conn.prepareStatement("UPDATE PRZEWOZNIK SET mail = ?, przewoznik = ?) WHERE przewoznikid == ?;");
         pst.setString(1, data.getMail());
         pst.setString   (2, data.getPrzewoznik());
+        pst.setInt(3,data.getPrzewoznikID());
         pst.executeUpdate();
     }
     public void addPrzewoznik(DataPrzewoznik newRecord) throws SQLException {
@@ -269,9 +272,10 @@ public class DataBaseAPI {
             Connect();
         }
         PreparedStatement pst;
-        pst = conn.prepareStatement("INSERT INTO PRZEWOZNIK(przewoznik,mail)VALUES(?,?)");
-        pst.setString   (1, data.getPrzewoznik());
-        pst.setString(2, data.getMail());
+        pst = conn.prepareStatement("INSERT INTO PRZEWOZNIK(przewoznikid,przewoznik,mail)VALUES(?,?,?)");
+        pst.setInt(1,data.getPrzewoznikID());
+        pst.setString   (2, data.getPrzewoznik());
+        pst.setString(3, data.getMail());
         pst.executeUpdate();
     }
 

@@ -33,10 +33,10 @@ public class DataPrzewoznikList {
     {
         return DataList;
     }
-    public DataPrzewoznik getPrzewoznik(String carrier){
+    public DataPrzewoznik getPrzewoznik(int carrier){
         for (DataPrzewoznik dane : DataList)
         {
-            if (dane.getPrzewoznik() == carrier) return dane;
+            if (dane.getPrzewoznikID() == carrier) return dane;
         }
         return null;
     }
@@ -48,13 +48,13 @@ public class DataPrzewoznikList {
         DataPrzewoznik checkedPrzewoznik;
 
         for (DataPrzewoznik record : DataList) {
-            checkedPrzewoznik = DataBaseAPI.getInstance().getPrzewoznik(record.getPrzewoznik());
+            checkedPrzewoznik = DataBaseAPI.getInstance().getPrzewoznik(record.getPrzewoznikID());
             if (checkedPrzewoznik != null) {
                 DataBaseAPI.getInstance().delatePrzewoznik(record);
             }
         }
         for (DataPrzewoznik record : excelData) {
-            checkedPrzewoznik = DataBaseAPI.getInstance().getPrzewoznik(record.getPrzewoznik());
+            checkedPrzewoznik = DataBaseAPI.getInstance().getPrzewoznik(record.getPrzewoznikID());
             if (checkedPrzewoznik != null) {
                 if (!record.compare(checkedPrzewoznik)) {
                     DataBaseAPI.getInstance().updatePrzewoznik(record);
