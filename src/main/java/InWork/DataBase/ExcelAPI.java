@@ -142,8 +142,16 @@ public class ExcelAPI
 
             if(temp.contains(",")==true)
             {
+
                 temp = temp.replace(".","");
                 temp = temp.replace(",",".");
+            }
+            String[] strtable = temp.split(".");
+            String str = strtable[0];
+            int actualValue = str.length();
+            if(actualValue<4)
+            {
+                temp = temp.replace(".","");
             }
             newRecord.setQNT(Double.valueOf(temp));
             cell = sheet.getRow(source).getCell(10);

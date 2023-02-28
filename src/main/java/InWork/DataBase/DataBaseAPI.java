@@ -42,18 +42,30 @@ public class DataBaseAPI {
         DatabaseMetaData metaData = conn.getMetaData();
         ResultSet Result = metaData.getTables(null, null, null, new String[] {"TABLE"});
         boolean find = false;
+        boolean find2 = false;
         String TableName = "KTW";
+        String TableName2 = "PRZEWOZNIK";
         while (Result.next()) {
             if (TableName.equals(Result.getString("TABLE_NAME")))
             {
                 find = true;
                 break;
+
             }
         }
-        if (!find)
+
+        while (Result.next()) {
+            if (TableName2.equals(Result.getString("TABLE_NAME")))
+            {
+                find = true;
+                break;
+            }
+        }
+        if (!find &&!find2)
         {
             CreatTable();
             CreatTable2();
+
         }
     }
 
