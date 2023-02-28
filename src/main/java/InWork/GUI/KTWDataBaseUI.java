@@ -10,14 +10,14 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class DataBaseUI extends JFrame {
+public class KTWDataBaseUI extends JFrame {
 
     private JPanel MainPanel;
     private JTable KTWJTable;
     private TableRowSorter<KTWTable> KTWRowSorter;
     private JTextField textField1;
 
-    public DataBaseUI()
+    public KTWDataBaseUI()
     {
         setContentPane(MainPanel);
         setTitle("UPF");
@@ -56,4 +56,4 @@ public class DataBaseUI extends JFrame {
         super.setVisible(Visable);
         if (Visable) ((KTWTable)KTWJTable.getModel()).fireTableDataChanged();
     }
-};
+}

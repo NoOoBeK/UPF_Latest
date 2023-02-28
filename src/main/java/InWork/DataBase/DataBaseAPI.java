@@ -1,6 +1,8 @@
 package InWork.DataBase;
 
 import InWork.DataBase.DataStructure.DataKTW;
+import InWork.DataBase.DataStructure.DataPrzewoznik;
+
 import javax.swing.*;
 import java.sql.*;
 import java.time.LocalDate;
@@ -25,6 +27,12 @@ public class DataBaseAPI {
         }
         return Instance;
     }
+    private void Connect() throws SQLException {
+        String url = "jdbc:sqlite:" + DatabasePath + "\\UPF_DB.db";
+        //String url = DatabasePath + "\\UPF_DB.db";
+        conn = DriverManager.getConnection(url);
+        System.out.println("Connection to SQLite has been established.");
+    }
 
     private DataBaseAPI() throws SQLException {
         Instance = this;
@@ -45,15 +53,10 @@ public class DataBaseAPI {
         if (!find)
         {
             CreatTable();
+            CreatTable2();
         }
     }
 
-    private void Connect() throws SQLException {
-        String url = "jdbc:sqlite:" + DatabasePath + "\\UPF_DB.db";
-        //String url = DatabasePath + "\\UPF_DB.db";
-        conn = DriverManager.getConnection(url);
-        System.out.println("Connection to SQLite has been established.");
-    }
 
     private void CreatTable() throws SQLException {
 
@@ -68,10 +71,13 @@ public class DataBaseAPI {
             + "qatime INTEGER,\n"
             + "height REAL\n"
             + ");";
-        if (!conn.isValid(5)) {Connect();}
-        Statement stmt = conn.createStatement();stmt.execute(TableKTW);
-    }
+        if (!conn.isValid(5)) {
+            Connect();
+        }
+        Statement stmt = conn.createStatement();
+        stmt.execute(TableKTW);
 
+    }
     private void insertKTW(DataKTW data) throws SQLException {
 
         if (!conn.isValid(5)) {
@@ -90,7 +96,6 @@ public class DataBaseAPI {
         pst.setDouble(9, data.getHeight());
         pst.executeUpdate();
     }
-
     public void cleanDBKTW() throws SQLException {
         String sql1 = "DROP TABLE KTW;";
         conn.close();
@@ -99,7 +104,6 @@ public class DataBaseAPI {
         stmt.execute(sql1);
         CreatTable();
     }
-
     public void updateKTW(DataKTW data) throws SQLException {
         if (!conn.isValid(5)) {
             Connect();
@@ -118,7 +122,6 @@ public class DataBaseAPI {
         pst.setInt   (10, data.getSKU());
         pst.executeUpdate();
     }
-
     public int getKtwCount() throws SQLException {
         String querry = "SELECT COUNT(*) FROM KTW;";
         int count = -1;
@@ -130,11 +133,9 @@ public class DataBaseAPI {
         }
         return count;
     }
-
     public void addKTW(DataKTW newRecord) throws SQLException {
         insertKTW(newRecord);
     }
-
     public DataKTW getKTW(int sku) throws SQLException {
         DataKTW ret = null;
         String querry = "SELECT * FROM KTW WHERE sku = ?;";
@@ -157,7 +158,6 @@ public class DataBaseAPI {
         }
         return ret;
     }
-
     public ArrayList<DataKTW> getKTW() throws SQLException {
         String querry = "SELECT * FROM KTW;";
         ArrayList<DataKTW> ret = new ArrayList<>();
@@ -180,6 +180,7 @@ public class DataBaseAPI {
         return ret;
     }
 
+
     public boolean delateKTW(DataKTW record) throws SQLException {
         String querry = "DELETE FROM KTW WHERE sku == ?;";
         if (!conn.isValid(5)) {Connect();}
@@ -193,5 +194,78 @@ public class DataBaseAPI {
         PreparedStatement Pstmt = conn.prepareStatement(querry);
         Pstmt.setInt(1,sku);
         return Pstmt.execute();
+    }
+
+    private void CreatTable2() throws SQLException {
+
+               String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS PRZEWOZNIK(\n"
+                + "przewoznik TEXT NOT NULL,\n"
+                + "mail TEXT NOT NULL,\n"
+                + ");";
+        if (!conn.isValid(5)) {
+            Connect();
+        }
+        Statement stmt = conn.createStatement();
+        stmt.execute(TablePrzewzonik);
+    }
+    public DataPrzewoznik getPrzewoznik(String carrier) throws SQLException {
+        DataPrzewoznik ret = null;
+        String querry = "SELECT * FROM PRZEWOZNIK WHERE przewoznik = ?;";
+        if (!conn.isValid(5)) {Connect();}
+        PreparedStatement Pstmt = conn.prepareStatement(querry);
+        Pstmt.setString(1, carrier);
+        ResultSet rs = Pstmt.executeQuery();
+        while (rs.next()) {
+            DataPrzewoznik newRecord = new DataPrzewoznik();
+            newRecord.setPrzewoznik(rs.getString(1));
+            newRecord.setMail(rs.getString(2));
+            ret = newRecord;
+        }
+        return ret;
+    }
+    public ArrayList<DataPrzewoznik> getPrzewoznik() throws SQLException {
+        String querry = "SELECT * FROM PRZEWOZNIK;";
+        ArrayList<DataPrzewoznik> ret = new ArrayList<>();
+        if (!conn.isValid(5)) {Connect();}
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(querry);
+        while (rs.next()) {
+            DataPrzewoznik newRecord = new DataPrzewoznik();
+            newRecord.setPrzewoznik(rs.getString(1));
+            newRecord.setMail(rs.getString(2));
+            ret.add(newRecord);
+        }
+        return ret;
+    }
+    public boolean delatePrzewoznik(DataPrzewoznik record) throws SQLException {
+        String querry = "DELETE FROM PRZEWOZNIK WHERE przewoznik == ?;";
+        if (!conn.isValid(5)) {Connect();}
+        PreparedStatement Pstmt = conn.prepareStatement(querry);
+        Pstmt.setString(1,record.getPrzewoznik());
+        return Pstmt.execute();
+    }
+    public void updatePrzewoznik(DataPrzewoznik data) throws SQLException {
+        if (!conn.isValid(5)) {
+            Connect();
+        }
+        PreparedStatement pst;
+        pst = conn.prepareStatement("UPDATE PRZEWOZNIK SET mail = ?) WHERE przewoznik == ?;");
+        pst.setString(1, data.getMail());
+        pst.setString   (2, data.getPrzewoznik());
+        pst.executeUpdate();
+    }
+    public void addPrzewoznik(DataPrzewoznik newRecord) throws SQLException {
+        insertPrzewoznik(newRecord);
+    }
+    private void insertPrzewoznik(DataPrzewoznik data) throws SQLException {
+
+        if (!conn.isValid(5)) {
+            Connect();
+        }
+        PreparedStatement pst;
+        pst = conn.prepareStatement("INSERT INTO PRZEWOZNIK(przewoznik,mail)VALUES(?,?)");
+        pst.setString   (1, data.getPrzewoznik());
+        pst.setString(2, data.getMail());
+        pst.executeUpdate();
     }
 }

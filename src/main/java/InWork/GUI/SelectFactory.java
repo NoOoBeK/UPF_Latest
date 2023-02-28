@@ -8,8 +8,6 @@ import InWork.Settings;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,14 +38,15 @@ public class SelectFactory extends JFrame{
     private JButton Gliwice;
 
     private InWork.GUI.Settings SettingsUI;
-    private DataBaseUI DataBaseTable;
-
+    private KTWDataBaseUI DataBaseTable;
+    private PrzewoznikDataBaseUI PrzewoznikDataBaseTable;
     private SelectFactory thisframe;
 
     public SelectFactory() {
 
         thisframe = this;
         DataBaseTable = null;
+        PrzewoznikDataBaseTable = null;
         SettingsUI = null;
 
         setContentPane(MainPanel);
@@ -65,11 +64,11 @@ public class SelectFactory extends JFrame{
 
         exitButton.addActionListener(e -> System.exit(0));
         exitButton1.addActionListener(e -> System.exit(0));
+
         exitButton2.addActionListener(e -> System.exit(0));
-        exitButton3.addActionListener(e -> System.exit(0));
         DataBaseView.addActionListener(e -> {
             if (thisframe.DataBaseTable == null) {
-                DataBaseTable = new DataBaseUI();
+                DataBaseTable = new KTWDataBaseUI();
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                 DataBaseTable.setSize(screenSize.width, screenSize.height);
                 DataBaseTable.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -115,7 +114,6 @@ public class SelectFactory extends JFrame{
                 JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
             }
         });
-
         cleanDBButton.addActionListener(e -> {
             try {
                 DataBaseAPI.getInstance().cleanDBKTW();
@@ -132,6 +130,21 @@ public class SelectFactory extends JFrame{
                 throw new RuntimeException(ex);
             }
         });
+
+        BazaDanychPrzewoznik.addActionListener(e -> {
+            if (thisframe.PrzewoznikDataBaseTable == null) {
+                PrzewoznikDataBaseTable = new PrzewoznikDataBaseUI();
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                PrzewoznikDataBaseTable.setSize(screenSize.width, screenSize.height);
+                PrzewoznikDataBaseTable.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+                PrzewoznikDataBaseTable.setVisible(true);
+            } else {
+                PrzewoznikDataBaseTable.setVisible(true);
+            }
+        });
+        exitButton3.addActionListener(e -> System.exit(0));
+
+
         settingsButton.addActionListener(e -> {
             if (thisframe.SettingsUI == null) {
                 SettingsUI = new InWork.GUI.Settings();
