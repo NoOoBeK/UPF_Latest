@@ -42,9 +42,7 @@ public class DataBaseAPI {
         DatabaseMetaData metaData = conn.getMetaData();
         ResultSet Result = metaData.getTables(null, null, null, new String[] {"TABLE"});
         boolean find = false;
-        boolean find2 = false;
         String TableName = "KTW";
-        String TableName2 = "PRZEWOZNIK";
         while (Result.next()) {
             if (TableName.equals(Result.getString("TABLE_NAME")))
             {
@@ -53,18 +51,13 @@ public class DataBaseAPI {
 
             }
         }
-
-        while (Result.next()) {
-            if (TableName2.equals(Result.getString("TABLE_NAME")))
-            {
-                find = true;
-                break;
-            }
-        }
-        if (!find &&!find2)
+        if (!find)
         {
             CreatTable();
             CreatTable2();
+            CreatTable3();
+            CreatTable4();
+            CreatTable5();
 
         }
     }
@@ -211,9 +204,10 @@ public class DataBaseAPI {
     private void CreatTable2() throws SQLException {
 
                String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS PRZEWOZNIK(\n"
-                + "przewoznik TEXT NOT NULL,\n"
-                + "mail TEXT NOT NULL,\n"
-                + ");";
+                       + "przewoznikid INTEGER NOT NULL,\n"
+                       + "przewoznik TEXT NOT NULL,\n"
+                       + "mail TEXT NOT NULL,\n"
+                       + ");";
         if (!conn.isValid(5)) {
             Connect();
         }
@@ -279,5 +273,47 @@ public class DataBaseAPI {
         pst.setString   (1, data.getPrzewoznik());
         pst.setString(2, data.getMail());
         pst.executeUpdate();
+    }
+
+    private void CreatTable3() throws SQLException {
+
+        String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS FODATA(\n"
+                + "fo INTEGER NOT NULL,\n"
+                + "przewoznikid INTEGER NOT NULL,\n"
+                + "destid INTEGER NOT NULL,\n"
+                + "date REAL NOT NULL,\n"
+                + "time REAL NOT NULL,\n"
+                + ");";
+        if (!conn.isValid(5)) {
+            Connect();
+        }
+        Statement stmt = conn.createStatement();
+        stmt.execute(TablePrzewzonik);
+    }
+    private void CreatTable4() throws SQLException {
+
+        String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS FOUPDATE(\n"
+                + "fo INTEGER NOT NULL,\n"
+                + "date REAL NOT NULL,\n"
+                + "time REAL NOT NULL,\n"
+                + "update REAL NOT NULL,\n"
+                + ");";
+        if (!conn.isValid(5)) {
+            Connect();
+        }
+        Statement stmt = conn.createStatement();
+        stmt.execute(TablePrzewzonik);
+    }
+    private void CreatTable5() throws SQLException {
+
+        String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS PRZEWOZNIK(\n"
+                + "destid INTEGER NOT NULL,\n"
+                + "dest TEXT NOT NULL,\n"
+                + ");";
+        if (!conn.isValid(5)) {
+            Connect();
+        }
+        Statement stmt = conn.createStatement();
+        stmt.execute(TablePrzewzonik);
     }
 }
