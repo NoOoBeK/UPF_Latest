@@ -41,8 +41,8 @@ public class DataBaseAPI {
 
         DatabaseMetaData metaData = conn.getMetaData();
         ResultSet Result = metaData.getTables(null, null, null, new String[] {"TABLE"});
-        boolean find = false;
-        String TableName = "KTW";
+//        boolean find = false;
+//        String TableName = "KTW";
 //        while (Result.next()) {
 //            if (TableName.equals(Result.getString("TABLE_NAME")))
 //            {
@@ -213,12 +213,12 @@ public class DataBaseAPI {
         Statement stmt = conn.createStatement();
         stmt.execute(TablePrzewzonik);
     }
-    public DataPrzewoznik getPrzewoznik(int carrier) throws SQLException {
+    public DataPrzewoznik getPrzewoznik(Long carrier) throws SQLException {
         DataPrzewoznik ret = null;
         String querry = "SELECT * FROM PRZEWOZNIK WHERE przewoznikid = ?;";
         if (!conn.isValid(5)) {Connect();}
         PreparedStatement Pstmt = conn.prepareStatement(querry);
-        Pstmt.setInt(1, carrier);
+        Pstmt.setLong(1, carrier);
         ResultSet rs = Pstmt.executeQuery();
         while (rs.next()) {
             DataPrzewoznik newRecord = new DataPrzewoznik();
@@ -248,7 +248,7 @@ public class DataBaseAPI {
         String querry = "DELETE FROM PRZEWOZNIK WHERE przewoznikid == ?;";
         if (!conn.isValid(5)) {Connect();}
         PreparedStatement Pstmt = conn.prepareStatement(querry);
-        Pstmt.setInt(1,record.getPrzewoznikID());
+        Pstmt.setLong(1,record.getPrzewoznikID());
         return Pstmt.execute();
     }
     public void updatePrzewoznik(DataPrzewoznik data) throws SQLException {
@@ -259,7 +259,7 @@ public class DataBaseAPI {
         pst = conn.prepareStatement("UPDATE PRZEWOZNIK SET mail = ?, przewoznik = ?) WHERE przewoznikid == ?;");
         pst.setString(1, data.getMail());
         pst.setString   (2, data.getPrzewoznik());
-        pst.setInt(3,data.getPrzewoznikID());
+        pst.setLong(3,data.getPrzewoznikID());
         pst.executeUpdate();
     }
     public void addPrzewoznik(DataPrzewoznik newRecord) throws SQLException {
@@ -272,7 +272,7 @@ public class DataBaseAPI {
         }
         PreparedStatement pst;
         pst = conn.prepareStatement("INSERT INTO PRZEWOZNIK(przewoznikid,przewoznik,mail)VALUES(?,?,?)");
-        pst.setInt(1,data.getPrzewoznikID());
+        pst.setLong(1,data.getPrzewoznikID());
         pst.setString   (2, data.getPrzewoznik());
         pst.setString(3, data.getMail());
         pst.executeUpdate();

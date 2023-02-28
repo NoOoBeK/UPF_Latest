@@ -2,6 +2,7 @@ package InWork.GUI;
 
 import InWork.DataBase.DataBaseAPI;
 import InWork.DataBase.DataStructure.DataKTWList;
+import InWork.DataBase.DataStructure.DataPrzewoznikList;
 import InWork.DataBase.DataStructure.LiveLoadKTW;
 import InWork.DataBase.DataStructure.LiveLoadKTWList;
 import InWork.Settings;
@@ -131,6 +132,19 @@ public class SelectFactory extends JFrame{
             }
         });
 
+        ImportPrzewoznik.addActionListener(e -> {
+            try {
+                if (DataPrzewoznikList.getInstance().ImpotrPrzewoznik())
+                {
+                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
+                } else {
+                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
+                }
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
+                throwables.printStackTrace();
+            }
+        });
         BazaDanychPrzewoznik.addActionListener(e -> {
             if (thisframe.PrzewoznikDataBaseTable == null) {
                 PrzewoznikDataBaseTable = new PrzewoznikDataBaseUI();

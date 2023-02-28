@@ -4,12 +4,12 @@ public class DataPrzewoznik {
 
     String Przewoznik;
     String Mail;
-    int PrzewoznikID;
+    Long PrzewoznikID;
 
-    public int getPrzewoznikID() {
+    public long getPrzewoznikID() {
         return PrzewoznikID;
     }
-    public void setPrzewoznikID(int przewoznikID) {
+    public void setPrzewoznikID(long przewoznikID) {
         PrzewoznikID = przewoznikID;
     }
     public String getPrzewoznik() {
@@ -29,7 +29,7 @@ public class DataPrzewoznik {
         setPrzewoznik(data.getPrzewoznik());
         setMail(data.getMail());
     }
-    public void setAll (int przewoznikID,String przewoznik, String mail) {
+    public void setAll (long przewoznikID,String przewoznik, String mail) {
         setPrzewoznikID(przewoznikID);
         setPrzewoznik(przewoznik);
         setMail(mail);

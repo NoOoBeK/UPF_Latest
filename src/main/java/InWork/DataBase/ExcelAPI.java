@@ -177,12 +177,20 @@ public class ExcelAPI
         DataPrzewoznik newRecord;
         int source;
         XSSFCell cell;
+        Double iddouble;
 
-        for(source = 1 ; source < sheet.getLastRowNum();++source) {
+        for(source = 1 ; source < sheet.getLastRowNum()+1;++source) {
             newRecord = new DataPrzewoznik();
             cell = sheet.getRow(source).getCell(0);
-            newRecord.setPrzewoznik(cell.getStringCellValue());
+            iddouble = cell.getNumericCellValue();
+            if (iddouble.longValue() < 1) {
+                break;
+            }else{
+                System.out.println(iddouble.longValue());
+                newRecord.setPrzewoznikID(iddouble.longValue());}
             cell = sheet.getRow(source).getCell(1);
+            newRecord.setPrzewoznik(cell.getStringCellValue());
+            cell = sheet.getRow(source).getCell(2);
             newRecord.setMail(cell.getStringCellValue());
             ret.add(newRecord);
         }

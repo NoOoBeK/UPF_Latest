@@ -12,6 +12,7 @@ public class PrzewoznikTable extends AbstractTableModel {
     public PrzewoznikTable() {
 
         this.columnNames = new ArrayList<>();
+        this.columnNames.add("ID");
         this.columnNames.add("Przewoznik");
         this.columnNames.add("Mail");
 
@@ -36,8 +37,9 @@ public class PrzewoznikTable extends AbstractTableModel {
     public Object getValueAt(int row, int col) {
         switch (col)
         {
-            case 0: return DataPrzewoznikList.getInstance().getData().get(row).getPrzewoznik();
-            case 1: return DataPrzewoznikList.getInstance().getData().get(row).getMail();
+            case 0: return DataPrzewoznikList.getInstance().getData().get(row).getPrzewoznikID();
+            case 1: return DataPrzewoznikList.getInstance().getData().get(row).getPrzewoznik();
+            case 2: return DataPrzewoznikList.getInstance().getData().get(row).getMail();
 
         }
         return null;
