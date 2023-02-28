@@ -184,8 +184,6 @@ public class DataBaseAPI {
         }
         return ret;
     }
-
-
     public boolean delateKTW(DataKTW record) throws SQLException {
         String querry = "DELETE FROM KTW WHERE sku == ?;";
         if (!conn.isValid(5)) {Connect();}
@@ -200,6 +198,7 @@ public class DataBaseAPI {
         Pstmt.setInt(1,sku);
         return Pstmt.execute();
     }
+
 
     private void CreatTable2() throws SQLException {
 
@@ -279,6 +278,8 @@ public class DataBaseAPI {
         pst.executeUpdate();
     }
 
+
+
     private void CreatTable3() throws SQLException {
 
         String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS FODATA(\n"
@@ -294,6 +295,8 @@ public class DataBaseAPI {
         Statement stmt = conn.createStatement();
         stmt.execute(TablePrzewzonik);
     }
+
+
     private void CreatTable4() throws SQLException {
 
         String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS FOUPDATE(\n"
@@ -308,6 +311,8 @@ public class DataBaseAPI {
         Statement stmt = conn.createStatement();
         stmt.execute(TablePrzewzonik);
     }
+
+
     private void CreatTable5() throws SQLException {
 
         String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS PRZEWOZNIK(\n"
