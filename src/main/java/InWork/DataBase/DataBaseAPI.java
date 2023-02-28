@@ -43,23 +43,23 @@ public class DataBaseAPI {
         ResultSet Result = metaData.getTables(null, null, null, new String[] {"TABLE"});
         boolean find = false;
         String TableName = "KTW";
-        while (Result.next()) {
-            if (TableName.equals(Result.getString("TABLE_NAME")))
-            {
-                find = true;
-                break;
-
-            }
-        }
-        if (!find)
-        {
+//        while (Result.next()) {
+//            if (TableName.equals(Result.getString("TABLE_NAME")))
+//            {
+//                find = true;
+//                break;
+//
+//            }
+//        }
+//        if (!find)
+//        {
             CreatTable();
             CreatTable2();
             CreatTable3();
             CreatTable4();
             CreatTable5();
 
-        }
+//        }
     }
 
 
@@ -205,7 +205,7 @@ public class DataBaseAPI {
                String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS PRZEWOZNIK(\n"
                        + "przewoznikid INTEGER NOT NULL,\n"
                        + "przewoznik TEXT NOT NULL,\n"
-                       + "mail TEXT NOT NULL,\n"
+                       + "mail TEXT\n"
                        + ");";
         if (!conn.isValid(5)) {
             Connect();
@@ -282,45 +282,45 @@ public class DataBaseAPI {
 
     private void CreatTable3() throws SQLException {
 
-        String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS FODATA(\n"
+        String tableFO  = "CREATE TABLE IF NOT EXISTS FODATA(\n"
                 + "fo INTEGER NOT NULL,\n"
                 + "przewoznikid INTEGER NOT NULL,\n"
-                + "destid INTEGER NOT NULL,\n"
+                + "destid INTEGER NOT NULL\n"
                 + ");";
         if (!conn.isValid(5)) {
             Connect();
         }
         Statement stmt = conn.createStatement();
-        stmt.execute(TablePrzewzonik);
+        stmt.execute(tableFO);
     }
 
 
     private void CreatTable4() throws SQLException {
 
-        String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS FOUPDATE(\n"
+        String tableUPD  = "CREATE TABLE IF NOT EXISTS FOUPDATE(\n"
                 + "fo INTEGER NOT NULL,\n"
                 + "date REAL NOT NULL,\n"
-                + "time REAL NOT NULL,\n"
-                + "update REAL NOT NULL,\n"
+                + "upd REAL NOT NULL,\n"
+                + "time REAL NOT NULL\n"
                 + ");";
         if (!conn.isValid(5)) {
             Connect();
         }
         Statement stmt = conn.createStatement();
-        stmt.execute(TablePrzewzonik);
+        stmt.execute(tableUPD);
     }
 
 
     private void CreatTable5() throws SQLException {
 
-        String TablePrzewzonik  = "CREATE TABLE IF NOT EXISTS PRZEWOZNIK(\n"
+        String TableDEST  = "CREATE TABLE IF NOT EXISTS DEST(\n"
                 + "destid INTEGER NOT NULL,\n"
-                + "dest TEXT NOT NULL,\n"
+                + "dest TEXT NOT NULL\n"
                 + ");";
         if (!conn.isValid(5)) {
             Connect();
         }
         Statement stmt = conn.createStatement();
-        stmt.execute(TablePrzewzonik);
+        stmt.execute(TableDEST);
     }
 }
