@@ -1,4 +1,4 @@
-package InWork.DataBase.DataStructure;
+package InWork.DataStructure;
 
 public class LiveLoadPOL {
 
@@ -6,8 +6,7 @@ public class LiveLoadPOL {
     private double Time;
     private int PaletCoun;
 
-    public LiveLoadPOL()
-    {
+    public LiveLoadPOL(){
 
     }
     public double getDate() {

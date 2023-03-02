@@ -1,4 +1,4 @@
-package InWork.DataBase.DataStructure;
+package InWork.DataStructure;
 
 public class DataDirection {
     int DirectionID;

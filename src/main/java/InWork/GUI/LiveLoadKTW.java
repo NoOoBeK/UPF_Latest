@@ -1,7 +1,7 @@
 package InWork.GUI;
 
-import InWork.DataBase.DataStructure.LiveLoadPOL;
-import InWork.DataBase.ExcelAPI;
+import InWork.DataStructure.LiveLoadPOL;
+import InWork.Controllers.ExcelController;
 import InWork.Operations.Calculations;
 
 import javax.swing.*;
@@ -16,9 +16,9 @@ public class LiveLoadKTW extends JFrame {
     private JButton polskaButton;
     private JPanel MainPanel;
     private LiveLoadKTW thisFrame;
-    private ArrayList<ArrayList<InWork.DataBase.DataStructure.LiveLoadKTW>> List;
+    private ArrayList<ArrayList<InWork.DataStructure.LiveLoadKTW>> List;
 
-    public LiveLoadKTW(ArrayList<ArrayList<InWork.DataBase.DataStructure.LiveLoadKTW>> list) {
+    public LiveLoadKTW(ArrayList<ArrayList<InWork.DataStructure.LiveLoadKTW>> list) {
         setContentPane(MainPanel);
         setTitle("UPF");
 
@@ -28,15 +28,15 @@ public class LiveLoadKTW extends JFrame {
         irlandiaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ExcelAPI.IrelandSplit(List.get(7));
+                ExcelController.IrelandSplit(List.get(7));
                 JOptionPane.showMessageDialog(thisFrame, "Irlandia w Pliku");
             }
         });
         planButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<InWork.DataBase.DataStructure.LiveLoadKTW> przetworzone = Calculations.ProductionPlan(List);
-                ExcelAPI.ProductionPlan(przetworzone);
+                ArrayList<InWork.DataStructure.LiveLoadKTW> przetworzone = Calculations.ProductionPlan(List);
+                ExcelController.ProductionPlan(przetworzone);
                 JOptionPane.showMessageDialog(thisFrame, "Plan w Pliku");
             }
         });
@@ -44,7 +44,7 @@ public class LiveLoadKTW extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ArrayList<LiveLoadPOL> polska = Calculations.PolandLiveLoad(List.get(0));
-                ExcelAPI.Poland(polska);
+                ExcelController.Poland(polska);
                 JOptionPane.showMessageDialog(thisFrame, "Polska w Pliku");
             }
         });

@@ -1,25 +1,23 @@
-package InWork.DataBase;
+package InWork.Controllers;
 
-import InWork.DataBase.DataStructure.DataKTW;
-import InWork.DataBase.DataStructure.DataPrzewoznik;
+import InWork.DataStructure.DataKTW;
+import InWork.DataStructure.DataPrzewoznik;
 
 import javax.swing.*;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 
-public class DataBaseAPI {
+public class DataBaseController {
 
-    static private DataBaseAPI Instance = null;
+    static private DataBaseController Instance = null;
     private Connection conn;
-    private final String DatabasePath = "C:\\demo";
 
-    static public DataBaseAPI getInstance() {
+    static public DataBaseController getInstance() {
         if (Instance == null)
         {
             try {
-                Instance = new DataBaseAPI();
+                Instance = new DataBaseController();
             } catch (SQLException throwables) {
                 JOptionPane.showMessageDialog(null, "Błąd połączenia z bazą danych");
                 throwables.printStackTrace();
@@ -28,19 +26,20 @@ public class DataBaseAPI {
         return Instance;
     }
     private void Connect() throws SQLException {
-        String url = "jdbc:sqlite:" + DatabasePath + "\\UPF_DB.db";
+        String databasePath = "C:\\demo";
+        String url = "jdbc:sqlite:" + databasePath + "\\UPF_DB.db";
         //String url = DatabasePath + "\\UPF_DB.db";
         conn = DriverManager.getConnection(url);
         System.out.println("Connection to SQLite has been established.");
     }
 
-    private DataBaseAPI() throws SQLException {
+    private DataBaseController() throws SQLException {
         Instance = this;
         this.conn = null;
         Connect();
 
-        DatabaseMetaData metaData = conn.getMetaData();
-        ResultSet Result = metaData.getTables(null, null, null, new String[] {"TABLE"});
+//        DatabaseMetaData metaData = conn.getMetaData();
+//        ResultSet Result = metaData.getTables(null, null, null, new String[] {"TABLE"});
 //        boolean find = false;
 //        String TableName = "KTW";
 //        while (Result.next()) {

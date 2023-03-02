@@ -1,0 +1,10 @@
+.root{
+-fx-background-image: url("/logo.png");
+    -fx-background-repeat: repeat;
+    -fx-background-position: bottom right;
+}
+.label{
+    -fx-font-weight: 900;
+    -fx-font-size: 12px;
+    -fx-font-family: 'fantasy';
+}

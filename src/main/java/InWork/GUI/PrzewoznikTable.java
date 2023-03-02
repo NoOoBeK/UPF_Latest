@@ -1,7 +1,6 @@
 package InWork.GUI;
 
-import InWork.DataBase.DataStructure.DataKTWList;
-import InWork.DataBase.DataStructure.DataPrzewoznikList;
+import InWork.DataStructure.Collection.DataPrzewoznikList;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

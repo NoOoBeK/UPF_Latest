@@ -1,4 +1,4 @@
-package InWork.DataBase.DataStructure;
+package InWork.DataStructure;
 
 public class DataOrders {
     int FO;

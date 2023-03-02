@@ -1,10 +1,11 @@
 package InWork.GUI;
 
-import InWork.DataBase.DataBaseAPI;
-import InWork.DataBase.DataStructure.DataKTWList;
-import InWork.DataBase.DataStructure.DataPrzewoznikList;
-import InWork.DataBase.DataStructure.LiveLoadKTW;
-import InWork.DataBase.DataStructure.LiveLoadKTWList;
+import InWork.Controllers.DataBaseController;
+import InWork.Controllers.ImportController;
+import InWork.DataStructure.Collection.DataKTWList;
+import InWork.DataStructure.Collection.DataPrzewoznikList;
+import InWork.DataStructure.LiveLoadKTW;
+import InWork.DataStructure.Collection.LiveLoadKTWList;
 import InWork.Settings;
 
 import javax.swing.*;
@@ -12,7 +13,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class SelectFactory extends JFrame{
     private JButton exitButton;
@@ -41,7 +41,7 @@ public class SelectFactory extends JFrame{
     private InWork.GUI.Settings SettingsUI;
     private KTWDataBaseUI DataBaseTable;
     private PrzewoznikDataBaseUI PrzewoznikDataBaseTable;
-    private SelectFactory thisframe;
+    private final SelectFactory thisframe;
 
     public SelectFactory() {
 
@@ -53,20 +53,11 @@ public class SelectFactory extends JFrame{
         setContentPane(MainPanel);
         setTitle("UPF");
 
-        try {
-            recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
-        } catch (SQLException throwables) {
-            JOptionPane.showMessageDialog(thisframe, "Błąd Bazy Danych");
-            throwables.printStackTrace();
-        }
-        Date LastKTWImport = Settings.getInstance().getLastimportKTW();
-        if (LastKTWImport != null) LastInsert.setText(LastKTWImport.toString());
-        else                       LastInsert.setText("NULL");
-
         exitButton.addActionListener(e -> System.exit(0));
         exitButton1.addActionListener(e -> System.exit(0));
-
         exitButton2.addActionListener(e -> System.exit(0));
+        exitButton3.addActionListener(e -> System.exit(0));
+
         DataBaseView.addActionListener(e -> {
             if (thisframe.DataBaseTable == null) {
                 DataBaseTable = new KTWDataBaseUI();
@@ -79,27 +70,11 @@ public class SelectFactory extends JFrame{
             }
         });
         ImportKTW.addActionListener(e -> {
-            try {
-                if (DataKTWList.getInstance().ImpotrKTW())
-                {
-                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony pomyślnie");
-                    Settings.getInstance().setLastimportKTW(new Date());
-                    LastInsert.setText(Settings.getInstance().getLastimportKTW().toString());
-                    Settings.getInstance().SaveSettings();
-                    recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
-                } else {
-                    JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
-                }
-            } catch (SQLException throwables) {
-                JOptionPane.showMessageDialog(thisframe, "Import Zkończony niepowodzeniem");
-                throwables.printStackTrace();
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(thisframe, "Błąd z zapisaniem czasu ostatniego Importu");
-                throw new RuntimeException(ex);
-            }
+            ImportController.ImpotrKTW();
         });
+
         LiveLoadPlan.addActionListener(e -> {
-            ArrayList<ArrayList<LiveLoadKTW>> data = LiveLoadKTWList.getInstance().CreatData();
+            ArrayList<ArrayList<LiveLoadKTW>> data = LiveLoadKTWList.getInstance().CreateData();
             int count = 0;
             for (ArrayList<LiveLoadKTW> list : data)
             {
@@ -117,12 +92,12 @@ public class SelectFactory extends JFrame{
         });
         cleanDBButton.addActionListener(e -> {
             try {
-                DataBaseAPI.getInstance().cleanDBKTW();
+                DataBaseController.getInstance().cleanDBKTW();
                 DataKTWList.getInstance().cleanList();
                 Settings.getInstance().setLastimportKTW(null);
                 Settings.getInstance().SaveSettings();
                 LastInsert.setText("NULL");
-                recordCount.setText(Integer.toString(DataBaseAPI.getInstance().getKtwCount()));
+                recordCount.setText(Integer.toString(DataBaseController.getInstance().getKtwCount()));
             } catch (SQLException throwables) {
                 JOptionPane.showMessageDialog(thisframe, "błąd czyszczenia bazy Katowic");
                 throwables.printStackTrace();
@@ -156,7 +131,7 @@ public class SelectFactory extends JFrame{
                 PrzewoznikDataBaseTable.setVisible(true);
             }
         });
-        exitButton3.addActionListener(e -> System.exit(0));
+
 
 
         settingsButton.addActionListener(e -> {
@@ -169,5 +144,14 @@ public class SelectFactory extends JFrame{
                 SettingsUI.setVisible(true);
             }
         });
+    }
+
+    public void setDataBaseCount(String text)
+    {
+        recordCount.setText(text);
+    }
+    public void setLastImport(String text)
+    {
+        LastInsert.setText(text);
     }
 }

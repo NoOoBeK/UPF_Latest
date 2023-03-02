@@ -1,7 +1,6 @@
-package InWork.DataBase;
+package InWork.Controllers;
 
-import InWork.DataBase.DataStructure.*;
-import InWork.Operations.Calculations;
+import InWork.DataStructure.*;
 import InWork.Settings;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -16,9 +15,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 
-public class ExcelAPI
+public class ExcelController
 {
 
     static private File ChoseFile(Component caller){
@@ -34,7 +32,7 @@ public class ExcelAPI
         return null;
     }
     static public ArrayList<DataKTW> ImportKTW(Component caller) {
-        XSSFWorkbook book = null;
+        XSSFWorkbook book;
         File excelfile = ChoseFile(caller);
         ArrayList<DataKTW> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
@@ -49,16 +47,16 @@ public class ExcelAPI
         DataKTW newRecord;
         int source;
         XSSFCell cell;
-        Double skudouble;
+        double skudouble;
 
         for(source = 1 ; source < sheet.getLastRowNum();++source) {
             newRecord = new DataKTW();
             cell = sheet.getRow(source).getCell(0);
             skudouble = cell.getNumericCellValue();
-            if (skudouble.intValue() < 1) {
+            if ((int) skudouble < 1) {
                 break;
             }
-            newRecord.setSKU(skudouble.intValue());
+            newRecord.setSKU((int) skudouble);
 
             cell = sheet.getRow(source).getCell(1);
             newRecord.setName(cell.getStringCellValue());
@@ -104,7 +102,7 @@ public class ExcelAPI
         return ret;
     }
     static public ArrayList<DataPP> ImportPP(Component caller){
-        XSSFWorkbook book = null;
+        XSSFWorkbook book;
         File excelfile = ChoseFile(caller);
         ArrayList<DataPP> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
@@ -119,15 +117,15 @@ public class ExcelAPI
         DataPP newRecord;
         int source;
         XSSFCell cell;
-        Double skudouble;
+        double skudouble;
 
         for(source = 1 ; source < sheet.getLastRowNum()+1;++source) {
             newRecord = new DataPP();
             cell = sheet.getRow(source).getCell(7);
             skudouble = cell.getNumericCellValue();
-            if (skudouble.intValue() < 1) {
+            if ((int) skudouble < 1) {
                 break;}
-            newRecord.setSKU(skudouble.intValue());
+            newRecord.setSKU((int) skudouble);
             cell = sheet.getRow(source).getCell(0);
             newRecord.setSDate(cell.getNumericCellValue());
             cell = sheet.getRow(source).getCell(1);
@@ -140,7 +138,7 @@ public class ExcelAPI
             String temp = cell.toString();
 
 
-            if(temp.contains(",")==true)
+            if(temp.contains(","))
             {
 
                 temp = temp.replace(".","");
@@ -153,7 +151,7 @@ public class ExcelAPI
             {
                 temp = temp.replace(".","");
             }
-            newRecord.setQNT(Double.valueOf(temp));
+            newRecord.setQNT(Double.parseDouble(temp));
             cell = sheet.getRow(source).getCell(10);
             newRecord.setLane(cell.getStringCellValue());
             ret.add(newRecord);
@@ -162,7 +160,7 @@ public class ExcelAPI
         return ret;
     }
     static public ArrayList<DataPrzewoznik> ImportPrzewoznik(Component caller){
-        XSSFWorkbook book = null;
+        XSSFWorkbook book;
         File excelfile = ChoseFile(caller);
         ArrayList<DataPrzewoznik> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
@@ -177,17 +175,17 @@ public class ExcelAPI
         DataPrzewoznik newRecord;
         int source;
         XSSFCell cell;
-        Double iddouble;
+        double iddouble;
 
         for(source = 1 ; source < sheet.getLastRowNum()+1;++source) {
             newRecord = new DataPrzewoznik();
             cell = sheet.getRow(source).getCell(0);
             iddouble = cell.getNumericCellValue();
-            if (iddouble.longValue() < 1) {
+            if (Math.round(iddouble) < 1) {
                 break;
             }else{
-                System.out.println(iddouble.longValue());
-                newRecord.setPrzewoznikID(iddouble.longValue());}
+                System.out.println(Math.round(iddouble));
+                newRecord.setPrzewoznikID(Math.round(iddouble));}
             cell = sheet.getRow(source).getCell(1);
             newRecord.setPrzewoznik(cell.getStringCellValue());
             cell = sheet.getRow(source).getCell(2);
@@ -197,7 +195,7 @@ public class ExcelAPI
         return ret;
     }
     static public ArrayList<DataOrders>ImportOrders (Component caller){
-        XSSFWorkbook book = null;
+        XSSFWorkbook book;
         File excelfile = ChoseFile(caller);
         ArrayList<DataOrders> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
@@ -211,7 +209,6 @@ public class ExcelAPI
         XSSFSheet sheet = book.getSheetAt(0);
         DataOrders newRecord;
         int source;
-        XSSFCell cell;
 
         for(source = 1 ; source < sheet.getLastRowNum();++source) {
             newRecord = new DataOrders();
@@ -220,7 +217,7 @@ public class ExcelAPI
         return ret;
     }
     static public ArrayList<DataOrdersUpdate>ImportOrdersUpdate(Component caller){
-        XSSFWorkbook book = null;
+        XSSFWorkbook book;
         File excelfile = ChoseFile(caller);
         ArrayList<DataOrdersUpdate> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
@@ -234,7 +231,6 @@ public class ExcelAPI
         XSSFSheet sheet = book.getSheetAt(0);
         DataOrdersUpdate newRecord;
         int source;
-        XSSFCell cell;
 
         for(source = 1 ; source < sheet.getLastRowNum();++source) {
             newRecord = new DataOrdersUpdate();
@@ -244,7 +240,7 @@ public class ExcelAPI
 
     }
     static public ArrayList<DataOrdersUpdate>Update(Component caller){
-        XSSFWorkbook book = null;
+        XSSFWorkbook book;
         File excelfile = ChoseFile(caller);
         ArrayList<DataOrdersUpdate> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
@@ -258,7 +254,6 @@ public class ExcelAPI
         XSSFSheet sheet = book.getSheetAt(0);
         DataOrdersUpdate newRecord;
         int source;
-        XSSFCell cell;
 
         for(source = 1 ; source < sheet.getLastRowNum();++source) {
             newRecord = new DataOrdersUpdate();
@@ -277,7 +272,7 @@ public class ExcelAPI
         }
         try {
             book.write(out);
-            out.close();
+            if (out != null) out.close();
         } catch (IOException var8) {
             var8.printStackTrace();
 
@@ -293,7 +288,7 @@ public class ExcelAPI
 
         XSSFRow rowt = sheet.createRow(0);
         for (int celnum = 0; celnum < 4; celnum++) {
-            XSSFCell cell = rowt.createCell(celnum);
+            rowt.createCell(celnum);
         }
         sheet.getRow(0).getCell(0).setCellValue("SKU");
         sheet.getRow(0).getCell(1).setCellValue("Desc");
@@ -303,7 +298,7 @@ public class ExcelAPI
         for (source = 0; source<Ireland.size();source++){
             XSSFRow row = sheet.createRow(rowNum);
             for (int celnum = 0; celnum < 4; celnum++) {
-                XSSFCell cell = row.createCell(celnum);
+                row.createCell(celnum);
             }
             sheet.getRow(rowNum).getCell(0).setCellValue(Ireland.get(source).getSku());
             sheet.getRow(rowNum).getCell(1).setCellValue(Ireland.get(source).getName());
@@ -326,7 +321,7 @@ public class ExcelAPI
 
         XSSFRow row = sheet.createRow(0);
         for (int celnum = 0; celnum < 6; celnum++) {
-            XSSFCell cell = row.createCell(celnum);
+            row.createCell(celnum);
         }
         sheet.getRow(0).getCell(0).setCellValue("Data");
         sheet.getRow(0).getCell(1).setCellValue("Godzina");
@@ -335,22 +330,22 @@ public class ExcelAPI
         sheet.getRow(0).getCell(4).setCellValue("FO");
         sheet.getRow(0).getCell(5).setCellValue("Carrier");
 
-        for (int source = 0; source<list.size();source++) {
+        for (LiveLoadPOL liveLoadPOL : list) {
             //if (list.get(source).getNeededTruck()>0){
 
-              XSSFRow row1 = sheet.createRow(rowNum);
-                for (int celnum = 0; celnum < 4; celnum++) {
-                    XSSFCell cell = row1.createCell(celnum);
-                }
-                sheet.getRow(rowNum).getCell(0).setCellValue(list.get(source).getDate());
-                sheet.getRow(rowNum).getCell(1).setCellValue(list.get(source).getTime());
-                sheet.getRow(rowNum).getCell(2).setCellValue(list.get(source).getPaletCoun());
-                sheet.getRow(rowNum).getCell(3).setCellValue(list.get(source).getNeededTruck());
-                sheet.getRow(rowNum).getCell(0).setCellStyle(data);
-                sheet.getRow(rowNum).getCell(1).setCellStyle(time);
-                rowNum++;
-       //     }
-       }
+            XSSFRow row1 = sheet.createRow(rowNum);
+            for (int celnum = 0; celnum < 4; celnum++) {
+                row1.createCell(celnum);
+            }
+            sheet.getRow(rowNum).getCell(0).setCellValue(liveLoadPOL.getDate());
+            sheet.getRow(rowNum).getCell(1).setCellValue(liveLoadPOL.getTime());
+            sheet.getRow(rowNum).getCell(2).setCellValue(liveLoadPOL.getPaletCoun());
+            sheet.getRow(rowNum).getCell(3).setCellValue(liveLoadPOL.getNeededTruck());
+            sheet.getRow(rowNum).getCell(0).setCellStyle(data);
+            sheet.getRow(rowNum).getCell(1).setCellStyle(time);
+            rowNum++;
+            //     }
+        }
         FileOut(book,name);
     }
     static public void ProductionPlan(ArrayList<LiveLoadKTW> Plan){
@@ -373,7 +368,7 @@ public class ExcelAPI
                 XSSFRow row = sheet.createRow(rowNum);
                 for (int celnum=0;celnum<15;celnum++)
                 {
-                    XSSFCell cell0 = row.createCell(celnum);
+                    row.createCell(celnum);
                 }
                 sheet.getRow(rowNum).getCell(0).setCellValue(Plan.get(source).getSku());
                 sheet.getRow(rowNum).getCell(1).setCellValue(Plan.get(source).getName());
@@ -401,7 +396,7 @@ public class ExcelAPI
                         sheet.getRow(rowNum).getCell(8).setCellValue("");
                     }
                 sheet.getRow(rowNum).getCell(10).setCellValue("");
-                if(sheet.getRow(rowNum).getCell(8).getStringCellValue()=="")
+                if(sheet.getRow(rowNum).getCell(8).getStringCellValue().equals(""))
                 {
                     sheet.getRow(rowNum).getCell(9).setCellValue(ordernum);
                     ordernum=ordernum+1;

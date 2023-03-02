@@ -1,7 +1,8 @@
-package InWork.DataBase.DataStructure;
+package InWork.DataStructure.Collection;
 
-import InWork.DataBase.DataBaseAPI;
-import InWork.DataBase.ExcelAPI;
+import InWork.Controllers.DataBaseController;
+import InWork.Controllers.ExcelController;
+import InWork.DataStructure.DataPrzewoznik;
 
 import javax.swing.*;
 import java.sql.SQLException;
@@ -27,7 +28,7 @@ public class DataPrzewoznikList {
         loadDataDB();
     }
     private void loadDataDB() throws SQLException {
-        DataList = DataBaseAPI.getInstance().getPrzewoznik();
+        DataList = DataBaseController.getInstance().getPrzewoznik();
     }
     public ArrayList<DataPrzewoznik> getData()
     {
@@ -41,26 +42,26 @@ public class DataPrzewoznikList {
         return null;
     }
     public boolean ImpotrPrzewoznik() throws SQLException {
-        ArrayList<DataPrzewoznik> excelData = ExcelAPI.ImportPrzewoznik(null);
+        ArrayList<DataPrzewoznik> excelData = ExcelController.ImportPrzewoznik(null);
         if (excelData.size() < 1) {
             return false;
         }
         DataPrzewoznik checkedPrzewoznik;
 
         for (DataPrzewoznik record : DataList) {
-            checkedPrzewoznik = DataBaseAPI.getInstance().getPrzewoznik(record.getPrzewoznikID());
+            checkedPrzewoznik = DataBaseController.getInstance().getPrzewoznik(record.getPrzewoznikID());
             if (checkedPrzewoznik != null) {
-                DataBaseAPI.getInstance().delatePrzewoznik(record);
+                DataBaseController.getInstance().delatePrzewoznik(record);
             }
         }
         for (DataPrzewoznik record : excelData) {
-            checkedPrzewoznik = DataBaseAPI.getInstance().getPrzewoznik(record.getPrzewoznikID());
+            checkedPrzewoznik = DataBaseController.getInstance().getPrzewoznik(record.getPrzewoznikID());
             if (checkedPrzewoznik != null) {
                 if (!record.compare(checkedPrzewoznik)) {
-                    DataBaseAPI.getInstance().updatePrzewoznik(record);
+                    DataBaseController.getInstance().updatePrzewoznik(record);
                 }
             } else {
-                DataBaseAPI.getInstance().addPrzewoznik(record);
+                DataBaseController.getInstance().addPrzewoznik(record);
             }
         }
         loadDataDB();
