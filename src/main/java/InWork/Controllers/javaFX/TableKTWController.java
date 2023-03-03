@@ -4,6 +4,7 @@ import InWork.Tasks.ImportKTWTask;
 import InWork.DataStructure.Collection.DataKTWList;
 import InWork.DataStructure.DataKTW;
 import InWork.Settings;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -23,7 +24,7 @@ import java.util.ResourceBundle;
 public class TableKTWController implements Initializable {
 
     @FXML
-    TableView Table;
+    private TableView Table;
     @FXML
     private TableColumn<DataKTW, Integer> SKU;
     @FXML
@@ -42,35 +43,29 @@ public class TableKTWController implements Initializable {
     private TableColumn<DataKTW, Integer> QATime;
     @FXML
     private TableColumn<DataKTW, String> Destination;
-
-    @FXML
-    private Button ImportData;
-    @FXML
-    private Label LastImport;
     @FXML
     private ProgressBar ProgresBar;
 
-    private SimpleStringProperty LastImportText = new SimpleStringProperty();
     private ObservableList<DataKTW> TableList;
-    private SimpleDoubleProperty ProgresValue;
+
+    private SimpleBooleanProperty ImportKTWRunning;
     public void ImportKTW(ActionEvent actionEvent) {
-
-        ImportKTWTask task = new ImportKTWTask(TableList);
-        Thread BackGroundTask= new Thread();
-        BackGroundTask.setDaemon(true);
-        BackGroundTask.start();
-
-        Date LastDate = Settings.getInstance().getLastimportKTW();
-        String DateText = "";
-        if (LastDate != null) DateText = LastDate.toString();
-        LastImportText.set("Import: " + DateText);
-        Settings.getInstance().setLastimportKTW(new Date());
-        try {
-            Settings.getInstance().SaveSettings();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (!ImportKTWRunning.getValue()) {
+            ImportKTWTask task = new ImportKTWTask(TableList);
+            ProgresBar.progressProperty().unbind();
+            ProgresBar.progressProperty().bind(task.progressProperty());
+            ImportKTWRunning.unbind();
+            ImportKTWRunning.bind(task.runningProperty());
+            Thread BackGroundTask = new Thread(task);
+            BackGroundTask.setDaemon(true);
+            BackGroundTask.start();
+        } else
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Import KTW In Progress");
+            //alert.getDialogPane().setExpandableContent(new ScrollPane(new TextArea("Import KTW In Progress")));
+            alert.showAndWait();
         }
-        LastImportText.set("Import: " + Settings.getInstance().getLastimportKTW().toString());
     }
 
     @Override
@@ -88,13 +83,6 @@ public class TableKTWController implements Initializable {
         TableList = DataKTWList.getInstance().getData();
         Table.setItems(TableList);
 
-        ProgresValue = new SimpleDoubleProperty(0.0);
-        ProgresBar.progressProperty().bind(ProgresValue);
-
-        LastImport.textProperty().bind(LastImportText);
-        Date LastDate = Settings.getInstance().getLastimportKTW();
-        String DateText = "";
-        if (LastDate != null) DateText = LastDate.toString();
-        LastImportText.set("Import: " + DateText);
+        ImportKTWRunning = new SimpleBooleanProperty(false);
     }
 }

@@ -7,6 +7,7 @@ import InWork.DataStructure.Collection.DataPrzewoznikList;
 import InWork.DataStructure.LiveLoadKTW;
 import InWork.DataStructure.Collection.LiveLoadKTWList;
 import InWork.Settings;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 
@@ -14,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class SelectFactory extends JFrame{
@@ -44,6 +46,7 @@ public class SelectFactory extends JFrame{
     private KTWDataBaseUI DataBaseTable;
     private PrzewoznikDataBaseUI PrzewoznikDataBaseTable;
     private final SelectFactory thisframe;
+    private SimpleBooleanProperty ImportKTWRunning;
 
     public SelectFactory() {
 
@@ -51,6 +54,7 @@ public class SelectFactory extends JFrame{
         DataBaseTable = null;
         PrzewoznikDataBaseTable = null;
         SettingsUI = null;
+        ImportKTWRunning = new SimpleBooleanProperty(false);
 
         setContentPane(MainPanel);
         setTitle("UPF");
@@ -72,9 +76,13 @@ public class SelectFactory extends JFrame{
             }
         });
         ImportKTW.addActionListener(e -> {
-            Thread BackGroundTask= new Thread(new ImportKTWTask(FXCollections.observableArrayList()));
-            BackGroundTask.setDaemon(true);
-            BackGroundTask.start();
+            if (!ImportKTWRunning.getValue()) {
+                ImportKTWTask task = new ImportKTWTask(FXCollections.observableArrayList());
+                ImportKTWRunning.bind(task.runningProperty());
+                Thread BackGroundTask = new Thread(task);
+                BackGroundTask.setDaemon(true);
+                BackGroundTask.start();
+            }
         });
 
         LiveLoadPlan.addActionListener(e -> {
@@ -98,7 +106,7 @@ public class SelectFactory extends JFrame{
             try {
                 DataBaseController.getInstance().cleanDBKTW();
                 DataKTWList.getInstance().cleanList();
-                Settings.getInstance().setLastimportKTW(null);
+                Settings.getInstance().setLastimportKTW(LocalDate.MIN.toString());
                 Settings.getInstance().SaveSettings();
                 LastInsert.setText("NULL");
                 recordCount.setText(Integer.toString(DataBaseController.getInstance().getKtwCount()));
