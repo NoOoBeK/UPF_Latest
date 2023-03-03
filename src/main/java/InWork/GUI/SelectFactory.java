@@ -106,7 +106,7 @@ public class SelectFactory extends JFrame{
             try {
                 DataBaseController.getInstance().cleanDBKTW();
                 DataKTWList.getInstance().cleanList();
-                Settings.getInstance().setLastimportKTW(LocalDate.MIN.toString());
+                Settings.getInstance().setLastimportKTW(null);
                 Settings.getInstance().SaveSettings();
                 LastInsert.setText("NULL");
                 recordCount.setText(Integer.toString(DataBaseController.getInstance().getKtwCount()));

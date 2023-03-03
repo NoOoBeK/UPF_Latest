@@ -1,9 +1,12 @@
 package InWork.Controllers.javaFX;
 
+import InWork.Settings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.RadioMenuItem;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -41,5 +44,23 @@ public class SelectFactoryController {
 
     public void ViewDataKTW(ActionEvent actionEvent) {
         CreatKTWDBTable();
+    }
+
+
+    public void switchTheme(ActionEvent actionEvent) {
+        RadioMenuItem caller = (RadioMenuItem) actionEvent.getSource();
+
+        String Was = Settings.getInstance().getStyle();
+        Scene scene = caller.getParentPopup().getOwnerWindow().getScene();
+
+        if (!Was.equals("Normal")) scene.getStylesheets().remove(getClass().getResource("/theme/"+ Was +".css").toExternalForm());
+        String Is = caller.getText();
+        if (!Is.equals("Normal")) scene.getStylesheets().add(getClass().getResource("/theme/"+ Is +".css").toExternalForm());
+        Settings.getInstance().setStyle(caller.getText());
+        try {
+            Settings.getInstance().SaveSettings();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

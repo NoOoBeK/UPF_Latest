@@ -1,16 +1,19 @@
 package InWork;
 
+import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.apache.poi.sl.usermodel.ObjectMetaData;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.util.Date;
 
 public class Settings implements java.io.Serializable {
     private static Settings Instance = null;
-    private StringProperty LastimportKTW;
-    private StringProperty FileChoserPath;
-    private StringProperty Style;
+    private Date LastimportKTW;
+    private String FileChoserPath;
+    private String Style;
 
     public static Settings getInstance() {
         if (Instance == null)
@@ -21,9 +24,9 @@ public class Settings implements java.io.Serializable {
         return Instance;
     }
     private Settings() {
-        LastimportKTW = new SimpleStringProperty("");
-        FileChoserPath = new SimpleStringProperty("user.dir");
-        Style = new SimpleStringProperty("");
+        LastimportKTW = null;
+        FileChoserPath = "user.dir";
+        Style = "Normal";
     }
     private static void LoadSettings () {
         try {
@@ -42,37 +45,24 @@ public class Settings implements java.io.Serializable {
         oos.writeObject(Instance);
     }
 
-    public String getLastimportKTW() {
-        return LastimportKTW.get();
-    }
-
-    public StringProperty lastimportKTWProperty() {
+    public Date getLastimportKTW() {
         return LastimportKTW;
     }
-
     public void setLastimportKTW(Date lastimportKTW) {
-        this.LastimportKTW.set(lastimportKTW.toString());
-    }
-    public void setLastimportKTW(String lastimportKTW) {
-        this.LastimportKTW.set(lastimportKTW);
+        this.LastimportKTW = lastimportKTW;
     }
 
     public String getFileChoserPath() {
-        return FileChoserPath.get();
-    }
-    public StringProperty fileChoserPathProperty() {
         return FileChoserPath;
     }
+
     public void setFileChoserPath(String fileChoserPathProper) {
-        this.FileChoserPath.set(fileChoserPathProper);
+        this.FileChoserPath =fileChoserPathProper;
     }
     public String getStyle() {
-        return Style.get();
-    }
-    public StringProperty styleProperty() {
         return Style;
     }
     public void setStyle(String style) {
-        this.Style.set(style);
+        this.Style = style;
     }
 }
