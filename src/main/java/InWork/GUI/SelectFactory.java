@@ -1,12 +1,14 @@
 package InWork.GUI;
 
 import InWork.Controllers.DataBaseController;
-import InWork.Controllers.ImportController;
+import InWork.Tasks.ImportKTWTask;
 import InWork.DataStructure.Collection.DataKTWList;
 import InWork.DataStructure.Collection.DataPrzewoznikList;
 import InWork.DataStructure.LiveLoadKTW;
 import InWork.DataStructure.Collection.LiveLoadKTWList;
 import InWork.Settings;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,7 +72,9 @@ public class SelectFactory extends JFrame{
             }
         });
         ImportKTW.addActionListener(e -> {
-            ImportController.ImpotrKTW();
+            Thread BackGroundTask= new Thread(new ImportKTWTask(FXCollections.observableArrayList()));
+            BackGroundTask.setDaemon(true);
+            BackGroundTask.start();
         });
 
         LiveLoadPlan.addActionListener(e -> {

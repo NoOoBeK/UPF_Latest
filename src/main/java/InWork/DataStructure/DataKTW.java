@@ -2,15 +2,15 @@ package InWork.DataStructure;
 
 public class DataKTW {
 
-    int SKU;
-    String Name;
-    double Gross;
-    double Net;
-    double cs;
-    String dest;
-    String paltype;
-    int qatime;
-    double height;
+    private int SKU;
+    private String Name;
+    private double Gross;
+    private double Net;
+    private double cs;
+    private String dest;
+    private String paltype;
+    private int qatime;
+    private double height;
 
     public DataKTW() {
 
@@ -68,6 +68,18 @@ public class DataKTW {
     }
     public void setHeight(double height) {
         this.height = height;
+    }
+    public void clone(DataKTW source)
+    {
+        setSKU(source.getSKU());
+        setQatime(source.getQatime());
+        setPaltype(source.getPaltype());
+        setCs(source.getCs());
+        setDest(source.getDest());
+        setHeight(source.getHeight());
+        setName(source.getName());
+        setGross(source.getGross());
+        setNet(source.getNet());
     }
     public boolean compare(DataKTW comparData)
     {

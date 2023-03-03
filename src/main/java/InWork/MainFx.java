@@ -12,8 +12,6 @@ public class MainFx extends Application {
         try{
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/SelectFactory.fxml"));
         Scene scene = new Scene(root);
-        String css = this.getClass().getResource("/css/application.css").toExternalForm();
-        scene.getStylesheets().add(css);
         Stage.setScene(scene);
         Stage.show();
         } catch (Exception e) {

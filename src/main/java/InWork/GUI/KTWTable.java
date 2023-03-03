@@ -6,7 +6,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
 public class KTWTable extends AbstractTableModel {
-    private ArrayList<String> columnNames;
+    private final ArrayList<String> columnNames;
 
     public KTWTable() {
 

@@ -2,6 +2,7 @@ package InWork.Controllers;
 
 import InWork.DataStructure.DataKTW;
 import InWork.DataStructure.DataPrzewoznik;
+import javafx.collections.ObservableList;
 
 import javax.swing.*;
 import java.sql.*;
@@ -16,49 +17,35 @@ public class DataBaseController {
     static public DataBaseController getInstance() {
         if (Instance == null)
         {
-            try {
-                Instance = new DataBaseController();
-            } catch (SQLException throwables) {
-                JOptionPane.showMessageDialog(null, "Błąd połączenia z bazą danych");
-                throwables.printStackTrace();
-            }
+            Instance = new DataBaseController();
         }
         return Instance;
     }
-    private void Connect() throws SQLException {
+    private void Connect() {
         String databasePath = "C:\\demo";
         String url = "jdbc:sqlite:" + databasePath + "\\UPF_DB.db";
         //String url = DatabasePath + "\\UPF_DB.db";
-        conn = DriverManager.getConnection(url);
+        try {
+            conn = DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println("Connection to SQLite has been established.");
     }
 
-    private DataBaseController() throws SQLException {
+    private DataBaseController() {
         Instance = this;
         this.conn = null;
         Connect();
-
-//        DatabaseMetaData metaData = conn.getMetaData();
-//        ResultSet Result = metaData.getTables(null, null, null, new String[] {"TABLE"});
-//        boolean find = false;
-//        String TableName = "KTW";
-//        while (Result.next()) {
-//            if (TableName.equals(Result.getString("TABLE_NAME")))
-//            {
-//                find = true;
-//                break;
-//
-//            }
-//        }
-//        if (!find)
-//        {
+        try {
             CreatTable();
             CreatTable2();
             CreatTable3();
             CreatTable4();
             CreatTable5();
-
-//        }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -80,7 +67,6 @@ public class DataBaseController {
         }
         Statement stmt = conn.createStatement();
         stmt.execute(TableKTW);
-
     }
     private void insertKTW(DataKTW data) throws SQLException {
 
@@ -182,6 +168,26 @@ public class DataBaseController {
             ret.add(newRecord);
         }
         return ret;
+    }
+    public void getKTW(ObservableList<DataKTW> List) throws SQLException {
+        String querry = "SELECT * FROM KTW;";
+        if (!conn.isValid(5)) {Connect();}
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(querry);
+        List.clear();
+        while (rs.next()) {
+            DataKTW newRecord = new DataKTW();
+            newRecord.setSKU(rs.getInt(1));
+            newRecord.setName(rs.getString(2));
+            newRecord.setGross(rs.getDouble(3));
+            newRecord.setNet(rs.getDouble(4));
+            newRecord.setCs(rs.getDouble(5));
+            newRecord.setDest(rs.getString(6));
+            newRecord.setPaltype(rs.getString(7));
+            newRecord.setQatime(rs.getInt(8));
+            newRecord.setHeight(rs.getDouble(9));
+            List.add(newRecord);
+        }
     }
     public boolean delateKTW(DataKTW record) throws SQLException {
         String querry = "DELETE FROM KTW WHERE sku == ?;";
