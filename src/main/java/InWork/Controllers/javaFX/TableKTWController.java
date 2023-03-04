@@ -6,10 +6,14 @@ import InWork.DataStructure.Collection.DataKTWList;
 import InWork.DataStructure.DataKTW;
 import InWork.Settings;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.css.Stylesheet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.net.URL;
@@ -81,18 +85,6 @@ public class TableKTWController implements Initializable {
 
         ImportKTWRunning = new SimpleBooleanProperty(false);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
-        try {
-            Date LastDate = Settings.getInstance().getLastimportKTW();
-            String LastDateText = "Never";
-            if (LastDate != null) LastDateText = LastDate.toString();
-            alert.setHeaderText("Record In Databas: " + String.valueOf(DataBaseController.getInstance().getKtwCount() + "\n" +
-                                "Last Import KTW: " + LastDateText));
-            alert.showAndWait();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
 
     }
 }
