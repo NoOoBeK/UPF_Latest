@@ -429,7 +429,7 @@ public class LiveLoadKTWTask extends Task {
             {
                 Steps++;
                 if (Steps >= MoveTrackAfterSteps && !AddSkipedTruck) {
-                    if (PalletCount< MinPalletCountToNoRemoveTruck)
+                    if (PalletCount < MinPalletCountToNoRemoveTruck)
                         ret.get(ret.size() - MoveTrackAfterSteps - 1).setNeededTruck((ret.get(ret.size() - MoveTrackAfterSteps - 1).getNeededTruck()) - 1);
                     AddSkipedTruck = true;
                     PalletCount = 0;

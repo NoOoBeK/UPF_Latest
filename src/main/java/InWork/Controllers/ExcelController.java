@@ -25,15 +25,13 @@ public class ExcelController
     }
     static public void FileOut(XSSFWorkbook book, String name){
         FileOutputStream out = null;
-        while(true) {
             try {
                 out = new FileOutputStream("C:\\demo\\" + name + ".xlsx");
-                break;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "File " + name + " is open, close it and try again");
+                return;
             }
-        }
         try {
             book.write(out);
             if (out != null) out.close();
