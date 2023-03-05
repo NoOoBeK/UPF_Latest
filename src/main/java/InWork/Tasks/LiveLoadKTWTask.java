@@ -73,7 +73,6 @@ public class LiveLoadKTWTask extends Task {
             cell = sheet.getRow(source).getCell(6);
             String temp = cell.toString();
             temp = temp.replaceAll("\\s", "");
-
             if(temp.contains(","))
             {
 
@@ -342,15 +341,13 @@ public class LiveLoadKTWTask extends Task {
         }
         return Plan;
     }
-
     private ArrayList<LiveLoadPOL> CalculatPoland(ArrayList<LiveLoadKTW> list) {
         updateMessage("Calculate Poland");
-        boolean wait = true;
         String input = "";
-        while (wait)
+        while (true)
         {
             input = JOptionPane.showInputDialog(null,"Podaj początkową ilość palet", 0);
-            if (CheckType.isInteger(input)) wait = false;
+            if (CheckType.isInteger(input)) break;
         }
         int PalletCount = Integer.valueOf(input);
         ArrayList<LiveLoadPOL> ret = new ArrayList<>();
@@ -380,6 +377,12 @@ public class LiveLoadKTWTask extends Task {
         }
 
         double TimeLenght = 1.0/ 24.0;
+        int MoveTrackAfterSteps = 4;
+        int MinPalletCountToNoRemoveTruck = 25;
+        int LastPallCount = -1;
+        int Steps = 0;
+        boolean AddSkipedTruck = false;
+        int NeddedTruck = PalletCount == 0 ? 1 : 0;
         while (Start < End)
         {
             LiveLoadPOL newRecord = new LiveLoadPOL();
@@ -407,7 +410,11 @@ public class LiveLoadKTWTask extends Task {
             }
             newRecord.setPaletCoun(PalletCount);
 
-            int NeddedTruck = 0;
+            if (AddSkipedTruck && LastPallCount != PalletCount)
+            {
+                AddSkipedTruck = false;
+                NeddedTruck += 1;
+            }
             while (PalletCount >= 30)
             {
                 NeddedTruck += 1;
@@ -416,6 +423,19 @@ public class LiveLoadKTWTask extends Task {
             newRecord.setNeededTruck(NeddedTruck);
             Start += TimeLenght;
             ret.add(newRecord);
+            NeddedTruck = 0;
+
+            if (LastPallCount == PalletCount)
+            {
+                Steps++;
+                if (Steps >= MoveTrackAfterSteps) {
+                    if (ret.get(ret.size() - MoveTrackAfterSteps - 1).getPaletCoun() < MinPalletCountToNoRemoveTruck)
+                        ret.get(ret.size() - MoveTrackAfterSteps - 1).setNeededTruck((ret.get(ret.size() - MoveTrackAfterSteps - 1).getNeededTruck()) - 1);
+                    AddSkipedTruck = true;
+                }
+            } else Steps = 0;
+            LastPallCount = PalletCount;
+
             Handle++;
             updateProgress(Handle, AllToHandle);
         }
