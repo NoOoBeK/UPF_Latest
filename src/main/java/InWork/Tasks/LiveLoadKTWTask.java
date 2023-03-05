@@ -72,8 +72,7 @@ public class LiveLoadKTWTask extends Task {
             newRecord.setETime(cell.getNumericCellValue());
             cell = sheet.getRow(source).getCell(6);
             String temp = cell.toString();
-            temp.replaceAll("\\s", "");
-            temp.replaceAll(" ", "");
+            temp = temp.replaceAll("\\s", "");
 
             if(temp.contains(","))
             {
@@ -81,7 +80,6 @@ public class LiveLoadKTWTask extends Task {
                 temp = temp.replace(".","");
                 temp = temp.replace(",",".");
             }
-            int test = temp.indexOf(".");
             if(temp.indexOf(".") < 4)
             {
                 temp = temp.replace(".","");
@@ -430,6 +428,7 @@ public class LiveLoadKTWTask extends Task {
         if (!Ireland && !Plan && !Poland)
         {
             PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING,"None Selected Skip Live Load");
+            updateProgress(0,1);
             updateMessage("Live Load Cancell");
             return null;
         }
