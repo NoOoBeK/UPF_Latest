@@ -126,6 +126,7 @@ public class SelectFactoryController implements Initializable {
     public void LiveLoadKTW(ActionEvent actionEvent) {
         if (!LiveLoadRunning.getValue())
         {
+            LiveLoadRunning.unbind();
             LiveLoadRunning.setValue(true);
 
             File SouceFile = PopUpWindow.ChoseExcelFile("Select Katowice Data Excel", (Stage)LiveLoadIreland.getScene().getWindow());

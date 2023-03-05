@@ -72,7 +72,7 @@ public class LiveLoadKTWTask extends Task {
             newRecord.setETime(cell.getNumericCellValue());
             cell = sheet.getRow(source).getCell(6);
             String temp = cell.toString();
-
+            temp.replaceAll("\\s", "");
 
             if(temp.contains(","))
             {

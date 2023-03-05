@@ -29,7 +29,12 @@ public class ImportKTWTask extends Task<Boolean>{
         updateMessage("Import excel data");
         updateProgress(-1,1);
         Workbook WoorkBook = ExcelController.ImportFile(SourceFile);
-        if (WoorkBook == null) return null;
+        if (WoorkBook == null)
+        {
+            updateProgress(0,1);
+            updateMessage("Import data canceled");
+            return null;
+        }
         ArrayList<DataKTW> ret = new ArrayList<>();
 
         updateMessage("Analysis of imported excel data");

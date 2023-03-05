@@ -32,9 +32,9 @@
                         <CheckBox fx:id="LiveLoadIreland" layoutX="14.0" layoutY="53.0" mnemonicParsing="false" text="Ireland" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="55.0" />
                         <CheckBox fx:id="LiveLoadPlan" layoutX="14.0" layoutY="78.0" mnemonicParsing="false" text="Plan" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="85.0" />
                         <CheckBox fx:id="LiveLoadPoland" layoutX="14.0" layoutY="105.0" mnemonicParsing="false" text="Poland" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="115.0" />
-                        <Label fx:id="LiveLoadProgressText" layoutX="113.0" layoutY="85.0" text="Label" />
-                        <ProgressBar fx:id="LiveLoadProgressBar" layoutX="113.0" layoutY="115.0" prefHeight="18.0" prefWidth="181.0" progress="0.0" />
-                        <Separator layoutX="19.0" layoutY="73.0" maxHeight="1.0" maxWidth="1.7976931348623157E308" minHeight="0.0" prefHeight="0.0" prefWidth="335.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="150.0" />
+                        <Label fx:id="LiveLoadProgressText" layoutX="113.0" layoutY="85.0" text="Label" AnchorPane.leftAnchor="113.0" AnchorPane.topAnchor="85.0" />
+                        <ProgressBar fx:id="LiveLoadProgressBar" layoutX="113.0" layoutY="115.0" prefHeight="18.0" prefWidth="181.0" progress="0.0" AnchorPane.leftAnchor="113.0" AnchorPane.topAnchor="115.0" />
+                        <Separator layoutX="19.0" layoutY="73.0" maxHeight="1.0" maxWidth="1.7976931348623157E308" minHeight="0.0" prefHeight="0.0" prefWidth="335.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0" />
                      </children>
                   </AnchorPane>
                </content>
