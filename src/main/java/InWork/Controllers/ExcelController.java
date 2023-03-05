@@ -31,8 +31,7 @@ public class ExcelController
                 break;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                Alert alert = PopUpWindow.showMsgWarrning(Alert.AlertType.CONFIRMATION, "File " + name + " is open, close it and press OK to try again");
-                if (alert.getResult() == ButtonType.CANCEL) break;
+                PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "File " + name + " is open, close it and try again");
             }
         }
         try {
