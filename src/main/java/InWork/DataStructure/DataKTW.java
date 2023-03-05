@@ -12,9 +12,6 @@ public class DataKTW {
     private int qatime;
     private double height;
 
-    public DataKTW() {
-
-    }
     public int getSKU() {
         return SKU;
     }

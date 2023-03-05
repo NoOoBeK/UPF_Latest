@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -46,7 +48,8 @@ public class TableKTWController implements Initializable {
     private SimpleBooleanProperty ImportKTWRunning;
     public void ImportKTW(ActionEvent actionEvent) {
         if (!ImportKTWRunning.getValue()) {
-            ImportKTWTask task = new ImportKTWTask(TableList);
+            File ImportedFile = PopUpWindow.ChoseExcelFile("Select Katowice Excel Data", (Stage)ProgresBar.getScene().getWindow());
+            ImportKTWTask task = new ImportKTWTask(ImportedFile, TableList);
             ProgresBar.progressProperty().unbind();
             ProgresBar.progressProperty().bind(task.progressProperty());
             ImportKTWRunning.unbind();
@@ -61,15 +64,15 @@ public class TableKTWController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SKU.setCellValueFactory(new PropertyValueFactory<DataKTW, Integer>("SKU"));
-        Name.setCellValueFactory(new PropertyValueFactory<DataKTW, String>("Name"));
-        Gross.setCellValueFactory(new PropertyValueFactory<DataKTW, Double>("Gross"));
-        Net.setCellValueFactory(new PropertyValueFactory<DataKTW, Double>("Net"));
-        cs.setCellValueFactory(new PropertyValueFactory<DataKTW, Double>("cs"));
-        Destination.setCellValueFactory(new PropertyValueFactory<DataKTW, String>("dest"));
-        PalletType.setCellValueFactory(new PropertyValueFactory<DataKTW, String>("paltype"));
-        QATime.setCellValueFactory(new PropertyValueFactory<DataKTW, Integer>("qatime"));
-        Height.setCellValueFactory(new PropertyValueFactory<DataKTW, Double>("height"));
+        SKU.setCellValueFactory(new PropertyValueFactory<>("SKU"));
+        Name.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        Gross.setCellValueFactory(new PropertyValueFactory<>("Gross"));
+        Net.setCellValueFactory(new PropertyValueFactory<>("Net"));
+        cs.setCellValueFactory(new PropertyValueFactory<>("cs"));
+        Destination.setCellValueFactory(new PropertyValueFactory<>("dest"));
+        PalletType.setCellValueFactory(new PropertyValueFactory<>("paltype"));
+        QATime.setCellValueFactory(new PropertyValueFactory<>("qatime"));
+        Height.setCellValueFactory(new PropertyValueFactory<>("height"));
 
         TableList = DataKTWList.getInstance().getData();
         Table.setItems(TableList);

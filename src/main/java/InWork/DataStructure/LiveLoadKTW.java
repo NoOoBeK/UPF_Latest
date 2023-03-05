@@ -13,9 +13,8 @@ public class LiveLoadKTW {
     private String Dest;
     private String Line;
 
-    public LiveLoadKTW() {
+    public LiveLoadKTW() {}
 
-    }
     public LiveLoadKTW(LiveLoadKTW source)
     {
         setSku(source.getSku());

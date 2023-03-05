@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -96,7 +97,7 @@ public class SelectFactoryController implements Initializable {
                 Date LastDate = Settings.getInstance().getLastimportKTW();
                 String LastDateText = "Never";
                 if (LastDate != null) LastDateText = LastDate.toString();
-                PopUpWindow.showMsgWarrning(Alert.AlertType.INFORMATION, "Record In Databas: " + String.valueOf(DataBaseController.getInstance().getKtwCount()) + "\n" +
+                PopUpWindow.showMsgWarrning(Alert.AlertType.INFORMATION, "Record In Databas: " + DataBaseController.getInstance().getKtwCount() + "\n" +
                         "Last Import KTW: " + LastDateText);
             } else
             {
@@ -127,12 +128,14 @@ public class SelectFactoryController implements Initializable {
         {
             LiveLoadRunning.setValue(true);
 
-
-            LiveLoadKTWTask task = new LiveLoadKTWTask(LiveLoadIreland.isSelected(), LiveLoadPlan.isSelected(), LiveLoadPoland.isSelected());
+            File SouceFile = PopUpWindow.ChoseExcelFile("Select Katowice Data Excel", (Stage)LiveLoadIreland.getScene().getWindow());
+            LiveLoadKTWTask task = new LiveLoadKTWTask(SouceFile, LiveLoadIreland.isSelected(), LiveLoadPlan.isSelected(), LiveLoadPoland.isSelected());
             LiveLoadProgressBar.progressProperty().unbind();
             LiveLoadProgressBar.progressProperty().bind(task.progressProperty());
             LiveLoadRunning.unbind();
             LiveLoadRunning.bind(task.runningProperty());
+            LiveLoadProgressText.textProperty().unbind();
+            LiveLoadProgressText.textProperty().bind(task.messageProperty());
             Thread BackGroundTask = new Thread(task);
             BackGroundTask.setDaemon(true);
             BackGroundTask.start();

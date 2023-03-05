@@ -1,12 +1,6 @@
 package InWork;
 
-import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import org.apache.poi.sl.usermodel.ObjectMetaData;
-
 import java.io.*;
-import java.time.LocalDate;
 import java.util.Date;
 
 public class Settings implements java.io.Serializable {
@@ -25,7 +19,7 @@ public class Settings implements java.io.Serializable {
     }
     private Settings() {
         LastimportKTW = null;
-        FileChoserPath = "user.dir";
+        FileChoserPath = System.getProperty("user.dir");
         Style = "Normal";
     }
     private static void LoadSettings () {
