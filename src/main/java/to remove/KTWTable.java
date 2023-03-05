@@ -1,5 +1,3 @@
-package InWork.GUI;
-
 import InWork.DataStructure.Collection.DataKTWList;
 
 import javax.swing.table.AbstractTableModel;

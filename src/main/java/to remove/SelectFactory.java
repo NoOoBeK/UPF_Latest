@@ -1,5 +1,3 @@
-package InWork.GUI;
-
 import InWork.Controllers.DataBaseController;
 import InWork.Tasks.ImportKTWTask;
 import InWork.DataStructure.Collection.DataKTWList;
@@ -8,14 +6,12 @@ import InWork.DataStructure.LiveLoadKTW;
 import InWork.DataStructure.Collection.LiveLoadKTWList;
 import InWork.Settings;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class SelectFactory extends JFrame{
@@ -42,7 +38,7 @@ public class SelectFactory extends JFrame{
     private JButton BazaDanychUpdate;
     private JButton Gliwice;
 
-    private InWork.GUI.Settings SettingsUI;
+    private Settings SettingsUI;
     private KTWDataBaseUI DataBaseTable;
     private PrzewoznikDataBaseUI PrzewoznikDataBaseTable;
     private final SelectFactory thisframe;
@@ -93,7 +89,7 @@ public class SelectFactory extends JFrame{
                 count += list.size();
             }
             if (count > 0) {
-                InWork.GUI.LiveLoadKTW form = new InWork.GUI.LiveLoadKTW(data);
+                LiveLoadKTW form = new LiveLoadKTW(data);
                 form.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 form.pack();
                 form.setVisible(true);
@@ -148,7 +144,7 @@ public class SelectFactory extends JFrame{
 
         settingsButton.addActionListener(e -> {
             if (thisframe.SettingsUI == null) {
-                SettingsUI = new InWork.GUI.Settings();
+                SettingsUI = new Settings();
                 SettingsUI.pack();
                 SettingsUI.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
                 SettingsUI.setVisible(true);

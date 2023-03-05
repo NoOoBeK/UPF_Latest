@@ -1,13 +1,10 @@
-package InWork.Controllers.javaFX;
+package InWork.GUI.Controllers;
 
 import InWork.Controllers.DataBaseController;
+import InWork.GUI.PopUpWindow;
 import InWork.Settings;
-import InWork.Tasks.ImportKTWTask;
 import InWork.Tasks.LiveLoadKTWTask;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -61,31 +58,22 @@ public class SelectFactoryController implements Initializable {
                 LiveLoadIreland.getScene().getStylesheets().remove(oldValue.getUserData());
                 if (StageTableKTW != null) StageTableKTW.getScene().getStylesheets().remove(oldValue.getUserData());
             }
+            String Style = "";
             if (newValue.getUserData() != null)
             {
-                LiveLoadIreland.getScene().getStylesheets().add((String) newValue.getUserData());
-                if (StageTableKTW != null) StageTableKTW.getScene().getStylesheets().add((String) newValue.getUserData());
+                Style = (String) newValue.getUserData();
+                LiveLoadIreland.getScene().getStylesheets().add(Style);
+                if (StageTableKTW != null) StageTableKTW.getScene().getStylesheets().add(Style);
+            }
+            Settings.getInstance().setStyle(Style);
+            try {
+                Settings.getInstance().SaveSettings();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-    }
 
-    public void ShowDBInfo()
-    {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        for (String style : LiveLoadIreland.getScene().getStylesheets())
-        {
-            alert.getDialogPane().getStylesheets().add(style);
-        }
-        try {
-            Date LastDate = Settings.getInstance().getLastimportKTW();
-            String LastDateText = "Never";
-            if (LastDate != null) LastDateText = LastDate.toString();
-            alert.setHeaderText("Record In Databas: " + String.valueOf(DataBaseController.getInstance().getKtwCount() + "\n" +
-                    "Last Import KTW: " + LastDateText));
-            alert.showAndWait();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        LiveLoadRunning = new SimpleBooleanProperty(false);
     }
 
     private void CreatKTWDBTable ()
@@ -93,7 +81,7 @@ public class SelectFactoryController implements Initializable {
         try {
             if (StageTableKTW == null) {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TableKTW.fxml"));
-                Parent root = (Parent) fxmlLoader.load();
+                Parent root = fxmlLoader.load();
                 Scene scene = new Scene(root);
                 for (String style : LiveLoadIreland.getScene().getStylesheets())
                 {
@@ -105,7 +93,11 @@ public class SelectFactoryController implements Initializable {
                 StageTableKTW.setTitle("Upfield");
                 StageTableKTW.show();
                 ControlletTableKTW = fxmlLoader.getController();
-                ShowDBInfo();
+                Date LastDate = Settings.getInstance().getLastimportKTW();
+                String LastDateText = "Never";
+                if (LastDate != null) LastDateText = LastDate.toString();
+                PopUpWindow.showMsgWarrning(Alert.AlertType.INFORMATION, "Record In Databas: " + String.valueOf(DataBaseController.getInstance().getKtwCount()) + "\n" +
+                        "Last Import KTW: " + LastDateText);
             } else
             {
                 if (StageTableKTW.isIconified()) StageTableKTW.setIconified(false);
@@ -114,6 +106,8 @@ public class SelectFactoryController implements Initializable {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
@@ -142,9 +136,6 @@ public class SelectFactoryController implements Initializable {
             Thread BackGroundTask = new Thread(task);
             BackGroundTask.setDaemon(true);
             BackGroundTask.start();
-        } else
-        {
-
-        }
+        } else PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "LiveLoadKTW in Progress");
     }
 }

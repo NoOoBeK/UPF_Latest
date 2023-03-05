@@ -1,24 +1,17 @@
-package InWork.Controllers.javaFX;
+package InWork.GUI.Controllers;
 
-import InWork.Controllers.DataBaseController;
+import InWork.GUI.PopUpWindow;
 import InWork.Tasks.ImportKTWTask;
 import InWork.DataStructure.Collection.DataKTWList;
 import InWork.DataStructure.DataKTW;
-import InWork.Settings;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.css.Stylesheet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.net.URL;
-import java.sql.SQLException;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 public class TableKTWController implements Initializable {
@@ -45,6 +38,8 @@ public class TableKTWController implements Initializable {
     private TableColumn<DataKTW, String> Destination;
     @FXML
     private ProgressBar ProgresBar;
+    @FXML
+    private Label ProgressText;
 
     private ObservableList<DataKTW> TableList;
 
@@ -56,16 +51,12 @@ public class TableKTWController implements Initializable {
             ProgresBar.progressProperty().bind(task.progressProperty());
             ImportKTWRunning.unbind();
             ImportKTWRunning.bind(task.runningProperty());
+            ProgressText.textProperty().unbind();
+            ProgressText.textProperty().bind(task.messageProperty());
             Thread BackGroundTask = new Thread(task);
             BackGroundTask.setDaemon(true);
             BackGroundTask.start();
-        } else
-        {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText("Import KTW In Progress");
-            //alert.getDialogPane().setExpandableContent(new ScrollPane(new TextArea("Import KTW In Progress")));
-            alert.showAndWait();
-        }
+        } else PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "Import KTW In Progress");
     }
 
     @Override

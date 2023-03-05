@@ -1,5 +1,3 @@
-package InWork.GUI;
-
 import InWork.DataStructure.LiveLoadPOL;
 import InWork.Controllers.ExcelController;
 import InWork.Operations.Calculations;

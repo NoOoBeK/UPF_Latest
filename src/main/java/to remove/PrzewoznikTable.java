@@ -1,5 +1,3 @@
-package InWork.GUI;
-
 import InWork.DataStructure.Collection.DataPrzewoznikList;
 
 import javax.swing.table.AbstractTableModel;

@@ -1,6 +1,6 @@
 package InWork;
 
-import InWork.GUI.SelectFactory;
+import SelectFactory;
 
 import javax.swing.*;
 import java.awt.*;

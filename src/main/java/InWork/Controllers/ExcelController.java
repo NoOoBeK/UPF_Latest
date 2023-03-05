@@ -1,7 +1,9 @@
 package InWork.Controllers;
 
 import InWork.DataStructure.*;
+import InWork.GUI.PopUpWindow;
 import InWork.Settings;
+import javafx.scene.control.Alert;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
@@ -32,24 +34,23 @@ public class ExcelController
         return null;
     }
     static public ArrayList<DataKTW> ImportKTW(Component caller) {
-        XSSFWorkbook book;
+        XSSFWorkbook book = null;
         File excelfile = ChoseFile(caller);
         ArrayList<DataKTW> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
         try {
              book = new XSSFWorkbook(excelfile);
         } catch (IOException | InvalidFormatException e) {
-            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            PopUpWindow.showMsgWarrning(Alert.AlertType.ERROR, "Opening Excel file ERROR", e.getLocalizedMessage());
             e.printStackTrace();
-            return ret;
         }
-        XSSFSheet sheet = book.getSheetAt(1);
+        XSSFSheet sheet = book != null ? book.getSheetAt(1) : null;
         DataKTW newRecord;
         int source;
         XSSFCell cell;
         double skudouble;
 
-        for(source = 1 ; source < sheet.getLastRowNum();++source) {
+        for(source = 1 ; source < (sheet != null ? sheet.getLastRowNum() : 0); ++source) {
             newRecord = new DataKTW();
             cell = sheet.getRow(source).getCell(0);
             skudouble = cell.getNumericCellValue();
@@ -102,24 +103,23 @@ public class ExcelController
         return ret;
     }
     static public ArrayList<DataPP> ImportPP(Component caller){
-        XSSFWorkbook book;
+        XSSFWorkbook book = null;
         File excelfile = ChoseFile(caller);
         ArrayList<DataPP> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
         try {
             book = new XSSFWorkbook(excelfile);
         } catch (IOException | InvalidFormatException e) {
-            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            PopUpWindow.showMsgWarrning(Alert.AlertType.ERROR, "Opening Excel file ERROR", e.getLocalizedMessage());
             e.printStackTrace();
-            return ret ;
         }
-        XSSFSheet sheet = book.getSheetAt(0);
+        XSSFSheet sheet = book != null ? book.getSheetAt(0) : null;
         DataPP newRecord;
         int source;
         XSSFCell cell;
         double skudouble;
 
-        for(source = 1 ; source < sheet.getLastRowNum()+1;++source) {
+        for(source = 1 ; source < (sheet != null ? sheet.getLastRowNum() : 0) +1; ++source) {
             newRecord = new DataPP();
             cell = sheet.getRow(source).getCell(7);
             skudouble = cell.getNumericCellValue();
@@ -160,24 +160,23 @@ public class ExcelController
         return ret;
     }
     static public ArrayList<DataPrzewoznik> ImportPrzewoznik(Component caller){
-        XSSFWorkbook book;
+        XSSFWorkbook book = null;
         File excelfile = ChoseFile(caller);
         ArrayList<DataPrzewoznik> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
         try {
             book = new XSSFWorkbook(excelfile);
         } catch (IOException | InvalidFormatException e) {
-            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            PopUpWindow.showMsgWarrning(Alert.AlertType.ERROR, "Opening Excel file ERROR", e.getLocalizedMessage());
             e.printStackTrace();
-            return ret ;
         }
-        XSSFSheet sheet = book.getSheetAt(0);
+        XSSFSheet sheet = book != null ? book.getSheetAt(0) : null;
         DataPrzewoznik newRecord;
         int source;
         XSSFCell cell;
         double iddouble;
 
-        for(source = 1 ; source < sheet.getLastRowNum()+1;++source) {
+        for(source = 1 ; source < (sheet != null ? sheet.getLastRowNum() : 0) +1; ++source) {
             newRecord = new DataPrzewoznik();
             cell = sheet.getRow(source).getCell(0);
             iddouble = cell.getNumericCellValue();
@@ -195,44 +194,42 @@ public class ExcelController
         return ret;
     }
     static public ArrayList<DataOrders>ImportOrders (Component caller){
-        XSSFWorkbook book;
+        XSSFWorkbook book = null;
         File excelfile = ChoseFile(caller);
         ArrayList<DataOrders> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
         try {
             book = new XSSFWorkbook(excelfile);
         } catch (IOException | InvalidFormatException e) {
-            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            PopUpWindow.showMsgWarrning(Alert.AlertType.ERROR, "Opening Excel file ERROR", e.getLocalizedMessage());
             e.printStackTrace();
-            return ret ;
         }
-        XSSFSheet sheet = book.getSheetAt(0);
+        XSSFSheet sheet = book != null ? book.getSheetAt(0) : null;
         DataOrders newRecord;
         int source;
 
-        for(source = 1 ; source < sheet.getLastRowNum();++source) {
+        for(source = 1 ; source < (sheet != null ? sheet.getLastRowNum() : 0); ++source) {
             newRecord = new DataOrders();
             ret.add(newRecord);
         }
         return ret;
     }
     static public ArrayList<DataOrdersUpdate>ImportOrdersUpdate(Component caller){
-        XSSFWorkbook book;
+        XSSFWorkbook book = null;
         File excelfile = ChoseFile(caller);
         ArrayList<DataOrdersUpdate> ret = new ArrayList<>();
         if (excelfile == null) {return ret;}
         try {
             book = new XSSFWorkbook(excelfile);
         } catch (IOException | InvalidFormatException e) {
-            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            PopUpWindow.showMsgWarrning(Alert.AlertType.ERROR, "Opening Excel file ERROR", e.getLocalizedMessage());
             e.printStackTrace();
-            return ret ;
         }
-        XSSFSheet sheet = book.getSheetAt(0);
+        XSSFSheet sheet = book != null ? book.getSheetAt(0) : null;
         DataOrdersUpdate newRecord;
         int source;
 
-        for(source = 1 ; source < sheet.getLastRowNum();++source) {
+        for(source = 1 ; source < (sheet != null ? sheet.getLastRowNum() : 0); ++source) {
             newRecord = new DataOrdersUpdate();
             ret.add(newRecord);
         }
@@ -247,7 +244,7 @@ public class ExcelController
         try {
             book = new XSSFWorkbook(excelfile);
         } catch (IOException | InvalidFormatException e) {
-            JOptionPane.showMessageDialog(caller,"Błąd otwarcia pliku Excel");
+            PopUpWindow.showMsgWarrning(Alert.AlertType.ERROR, "Opening Excel file ERROR", e.getLocalizedMessage());
             e.printStackTrace();
             return ret ;
         }
@@ -267,8 +264,9 @@ public class ExcelController
         FileOutputStream out = null;
         try {
             out = new FileOutputStream("C:\\demo\\"+name+".xlsx");
-        } catch (FileNotFoundException var9) {
-            JOptionPane.showMessageDialog(new Frame(),"Otwarty Plik " +name +" Zamknij i Powtórz operacje");
+        } catch (FileNotFoundException e) {
+            PopUpWindow.showMsgWarrning(Alert.AlertType.ERROR, "File " + name + " is Open, close it and Try again");
+            e.printStackTrace();
         }
         try {
             book.write(out);

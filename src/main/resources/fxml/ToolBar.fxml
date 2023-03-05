@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToolBar?>
+
+<ToolBar prefHeight="40.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19" fx:controller="InWork.GUI.Controllers.ToolBarController">
+  <items>
+      <MenuButton mnemonicParsing="false" text="Settings">
+         <items>
+            <Menu mnemonicParsing="false" text="Unspecified Menu">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Action 1" />
+               </items>
+            </Menu>
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <Menu mnemonicParsing="false" text="Theme">
+               <items>
+                  <RadioMenuItem fx:id="ThemeDefault" mnemonicParsing="false" selected="true" text="Default" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <RadioMenuItem fx:id="ThemeDark" mnemonicParsing="false" text="Dark" />
+               </items>
+            </Menu>
+         </items>
+      </MenuButton>
+  </items>
+</ToolBar>

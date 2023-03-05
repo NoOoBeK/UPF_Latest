@@ -4,8 +4,9 @@ import InWork.Controllers.ExcelController;
 import InWork.DataStructure.DataKTW;
 import InWork.DataStructure.DataPP;
 import InWork.DataStructure.LiveLoadKTW;
+import InWork.GUI.PopUpWindow;
+import javafx.scene.control.Alert;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +45,7 @@ public class LiveLoadKTWList {
         for (DataPP danePP : ExcelController.ImportPP(null)) {
             corrData = DataKTWList.getInstance().getKTW(danePP.getSKU());
             if (corrData == null) {
-                JOptionPane.showMessageDialog(null, "Brak SKU w bazie danych Zaktualizuj Baze Danych");
+                PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "SKU " + danePP.getSKU() + " not find in Data Base");
                 return null;
             }
             LiveLoadKTW newRecord = new LiveLoadKTW();

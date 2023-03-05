@@ -28,8 +28,15 @@ public class ImportKTWTask extends Task<Boolean>{
         updateProgress(0, 1);
         try {
             DataBaseController DataBase = DataBaseController.getInstance();
+            updateMessage("Lading ExcelFile");
             ArrayList<DataKTW> excelData = ExcelController.ImportKTW(null);
-            if (excelData.size() < 1) return false;
+            updateProgress(0, 1);
+            updateMessage("Comper Imported Data to Data Base");
+            if (excelData.size() < 1)
+            {
+                updateMessage("");
+                return false;
+            }
 
             int AllToHandle = DataList.size() + excelData.size();
             int Handle = 0;
@@ -70,10 +77,13 @@ public class ImportKTWTask extends Task<Boolean>{
                 updateProgress(Handle, AllToHandle);
             }
         } catch (SQLException e) {
+            updateProgress(0, 1);
+            updateMessage("Error");
             throw new RuntimeException(e);
         }
         Settings.getInstance().setLastimportKTW(new Date());
         Settings.getInstance().SaveSettings();
+        updateMessage("");
         return true;
     }
 }
