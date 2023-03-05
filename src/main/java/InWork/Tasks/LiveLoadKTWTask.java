@@ -73,6 +73,7 @@ public class LiveLoadKTWTask extends Task {
             cell = sheet.getRow(source).getCell(6);
             String temp = cell.toString();
             temp.replaceAll("\\s", "");
+            temp.replaceAll(" ", "");
 
             if(temp.contains(","))
             {
@@ -80,6 +81,7 @@ public class LiveLoadKTWTask extends Task {
                 temp = temp.replace(".","");
                 temp = temp.replace(",",".");
             }
+            int test = temp.indexOf(".");
             if(temp.indexOf(".") < 4)
             {
                 temp = temp.replace(".","");
