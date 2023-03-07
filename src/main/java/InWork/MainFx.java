@@ -1,25 +1,12 @@
 package InWork;
 
+import InWork.GUI.GUIController;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class MainFx extends Application {
     @Override
-    public void start(Stage Stage) {
-        try {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/SelectFactory.fxml"));
-        Scene scene = new Scene(root);
-        if (Settings.getInstance().isDarkMode()) scene.getStylesheets().add(getClass().getResource("Dark.css").toExternalForm());
-        Stage.setTitle("Upfield");
-        Stage.setScene(scene);
-        Stage.getIcons().add(new Image("/logo.png"));
-        Stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void start(Stage stage) {
+        GUIController.StartGUI(stage);
     }
 }

@@ -1,20 +1,23 @@
 package InWork.GUI.Controllers;
 
-import InWork.GUI.PopUpWindow;
+import InWork.GUI.GUIController;
 import InWork.Settings;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.LocalTimeStringConverter;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.FormatStyle;
 import java.util.ResourceBundle;
-
 public class SettingsController implements Initializable {
 
     @FXML
@@ -37,64 +40,56 @@ public class SettingsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Settings settings = Settings.getInstance();
-        DefaultChoiserPath.textProperty().bind(settings.fileChoserPathProperty());
-        LiveLoadKTWIrelandSavePath.textProperty().bind(settings.liveLoadKTWIrelandSavePathProperty());
-        LiveLoadKTWPlanSavePath.textProperty().bind(settings.liveLoadKTWPlanSavePathProperty());
-        LiveLoadKTWPolandSavePath.textProperty().bind(settings.liveLoadKTWPolandSavePathProperty());
-        LiveLoadKTWPolandStep.textProperty().bind(settings.liveLoadKTWPolandStepProperty().asString());
-        LiveLoadKTWPolandStep.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
-        LiveLoadKTWMinPaletValueNoSkip.textProperty().bind(settings.liveLoadKTWMinPaletValueNoSkipProperty().asString());
+        DefaultChoiserPath.textProperty().bindBidirectional(settings.fileChoserPathProperty());
+        LiveLoadKTWIrelandSavePath.textProperty().bindBidirectional(settings.liveLoadKTWIrelandSavePathProperty());
+        LiveLoadKTWPlanSavePath.textProperty().bindBidirectional(settings.liveLoadKTWPlanSavePathProperty());
+        LiveLoadKTWPolandSavePath.textProperty().bindBidirectional(settings.liveLoadKTWPolandSavePathProperty());
+        LiveLoadKTWPolandStep.setTextFormatter(new TextFormatter<>(new LocalTimeStringConverter(FormatStyle.SHORT)));
+        LiveLoadKTWPolandStep.textProperty().bindBidirectional(settings.liveLoadKTWPolandStepProperty(), new LocalTimeStringConverter());
         LiveLoadKTWMinPaletValueNoSkip.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
-        LiveLoadKTWStepToSkipTruck.textProperty().bind(settings.liveLoadKTWStepToSkipTruckProperty().asString());
+        LiveLoadKTWMinPaletValueNoSkip.textProperty().bindBidirectional(settings.liveLoadKTWMinPaletValueNoSkipProperty().asObject(), new IntegerStringConverter());
         LiveLoadKTWStepToSkipTruck.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
-        DarkMode.selectedProperty().bind(settings.darkModeProperty());
+        LiveLoadKTWStepToSkipTruck.textProperty().bindBidirectional(settings.liveLoadKTWStepToSkipTruckProperty().asObject(), new IntegerStringConverter());
+        DarkMode.selectedProperty().bindBidirectional(settings.darkModeProperty());
     }
 
     @FXML
     void ChangeFileChoiserPath(ActionEvent event) {
-        File file = PopUpWindow.DirectoryChoiser("Set Start Choser Path",(Stage)DarkMode.getScene().getWindow());
+        File file = GUIController.DirectoryChoiser("Set Start Choser Path",(Stage)DarkMode.getScene().getWindow());
+        if (file == null) return;
         Settings.getInstance().setFileChoserPath(file.getPath());
-        try {
-            Settings.getInstance().SaveSettings();
-        } catch (IOException e) {
-            PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING,"Save Settings Error", e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     @FXML
     void ChangeLiveLoadKTWIrelandFile(ActionEvent event) {
-        File file = PopUpWindow.SaveExcelFile("Set Ireland Save File",(Stage)DarkMode.getScene().getWindow());
+        File file = GUIController.SaveExcelFile("Set Ireland Save File",(Stage)DarkMode.getScene().getWindow());
+        if (file == null) return;
         Settings.getInstance().setLiveLoadKTWIrelandSavePath(file.getPath());
-        try {
-            Settings.getInstance().SaveSettings();
-        } catch (IOException e) {
-            PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING,"Save Settings Error", e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     @FXML
     void ChangeLiveLoadKTWPlanFile(ActionEvent event) {
-        File file = PopUpWindow.SaveExcelFile("Set Plan Save File",(Stage)DarkMode.getScene().getWindow());
+        File file = GUIController.SaveExcelFile("Set Plan Save File",(Stage)DarkMode.getScene().getWindow());
+        if (file == null) return;
         Settings.getInstance().setLiveLoadKTWPlanSavePath(file.getPath());
-        try {
-            Settings.getInstance().SaveSettings();
-        } catch (IOException e) {
-            PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING,"Save Settings Error", e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     @FXML
     void ChangeLiveLoadKTWPolandFile(ActionEvent event) {
-        File file = PopUpWindow.SaveExcelFile("Set Poland Save File",(Stage)DarkMode.getScene().getWindow());
+        File file = GUIController.SaveExcelFile("Set Poland Save File",(Stage)DarkMode.getScene().getWindow());
+        if (file == null) return;
         Settings.getInstance().setLiveLoadKTWPolandSavePath(file.getPath());
-        try {
-            Settings.getInstance().SaveSettings();
-        } catch (IOException e) {
-            PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING,"Save Settings Error", e.getMessage());
-            e.printStackTrace();
-        }
+    }
+    @FXML
+    void RestoreDefaultSettings(ActionEvent event) {
+        Settings.getInstance().DefaultSetting();
+    }
+    @FXML
+    void CancelSaveSettings(ActionEvent event) {
+        Settings.getInstance().RevertSetting();
+    }
+    @FXML
+    void SaveSettings(ActionEvent event) {
+        Settings.getInstance().SaveSettings();
     }
 }

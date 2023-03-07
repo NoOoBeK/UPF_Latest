@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="524.0" prefWidth="584.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InWork.GUI.Controllers.SettingsController">
+<AnchorPane prefHeight="598.0" prefWidth="584.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InWork.GUI.Controllers.SettingsController">
    <children>
       <Button layoutX="14.0" layoutY="40.0" mnemonicParsing="false" onAction="#ChangeFileChoiserPath" text="Change Directory" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="40.0" />
       <Label fx:id="DefaultChoiserPath" layoutX="131.0" layoutY="40.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="232.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="40.0" />
@@ -30,5 +30,9 @@
       <Label layoutX="13.0" layoutY="357.0" text="Step Amount without pallet count to skip truck" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="400.0" />
       <Label layoutX="130.0" layoutY="23.0" text="Start File Choiser Path" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="20.0" />
       <TextField fx:id="LiveLoadKTWMinPaletValueNoSkip" layoutX="127.0" layoutY="485.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="480.0" />
+      <Separator layoutX="35.0" layoutY="346.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="540.0" />
+      <Button layoutX="517.0" layoutY="552.0" mnemonicParsing="false" onAction="#SaveSettings" text="Save Settings" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="550.0" />
+      <Button layoutX="414.0" layoutY="550.0" mnemonicParsing="false" onAction="#CancelSaveSettings" text="Cancel" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="550.0" />
+      <Button layoutX="341.0" layoutY="550.0" mnemonicParsing="false" onAction="#RestoreDefaultSettings" text="Restor Default Settings" AnchorPane.rightAnchor="190.0" AnchorPane.topAnchor="550.0" />
    </children>
 </AnchorPane>

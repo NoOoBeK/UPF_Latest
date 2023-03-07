@@ -1,8 +1,7 @@
 package InWork.Controllers;
 
-import InWork.GUI.PopUpWindow;
+import InWork.GUI.GUIController;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import java.awt.Color;
@@ -18,25 +17,25 @@ public class ExcelController
         try {
             return WorkbookFactory.create(file);
         } catch (IOException e) {
-            PopUpWindow.showMsgWarrning(Alert.AlertType.ERROR, "Opening Excel file ERROR", e.getLocalizedMessage());
+            GUIController.showMsgWarrning(Alert.AlertType.ERROR, "Opening Excel file ERROR", e.getLocalizedMessage());
             e.printStackTrace();
         }
         return null;
     }
-    static public void FileOut(XSSFWorkbook book, String name){
+    static public void FileOut(XSSFWorkbook book, String Filepath){
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream("C:\\demo\\" + name + ".xlsx");
+            out = new FileOutputStream(Filepath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "File " + name + " is open, close it and try again");
+            GUIController.showMsgWarrning(Alert.AlertType.WARNING, "File " + Filepath + " is open, close it and try again");
             return;
         }
         try {
             book.write(out);
             if (out != null) out.close();
         } catch (IOException e) {
-            PopUpWindow.showMsgWarrning(Alert.AlertType.ERROR, "Problem with saving File", e.getMessage());
+            GUIController.showMsgWarrning(Alert.AlertType.ERROR, "Problem with saving File", e.getMessage());
             e.printStackTrace();
         }
     }

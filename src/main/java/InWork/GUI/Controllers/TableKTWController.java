@@ -1,6 +1,6 @@
 package InWork.GUI.Controllers;
 
-import InWork.GUI.PopUpWindow;
+import InWork.GUI.GUIController;
 import InWork.Tasks.ImportKTWTask;
 import InWork.DataStructure.Collection.DataKTWList;
 import InWork.DataStructure.DataKTW;
@@ -48,7 +48,7 @@ public class TableKTWController implements Initializable {
     private SimpleBooleanProperty ImportKTWRunning;
     public void ImportKTW(ActionEvent actionEvent) {
         if (!ImportKTWRunning.getValue()) {
-            File ImportedFile = PopUpWindow.ChoseExcelFile("Select Katowice Excel Data", (Stage)ProgresBar.getScene().getWindow());
+            File ImportedFile = GUIController.ChoseExcelFile("Select Katowice Excel Data", (Stage)ProgresBar.getScene().getWindow());
             ImportKTWTask task = new ImportKTWTask(ImportedFile, TableList);
             ProgresBar.progressProperty().unbind();
             ProgresBar.progressProperty().bind(task.progressProperty());
@@ -59,7 +59,7 @@ public class TableKTWController implements Initializable {
             Thread BackGroundTask = new Thread(task);
             BackGroundTask.setDaemon(true);
             BackGroundTask.start();
-        } else PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "Import KTW In Progress");
+        } else GUIController.showMsgWarrning(Alert.AlertType.WARNING, "Import KTW In Progress");
     }
 
     @Override

@@ -6,8 +6,9 @@ import InWork.DataStructure.DataKTW;
 import InWork.DataStructure.DataPP;
 import InWork.DataStructure.LiveLoadKTW;
 import InWork.DataStructure.LiveLoadPOL;
-import InWork.GUI.PopUpWindow;
-import InWork.Operations.CheckType;
+import InWork.GUI.GUIController;
+import InWork.Operations.NumberHandler;
+import InWork.Settings;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,6 +18,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
 import javax.swing.*;
 import java.io.File;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -115,7 +117,7 @@ public class LiveLoadKTWTask extends Task {
         for (DataPP danePP : data) {
             corrData = DataKTWList.getInstance().getKTW(danePP.getSKU());
             if (corrData == null) {
-                PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "SKU " + danePP.getSKU() + " not find in Data Base");
+                GUIController.showMsgWarrning(Alert.AlertType.WARNING, "SKU " + danePP.getSKU() + " not find in Data Base");
                 return ret;
             }
             LiveLoadKTW newRecord = new LiveLoadKTW();
@@ -167,7 +169,6 @@ public class LiveLoadKTWTask extends Task {
 
     private void IrelandSplit(ArrayList<LiveLoadKTW> Ireland){
         updateMessage("Exporting Ireland");
-        String name = "Ireland";
         XSSFWorkbook book = new XSSFWorkbook();
         XSSFSheet sheet = book.createSheet("List");
         int source;
@@ -197,11 +198,10 @@ public class LiveLoadKTWTask extends Task {
             Handle++;
             updateProgress(Handle, AllToHandle);
         }
-        ExcelController.FileOut(book,name);
+        ExcelController.FileOut(book,Settings.getInstance().getLiveLoadKTWIrelandSavePath());
     }
     private void Poland(ArrayList<LiveLoadPOL> list){
         updateMessage("Exporting Poland");
-        String name = "Poland";
         XSSFWorkbook book = new XSSFWorkbook();
         XSSFSheet sheet = book.createSheet("Polska");
         XSSFCellStyle data = ExcelController.date(book);
@@ -235,11 +235,10 @@ public class LiveLoadKTWTask extends Task {
             Handle++;
             updateProgress(Handle, AllToHandle);
         }
-        ExcelController.FileOut(book,name);
+        ExcelController.FileOut(book,Settings.getInstance().getLiveLoadKTWPolandSavePath());
     }
     private void ProductionPlan(ArrayList<LiveLoadKTW> Plan){
         updateMessage("Exporting Plan");
-        String name = "Plan";
         XSSFWorkbook book = new XSSFWorkbook();
         XSSFSheet sheet = book.createSheet("Plan");
         XSSFCellStyle nieplanowany = ExcelController.style(book,255,153,204,128,0,128,true);
@@ -305,7 +304,7 @@ public class LiveLoadKTWTask extends Task {
             Handle++;
             updateProgress(Handle, AllToHandle);
         }
-        ExcelController.FileOut(book,name);
+        ExcelController.FileOut(book,Settings.getInstance().getLiveLoadKTWPlanSavePath());
     }
 
     private ArrayList<LiveLoadKTW> CalculatProductionPlan(ArrayList<ArrayList<LiveLoadKTW>> all){
@@ -347,7 +346,7 @@ public class LiveLoadKTWTask extends Task {
         while (true)
         {
             input = JOptionPane.showInputDialog(null,"Podaj początkową ilość palet", 0);
-            if (CheckType.isInteger(input)) break;
+            if (NumberHandler.isInteger(input)) break;
         }
         int PalletCount = Integer.valueOf(input);
         ArrayList<LiveLoadPOL> ret = new ArrayList<>();
@@ -376,9 +375,10 @@ public class LiveLoadKTWTask extends Task {
             updateProgress(Handle, AllToHandle);
         }
 
-        double TimeLenght = 1.0/ 24.0;
-        int MoveTrackAfterSteps = 4;
-        int MinPalletCountToNoRemoveTruck = 25;
+        LocalTime StepTime = Settings.getInstance().getLiveLoadKTWPolandStep();
+        double TimeLenght = StepTime.getHour() / 24.0 + StepTime.getMinute() / 1440;
+        int MoveTrackAfterSteps = Settings.getInstance().getLiveLoadKTWStepToSkipTruck();
+        int MinPalletCountToNoRemoveTruck = Settings.getInstance().getLiveLoadKTWMinPaletValueNoSkip();
         int LastPallCount = -1;
         int Steps = 0;
         boolean AddSkipedTruck = false;
@@ -448,7 +448,7 @@ public class LiveLoadKTWTask extends Task {
     protected Object call() {
         if (!Ireland && !Plan && !Poland)
         {
-            PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING,"None Selected Skip Live Load");
+            GUIController.showMsgWarrning(Alert.AlertType.WARNING,"None Selected Skip Live Load");
             updateProgress(0,1);
             updateMessage("Live Load Cancell");
             return null;
@@ -463,7 +463,7 @@ public class LiveLoadKTWTask extends Task {
             {
                 ExtendetInfo.append("SKU: ").append(var.getSku()).append(" Destination").append(var.getDest()).append("\n");
             }
-            PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "Don't recognized some Destination", ExtendetInfo.toString());
+            GUIController.showMsgWarrning(Alert.AlertType.WARNING, "Don't recognized some Destination", ExtendetInfo.toString());
         }
         AllToHandle *= 2;
         AllToHandle /= 3;

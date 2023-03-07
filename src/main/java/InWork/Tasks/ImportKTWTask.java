@@ -3,7 +3,7 @@ package InWork.Tasks;
 import InWork.Controllers.DataBaseController;
 import InWork.Controllers.ExcelController;
 import InWork.DataStructure.DataKTW;
-import InWork.GUI.PopUpWindow;
+import InWork.GUI.GUIController;
 import InWork.Settings;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -155,13 +155,17 @@ public class ImportKTWTask extends Task<Boolean>{
                         break;
                     }
                 }
-                if (!find) DataBase.addKTW(record);
-                DataList.add(record);
+                if (!find)
+                {
+                    DataBase.addKTW(record);
+                    DataList.add(record);
+                }
+
                 Handle++;
                 updateProgress(Handle, AllToHandle);
             }
         } catch (SQLException e) {
-            PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "DataBase Error", e.getMessage());
+            GUIController.showMsgWarrning(Alert.AlertType.WARNING, "DataBase Error", e.getMessage());
             updateMessage("Error");
             e.printStackTrace();
             return false;
