@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="524.0" prefWidth="584.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InWork.GUI.Controllers.SettingsController">
+   <children>
+      <Button layoutX="14.0" layoutY="40.0" mnemonicParsing="false" onAction="#ChangeFileChoiserPath" text="Change Directory" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="40.0" />
+      <Label fx:id="DefaultChoiserPath" layoutX="131.0" layoutY="40.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="232.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="40.0" />
+      <CheckBox fx:id="DarkMode" layoutX="137.0" layoutY="82.0" mnemonicParsing="false" text="Dark Mode" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="80.0" />
+      <Separator layoutX="15.0" layoutY="326.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0" />
+      <Button layoutX="14.0" layoutY="169.0" mnemonicParsing="false" onAction="#ChangeLiveLoadKTWIrelandFile" text="Change Directory" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="160.0" />
+      <Label layoutX="134.0" layoutY="142.0" text="Ireland Save File" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="140.0" />
+      <Label fx:id="LiveLoadKTWIrelandSavePath" layoutX="134.0" layoutY="169.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="160.0" />
+      <Button layoutX="14.0" layoutY="225.0" mnemonicParsing="false" onAction="#ChangeLiveLoadKTWPlanFile" text="Change Directory" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="220.0" />
+      <Label layoutX="130.0" layoutY="185.0" text="Plan Save File" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="200.0" />
+      <Label fx:id="LiveLoadKTWPlanSavePath" layoutX="130.0" layoutY="225.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="220.0" />
+      <Button layoutX="6.0" layoutY="290.0" mnemonicParsing="false" onAction="#ChangeLiveLoadKTWPolandFile" text="Change Directory" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="280.0" />
+      <Label layoutX="134.0" layoutY="264.0" text="Poland Save File" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="260.0" />
+      <Label fx:id="LiveLoadKTWPolandSavePath" layoutX="134.0" layoutY="290.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="280.0" />
+      <Separator layoutX="25.0" layoutY="336.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="320.0" />
+      <Label layoutX="14.0" layoutY="326.0" text="Step Time in Poland Export" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="340.0" />
+      <TextField fx:id="LiveLoadKTWPolandStep" layoutX="130.0" layoutY="365.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="360.0" />
+      <Label layoutX="14.0" layoutY="406.0" text="Minimal Palet Count To Not Remov Truck" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="460.0" />
+      <TextField fx:id="LiveLoadKTWStepToSkipTruck" layoutX="127.0" layoutY="425.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="420.0" />
+      <Label layoutX="13.0" layoutY="357.0" text="Step Amount without pallet count to skip truck" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="400.0" />
+      <Label layoutX="130.0" layoutY="23.0" text="Start File Choiser Path" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="20.0" />
+      <TextField fx:id="LiveLoadKTWMinPaletValueNoSkip" layoutX="127.0" layoutY="485.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="480.0" />
+   </children>
+</AnchorPane>

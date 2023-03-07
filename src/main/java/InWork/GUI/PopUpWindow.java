@@ -6,18 +6,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
 
-public class PopUpWindow {
+public class PopUpWindow{
 
     static public void showMsgWarrning(Alert.AlertType AlertType, String Heder, String Description)
     {
         Platform.runLater(() -> {
             Alert alert = new Alert(AlertType);
-            String style = Settings.getInstance().getStyle();
-            if (!style.equals("")) alert.getDialogPane().getStylesheets().add(style);
+            if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object() { }.getClass().getResource("Dark.css").toExternalForm());
             alert.setHeaderText(Heder);
             alert.getDialogPane().setExpandableContent(new ScrollPane(new TextArea(Description)));
             alert.showAndWait();
@@ -28,11 +28,28 @@ public class PopUpWindow {
     {
         Platform.runLater(() -> {
             Alert alert = new Alert(AlertType);
-            String style = Settings.getInstance().getStyle();
-            if (!style.equals("")) alert.getDialogPane().getStylesheets().add(style);
+            if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object() { }.getClass().getResource("Dark.css").toExternalForm());
             alert.setHeaderText(Heder);
             alert.showAndWait();
         });
+    }
+
+    static public File DirectoryChoiser (String Title, Stage stage)
+    {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File(Settings.getInstance().getFileChoserPath()));
+        directoryChooser.setTitle(Title);
+        while (true) {
+            File chosedFile = directoryChooser.showDialog(stage);
+            if (chosedFile == null) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object() { }.getClass().getResource("Dark.css").toExternalForm());
+                alert.setHeaderText("No directory selected, are you sure you want to cancel?");
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.OK) break;
+            } else return chosedFile;
+        }
+        return null;
     }
 
     static public File ChoseFile (String Title, Stage stage)
@@ -44,7 +61,7 @@ public class PopUpWindow {
             File chosedFile = fileChooser.showOpenDialog(stage);
             if (chosedFile == null) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                String style = Settings.getInstance().getStyle();
+                if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object() { }.getClass().getResource("Dark.css").toExternalForm());
                 alert.setHeaderText("No file selected, are you sure you want to cancel?");
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.OK) break;
@@ -62,7 +79,25 @@ public class PopUpWindow {
             File chosedFile = fileChooser.showOpenDialog(stage);
             if (chosedFile == null) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                String style = Settings.getInstance().getStyle();
+                if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object() { }.getClass().getResource("Dark.css").toExternalForm());
+                alert.setHeaderText("No file selected, are you sure you want to cancel?");
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.OK) break;
+            } else return chosedFile;
+        }
+        return null;
+    }
+
+    static public File SaveExcelFile(String Title, Stage stage){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(Settings.getInstance().getFileChoserPath()));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel", "*.xlsx", "*.xls", "*.xlt"));
+        fileChooser.setTitle(Title);
+        while (true) {
+            File chosedFile = fileChooser.showSaveDialog(stage);
+            if (chosedFile == null) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object() { }.getClass().getResource("Dark.css").toExternalForm());
                 alert.setHeaderText("No file selected, are you sure you want to cancel?");
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.OK) break;

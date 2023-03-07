@@ -4,6 +4,7 @@ import InWork.Controllers.DataBaseController;
 import InWork.GUI.PopUpWindow;
 import InWork.Settings;
 import InWork.Tasks.LiveLoadKTWTask;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,44 +37,12 @@ public class SelectFactoryController implements Initializable {
     private SimpleBooleanProperty LiveLoadRunning;
 
 
-
-    @FXML
-    private RadioMenuItem ThemeDefault;
-    @FXML
-    private RadioMenuItem ThemeDark;
-
     private Stage StageTableKTW;
     private TableKTWController ControlletTableKTW;
+    private Stage StageSettings;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ToggleGroup ThemeGroup = new ToggleGroup();
-        ThemeDefault.setToggleGroup(ThemeGroup);
-        ThemeDark.setUserData(this.getClass().getResource("/theme/Dark.css").toExternalForm());
-        ThemeDark.setToggleGroup(ThemeGroup);
-        ThemeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(observable);
-
-            if (oldValue.getUserData() != null)
-            {
-                LiveLoadIreland.getScene().getStylesheets().remove(oldValue.getUserData());
-                if (StageTableKTW != null) StageTableKTW.getScene().getStylesheets().remove(oldValue.getUserData());
-            }
-            String Style = "";
-            if (newValue.getUserData() != null)
-            {
-                Style = (String) newValue.getUserData();
-                LiveLoadIreland.getScene().getStylesheets().add(Style);
-                if (StageTableKTW != null) StageTableKTW.getScene().getStylesheets().add(Style);
-            }
-            Settings.getInstance().setStyle(Style);
-            try {
-                Settings.getInstance().SaveSettings();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
         LiveLoadRunning = new SimpleBooleanProperty(false);
     }
 
@@ -84,10 +53,7 @@ public class SelectFactoryController implements Initializable {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TableKTW.fxml"));
                 Parent root = fxmlLoader.load();
                 Scene scene = new Scene(root);
-                for (String style : LiveLoadIreland.getScene().getStylesheets())
-                {
-                    scene.getStylesheets().add(style);
-                }
+                if (Settings.getInstance().isDarkMode()) scene.getStylesheets().add(getClass().getResource("Dark.css").toExternalForm());
                 StageTableKTW = new Stage();
                 StageTableKTW.getIcons().add(new Image("/logo.png"));
                 StageTableKTW.setScene(scene);
@@ -111,18 +77,13 @@ public class SelectFactoryController implements Initializable {
             throwables.printStackTrace();
         }
     }
-
     public void ImportKTW(ActionEvent actionEvent) {
         CreatKTWDBTable();
         ControlletTableKTW.ImportKTW(null);
     }
-
     public void ViewDataKTW(ActionEvent actionEvent) {
         CreatKTWDBTable();
     }
-
-
-
     public void LiveLoadKTW(ActionEvent actionEvent) {
         if (!LiveLoadRunning.getValue())
         {
@@ -141,5 +102,35 @@ public class SelectFactoryController implements Initializable {
             BackGroundTask.setDaemon(true);
             BackGroundTask.start();
         } else PopUpWindow.showMsgWarrning(Alert.AlertType.WARNING, "LiveLoadKTW in Progress");
+    }
+    @FXML
+    void OpenSettings(ActionEvent event) {
+        try {
+            if (StageSettings == null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Settings.fxml"));
+                Parent root = fxmlLoader.load();
+                Scene scene = new Scene(root);
+                if (Settings.getInstance().isDarkMode()) scene.getStylesheets().add(getClass().getResource("Dark.css").toExternalForm());
+                StageSettings = new Stage();
+                StageSettings.getIcons().add(new Image("/logo.png"));
+                StageSettings.setScene(scene);
+                StageSettings.setTitle("Upfield");
+                StageSettings.show();
+                Date LastDate = Settings.getInstance().getLastimportKTW();
+                String LastDateText = "Never";
+                if (LastDate != null) LastDateText = LastDate.toString();
+                PopUpWindow.showMsgWarrning(Alert.AlertType.INFORMATION, "Record In Databas: " + DataBaseController.getInstance().getKtwCount() + "\n" +
+                        "Last Import KTW: " + LastDateText);
+            } else
+            {
+                if (StageSettings.isIconified()) StageSettings.setIconified(false);
+                if (!StageSettings.isShowing())StageSettings.show();
+                StageSettings.toFront();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }
