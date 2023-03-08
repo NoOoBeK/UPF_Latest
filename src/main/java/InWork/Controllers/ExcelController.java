@@ -23,7 +23,7 @@ public class ExcelController
         return null;
     }
     static public void FileOut(XSSFWorkbook book, String Filepath){
-        FileOutputStream out = null;
+        FileOutputStream out;
         try {
             out = new FileOutputStream(Filepath);
         } catch (FileNotFoundException e) {
@@ -33,7 +33,7 @@ public class ExcelController
         }
         try {
             book.write(out);
-            if (out != null) out.close();
+            out.close();
         } catch (IOException e) {
             GUIController.showMsgWarrning(Alert.AlertType.ERROR, "Problem with saving File", e.getMessage());
             e.printStackTrace();

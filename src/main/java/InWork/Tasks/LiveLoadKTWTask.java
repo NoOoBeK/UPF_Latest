@@ -11,6 +11,7 @@ import InWork.Operations.NumberHandler;
 import InWork.Settings;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
+import javafx.util.Pair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -18,7 +19,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
 import javax.swing.*;
 import java.io.File;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,13 +33,15 @@ public class LiveLoadKTWTask extends Task {
     private final File SourceFile;
     private int AllToHandle;
     private int Handle;
+    private final ArrayList<Pair<LocalDateTime, Integer>> palletToAdd;
 
-    public LiveLoadKTWTask (File SourceFile, boolean Ireland, boolean Plan, boolean Poland)
+    public LiveLoadKTWTask (File SourceFile, boolean Ireland, boolean Plan, boolean Poland, ArrayList<Pair<LocalDateTime, Integer>> palletToAdd)
     {
         this.Ireland = Ireland;
         this.Plan = Plan;
         this.Poland = Poland;
         this.SourceFile = SourceFile;
+        this.palletToAdd = palletToAdd;
         AllToHandle = 0;
         Handle = 0;
     }
@@ -342,21 +347,19 @@ public class LiveLoadKTWTask extends Task {
     }
     private ArrayList<LiveLoadPOL> CalculatPoland(ArrayList<LiveLoadKTW> list) {
         updateMessage("Calculate Poland");
-        String input = "";
-        while (true)
-        {
-            input = JOptionPane.showInputDialog(null,"Podaj początkową ilość palet", 0);
-            if (NumberHandler.isInteger(input)) break;
-        }
-        int PalletCount = Integer.valueOf(input);
+        String input;
+        do {
+            input = JOptionPane.showInputDialog(null, "Podaj początkową ilość palet", 0);
+        } while (!NumberHandler.isInteger(input));
+        int PalletCount = Integer.parseInt(input);
         ArrayList<LiveLoadPOL> ret = new ArrayList<>();
-        Date Now = new Date();
-        if (Now.getMinutes() >= 30)
-        {
-            Now.setTime(Now.getTime() + (3600000));
-        }
-        Now.setMinutes(0);
-        Now.setSeconds(0);
+        LocalDateTime Now = LocalDateTime.now();
+        Now.minus(Now.getSecond(), ChronoUnit.SECONDS);
+        int min = Now.getMinute();
+
+        if (min >= 30) Now.plus(60 - min, ChronoUnit.MINUTES);
+        else           Now.minus(min,ChronoUnit.MINUTES);
+
         System.out.println(Now);
 
         double Start = DateUtil.getExcelDate(Now);
@@ -376,7 +379,7 @@ public class LiveLoadKTWTask extends Task {
         }
 
         LocalTime StepTime = Settings.getInstance().getLiveLoadKTWPolandStep();
-        double TimeLenght = StepTime.getHour() / 24.0 + StepTime.getMinute() / 1440;
+        double TimeLenght = StepTime.getHour() / 24.0 + StepTime.getMinute() / 1440.0;
         int MoveTrackAfterSteps = Settings.getInstance().getLiveLoadKTWStepToSkipTruck();
         int MinPalletCountToNoRemoveTruck = Settings.getInstance().getLiveLoadKTWMinPaletValueNoSkip();
         int LastPallCount = -1;
@@ -388,6 +391,12 @@ public class LiveLoadKTWTask extends Task {
             LiveLoadPOL newRecord = new LiveLoadPOL();
             newRecord.setDate(Math.floor(Start));
             newRecord.setTime(Start - Math.floor(Start));
+
+            for (Pair<LocalDateTime, Integer> pair : palletToAdd)
+            {
+                double checkedTime = DateUtil.getExcelDate(pair.getKey());
+                if (checkedTime >= Start && checkedTime < (Start + TimeLenght)) PalletCount += pair.getValue();
+            }
 
             for (LiveLoadKTW dane : list)
             {

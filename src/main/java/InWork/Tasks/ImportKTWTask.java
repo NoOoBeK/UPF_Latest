@@ -13,8 +13,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import java.io.File;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ImportKTWTask extends Task<Boolean>{
 
@@ -140,8 +140,8 @@ public class ImportKTWTask extends Task<Boolean>{
                     }
                 }
                 if (!find) {
-                    DataBase.delateKTW(Record);
-                    DataList.remove(i);
+                    if (!DataBase.delateKTW(Record)) GUIController.showMsgWarrning(Alert.AlertType.ERROR, "Failed removal of SKU " + Record.getSKU() + " from the database");
+                    else DataList.remove(i);
                 }
                 Handle++;
                 updateProgress(Handle, AllToHandle);
@@ -170,7 +170,7 @@ public class ImportKTWTask extends Task<Boolean>{
             e.printStackTrace();
             return false;
         }
-        Settings.getInstance().setLastimportKTW(new Date());
+        Settings.getInstance().setLastimportKTW(LocalDateTime.now());
         Settings.getInstance().SaveSettings();
         updateProgress(1,1);
         updateMessage("Import Katowice Data Complet");

@@ -7,12 +7,13 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
 public class Settings {
     private static Settings Instance = null;
-    private ObjectProperty<Date> LastimportKTW;
+    private ObjectProperty<LocalDateTime> LastimportKTW;
     private StringProperty FileChoserPath;
     private BooleanProperty DarkMode;
 
@@ -54,7 +55,7 @@ public class Settings {
                         if (Setting[0].equals("LastImportKTW"))
                         {
                             if (Setting[1].equals("")) Instance.LastimportKTW.set(null);
-                            else Instance.LastimportKTW.set(new Date(Long.valueOf(Setting[1])));
+                            else Instance.LastimportKTW.set(LocalDateTime.parse(Setting[1]));
                         }
                         else if (Setting[0].equals("FileChoserPath")) Instance.FileChoserPath.set(Setting[1]);
                         else if (Setting[0].equals("DarkMode")) Instance.DarkMode.set(Boolean.valueOf(Setting[1]));
@@ -127,7 +128,7 @@ public class Settings {
                         if (Setting[0].equals("LastImportKTW"))
                         {
                             if (Setting[1].equals("")) Instance.LastimportKTW.set(null);
-                            else Instance.LastimportKTW.set(new Date(Long.valueOf(Setting[1])));
+                            else Instance.LastimportKTW.set(LocalDateTime.parse(Setting[1]));
                         }
                         else if (Setting[0].equals("FileChoserPath")) Instance.FileChoserPath.set(Setting[1]);
                         else if (Setting[0].equals("DarkMode")) Instance.DarkMode.set(Boolean.valueOf(Setting[1]));
@@ -220,14 +221,14 @@ public class Settings {
     public void setFileChoserPath(String fileChoserPath) {
         this.FileChoserPath.set(fileChoserPath);
     }
-    public ObjectProperty<Date> getLastimportKTWProperty()
+    public ObjectProperty<LocalDateTime> getLastimportKTWProperty()
     {
         return LastimportKTW;
     }
-    public Date getLastimportKTW() {
+    public LocalDateTime getLastimportKTW() {
         return LastimportKTW.getValue();
     }
-    public void setLastimportKTW(Date lastimportKTW) {
+    public void setLastimportKTW(LocalDateTime lastimportKTW) {
         this.LastimportKTW.set(lastimportKTW);
     }
 }

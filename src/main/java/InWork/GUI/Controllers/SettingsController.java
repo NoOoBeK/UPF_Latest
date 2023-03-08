@@ -2,21 +2,15 @@ package InWork.GUI.Controllers;
 
 import InWork.GUI.GUIController;
 import InWork.Settings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalTimeStringConverter;
-
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.time.format.FormatStyle;
 import java.util.ResourceBundle;
 public class SettingsController implements Initializable {
 
@@ -44,7 +38,7 @@ public class SettingsController implements Initializable {
         LiveLoadKTWIrelandSavePath.textProperty().bindBidirectional(settings.liveLoadKTWIrelandSavePathProperty());
         LiveLoadKTWPlanSavePath.textProperty().bindBidirectional(settings.liveLoadKTWPlanSavePathProperty());
         LiveLoadKTWPolandSavePath.textProperty().bindBidirectional(settings.liveLoadKTWPolandSavePathProperty());
-        LiveLoadKTWPolandStep.setTextFormatter(new TextFormatter<>(new LocalTimeStringConverter(FormatStyle.SHORT)));
+        LiveLoadKTWPolandStep.setTextFormatter(new TextFormatter<>(new LocalTimeStringConverter()));
         LiveLoadKTWPolandStep.textProperty().bindBidirectional(settings.liveLoadKTWPolandStepProperty(), new LocalTimeStringConverter());
         LiveLoadKTWMinPaletValueNoSkip.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
         LiveLoadKTWMinPaletValueNoSkip.textProperty().bindBidirectional(settings.liveLoadKTWMinPaletValueNoSkipProperty().asObject(), new IntegerStringConverter());

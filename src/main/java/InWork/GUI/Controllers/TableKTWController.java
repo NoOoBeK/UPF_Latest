@@ -46,6 +46,7 @@ public class TableKTWController implements Initializable {
     private ObservableList<DataKTW> TableList;
 
     private SimpleBooleanProperty ImportKTWRunning;
+    @FXML
     public void ImportKTW(ActionEvent actionEvent) {
         if (!ImportKTWRunning.getValue()) {
             File ImportedFile = GUIController.ChoseExcelFile("Select Katowice Excel Data", (Stage)ProgresBar.getScene().getWindow());

@@ -1,6 +1,7 @@
 package InWork.GUI;
 
 import InWork.Controllers.DataBaseController;
+import InWork.GUI.Controllers.LiveLoadPolandInputController;
 import InWork.GUI.Controllers.TableKTWController;
 import InWork.Settings;
 import javafx.application.Platform;
@@ -12,16 +13,16 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.stage.*;
+import javafx.util.Pair;
 
-import javax.print.DocFlavor;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GUIController {
 
@@ -124,25 +125,25 @@ public class GUIController {
     {
         this.MainStage = MainStage;
         Settings.getInstance().darkModeProperty().addListener( (observable, oldValue, newValue) ->
-        {
-            Platform.runLater(() -> {
-                if (newValue) {
-                    MainStage.getScene().getStylesheets().add(getClass().getResource("/Dark.css").toExternalForm());
-                    if (SettingsStage != null) SettingsStage.getScene().getStylesheets().add(getClass().getResource("/Dark.css").toExternalForm());
-                    if (TableKTWStage != null) TableKTWStage.getScene().getStylesheets().add(getClass().getResource("/Dark.css").toExternalForm());
-                } else {
-                    MainStage.getScene().getStylesheets().remove(getClass().getResource("/Dark.css").toExternalForm());
-                    if (SettingsStage != null) SettingsStage.getScene().getStylesheets().remove(getClass().getResource("/Dark.css").toExternalForm());
-                    if (TableKTWStage != null) TableKTWStage.getScene().getStylesheets().remove(getClass().getResource("/Dark.css").toExternalForm());
-                }
-            });
-        });
+                Platform.runLater(() -> {
+                    if (newValue) {
+                        MainStage.getScene().getStylesheets().add(getClass().getResource("/Dark.css").toExternalForm());
+                        if (SettingsStage != null) SettingsStage.getScene().getStylesheets().add(getClass().getResource("/Dark.css").toExternalForm());
+                        if (TableKTWStage != null) TableKTWStage.getScene().getStylesheets().add(getClass().getResource("/Dark.css").toExternalForm());
+                    } else {
+                        MainStage.getScene().getStylesheets().remove(getClass().getResource("/Dark.css").toExternalForm());
+                        if (SettingsStage != null) SettingsStage.getScene().getStylesheets().remove(getClass().getResource("/Dark.css").toExternalForm());
+                        if (TableKTWStage != null) TableKTWStage.getScene().getStylesheets().remove(getClass().getResource("/Dark.css").toExternalForm());
+                    }
+                }));
     }
 
     private final Stage MainStage;
     private Stage SettingsStage;
     private Stage TableKTWStage;
+    private Stage LiveLoadPolandInputStage;
     private TableKTWController tableKTWController;
+    private LiveLoadPolandInputController liveLoadPolandInputController;
 
     public void CreatSetting()
     {
@@ -153,6 +154,7 @@ public class GUIController {
             SettingsStage = new Stage();
             SettingsStage.setScene(scene);
             setDefaultStageProperty(SettingsStage);
+            SettingsStage.initOwner(MainStage);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -173,7 +175,7 @@ public class GUIController {
         {
             HandleSettings();
         }else {
-            Platform.runLater(() -> {HandleSettings();});
+            Platform.runLater(this::HandleSettings);
         }
     }
     private void CreatTableKTW()
@@ -187,7 +189,7 @@ public class GUIController {
             TableKTWStage = new Stage();
             TableKTWStage.setScene(scene);
             setDefaultStageProperty(TableKTWStage);
-
+            TableKTWStage.initOwner(MainStage);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -198,7 +200,7 @@ public class GUIController {
         {
             CreatTableKTW();
             TableKTWStage.show();
-            Date LastDate = Settings.getInstance().getLastimportKTW();
+            LocalDateTime LastDate = Settings.getInstance().getLastimportKTW();
             String LastDateText = LastDate != null ? LastDate.toString() : "Never";
             try {
                 showMsgWarrning(Alert.AlertType.INFORMATION, "Record In Databas: " + DataBaseController.getInstance().getKtwCount() + "\n" +
@@ -220,7 +222,7 @@ public class GUIController {
         {
             HandleTableKTW();
         }else {
-            Platform.runLater(() -> {HandleTableKTW();});
+            Platform.runLater(this::HandleTableKTW);
         }
     }
 
@@ -235,5 +237,36 @@ public class GUIController {
             }
         }
         tableKTWController.ImportKTW(null);
+    }
+
+    private void CreateLiveLoadPolandInput(Stage ParentStage)
+    {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/LiveLoadPolandInput.fxml"));
+            Parent root = fxmlLoader.load();
+            liveLoadPolandInputController = fxmlLoader.getController();
+            Scene scene = new Scene(root);
+            if (Settings.getInstance().isDarkMode()) scene.getStylesheets().add(getClass().getResource("/Dark.css").toExternalForm());
+            LiveLoadPolandInputStage = new Stage();
+            LiveLoadPolandInputStage.initModality(Modality.WINDOW_MODAL);
+            LiveLoadPolandInputStage.setScene(scene);
+            setDefaultStageProperty(LiveLoadPolandInputStage);
+            LiveLoadPolandInputStage.initOwner(ParentStage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Pair<LocalDateTime, Integer>> ShowLiveLoadPolandInput(Stage ParentStage)    {
+        AtomicReference<ArrayList<Pair<LocalDateTime, Integer>>> ret = new AtomicReference<>(new ArrayList<>());
+        if (Platform.isFxApplicationThread())
+        {
+            CreateLiveLoadPolandInput(ParentStage);
+            LiveLoadPolandInputStage.setOnCloseRequest(event -> ret.set(liveLoadPolandInputController.getReturnValue()));
+            LiveLoadPolandInputStage.showAndWait();
+        }else {
+         System.out.println("LiveLoadPolandInput call outside Fx Thread. It can't be handle");
+        }
+        return ret.get();
     }
 }
