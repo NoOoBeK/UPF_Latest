@@ -9,6 +9,7 @@ import javafx.util.Pair;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalTimeStringConverter;
 
+import javax.swing.plaf.metal.MetalBorders;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,19 +39,21 @@ public class LiveLoadPolandInputController implements Initializable {
             //TO DO Message
             return;
         }
-
+        Tree.getRoot().setExpanded(true);
         boolean CheckDate = false;
         boolean CheckTime;
         for (TreeItem<String> nodeDate : Tree.getRoot().getChildren())
         {
             if (nodeDate.getValue().equals(newDate))
             {
+                nodeDate.setExpanded(true);
                 CheckDate = true;
                 CheckTime = false;
                 for (TreeItem<String> nodeTime : nodeDate.getChildren())
                 {
 
                     if (nodeTime.getValue().equals(newTime)) {
+                        nodeTime.setExpanded(true);
                         Integer PalletCount = Integer.parseInt(nodeTime.getChildren().get(0).getValue());
                         PalletCount += Integer.parseInt(newPalletCount);
                         nodeTime.getChildren().get(0).setValue(PalletCount.toString());
@@ -60,7 +63,8 @@ public class LiveLoadPolandInputController implements Initializable {
                 }
                 if (!CheckTime)
                 {
-                    TreeItem newNodeTime = new TreeItem<>(newTime);
+                    TreeItem<String> newNodeTime = new TreeItem<>(newTime);
+                    newNodeTime.setExpanded(true);
                     newNodeTime.getChildren().add(new TreeItem<>(newPalletCount));
                     nodeDate.getChildren().add(newNodeTime);
                 }
@@ -69,10 +73,12 @@ public class LiveLoadPolandInputController implements Initializable {
         }
         if (!CheckDate)
         {
-            TreeItem newNodeDate = new TreeItem<>(newDate);
-            TreeItem newNodeTime = new TreeItem<>(newTime);
-            //newNodeTime.getChildren().add(new TreeItem<>(newPalletCount));
-            //newNodeDate.getChildren().add(newNodeDate);
+            TreeItem<String> newNodeDate = new TreeItem<>(newDate);
+            newNodeDate.setExpanded(true);
+            TreeItem<String> newNodeTime = new TreeItem<>(newTime);
+            newNodeTime.setExpanded(true);
+            newNodeTime.getChildren().add(new TreeItem<>(newPalletCount));
+            newNodeDate.getChildren().add(newNodeTime);
             Tree.getRoot().getChildren().add(newNodeDate);
         }
     }
@@ -83,7 +89,8 @@ public class LiveLoadPolandInputController implements Initializable {
         for (TreeItem<String> node : Tree.selectionModelProperty().get().getSelectedItems())
         {
             if (node != Tree.getRoot()) {
-                toRemove.add(node);
+                if (node.isLeaf()) toRemove.add(node.getParent());
+                else toRemove.add(node);
             }
         }
         if (toRemove.size() < 1) GUIController.showMsgWarrning(Alert.AlertType.INFORMATION, "Select in Tree View to Remove");
@@ -99,8 +106,11 @@ public class LiveLoadPolandInputController implements Initializable {
         TreeItem<String> root = new TreeItem<>("Pallet To Add");
         Tree.setRoot(root);
         SelectedDate.setShowWeekNumbers(true);
+        SelectedDate.setValue(LocalDate.now());
         PaletCount.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
+        PaletCount.setText("0");
         SelectedTime.setTextFormatter(new TextFormatter<>(new LocalTimeStringConverter()));
+        SelectedTime.setText("00:00");
     }
 
     public ArrayList<Pair<LocalDateTime, Integer>> getReturnValue() {
