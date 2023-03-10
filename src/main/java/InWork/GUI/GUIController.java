@@ -1,7 +1,7 @@
 package InWork.GUI;
 
 import InWork.Controllers.DataBaseController;
-import InWork.GUI.Controllers.LiveLoadPolandInputController;
+import InWork.GUI.Controllers.LiveLoadPolandDialogController;
 import InWork.GUI.Controllers.TableKTWController;
 import InWork.Settings;
 import javafx.application.Platform;
@@ -21,36 +21,49 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class GUIController {
-
     static private GUIController Instance;
-    static public GUIController getInstance()
-    {
-        if (Instance == null) showMsgWarrning(Alert.AlertType.ERROR, "GUI not Started!!!!");
+
+    static private Alert CreatAlert(Alert.AlertType alertType, String Title, String Header, String Description) {
+        Alert alert = new Alert(alertType);
+        if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object() {}.getClass().getResource("Dark.css").toExternalForm());
+        if (!Title.equals("")) alert.setTitle(Title);
+        if (!Header.equals("")) alert.setHeaderText(Header);
+        if (!Description.equals("")) alert.getDialogPane().setExpandableContent(new ScrollPane(new TextArea(Description)));
+        return alert;
+    }
+    static public void showInformDialog(String Title, String Header, String Description) {
+        Platform.runLater(() -> {
+            String newTitle = Title;
+            if (!newTitle.equals("")) newTitle = "Information Dialog";
+            Alert alert = CreatAlert(Alert.AlertType.INFORMATION, newTitle, Header, Description);
+            alert.show();
+        });
+    }
+    static public void showWarrningDialog(String Title, String Header, String Description) {
+        Platform.runLater(() -> {
+            String newTitle = Title;
+            if (!newTitle.equals("")) newTitle = "Warrning Dialog";
+            Alert alert = CreatAlert(Alert.AlertType.WARNING, newTitle, Header, Description);
+            alert.show();
+        });
+    }
+    static public void showErrorDialog(String Title, String Header, String Description) {
+        Platform.runLater(() -> {
+            String newTitle = Title;
+            if (!newTitle.equals("")) newTitle = "Error Dialog";
+            Alert alert = CreatAlert(Alert.AlertType.ERROR, newTitle, Header, Description);
+            alert.show();
+        });
+    }
+    static public GUIController getInstance() {
+        if (Instance == null) showErrorDialog ("GUI ERROR", "", "GUI not Started!!!!");
         return Instance;
     }
-    static public void showMsgWarrning(Alert.AlertType AlertType, String Heder, String Description)    {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(AlertType);
-            if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object() {
-            }.getClass().getResource("Dark.css").toExternalForm());
-            alert.setHeaderText(Heder);
-            alert.getDialogPane().setExpandableContent(new ScrollPane(new TextArea(Description)));
-            alert.showAndWait();
-        });
-    }
-    static public void showMsgWarrning(Alert.AlertType AlertType, String Heder)    {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(AlertType);
-            if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object(){}.getClass().getResource("/Dark.css").toExternalForm());
-            alert.setHeaderText(Heder);
-            alert.showAndWait();
-        });
-    }
-    static public File DirectoryChoiser (String Title, Stage stage)    {
+    static public File DirectoryChoiser (String Title, Stage stage) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File(Settings.getInstance().getFileChoserPath()));
         directoryChooser.setTitle(Title);
@@ -100,8 +113,7 @@ public class GUIController {
         }
         return null;
     }
-    static public void StartGUI(Stage MainStage)
-    {
+    static public void StartGUI(Stage MainStage) {
         try {
             Parent root = FXMLLoader.load(new Object(){}.getClass().getResource("/fxml/SelectFactory.fxml"));
             Scene scene = new Scene(root);
@@ -114,15 +126,19 @@ public class GUIController {
             throw new RuntimeException(e);
         }
     }
-    static public void setDefaultStageProperty(Stage stage)
-    {
+    static public void setDefaultStageProperty(Stage stage) {
         Platform.runLater(() -> {
             stage.setTitle("Upfield");
             stage.getIcons().add(new Image("/logo.png"));
         });
     }
-    private GUIController(Stage MainStage)
-    {
+
+    private final Stage MainStage;
+    private Stage SettingsStage;
+    private Stage TableKTWStage;
+    private Stage LiveLoadPolandDialogStage;
+    private TableKTWController tableKTWController;
+    private GUIController(Stage MainStage) {
         this.MainStage = MainStage;
         Settings.getInstance().darkModeProperty().addListener( (observable, oldValue, newValue) ->
                 Platform.runLater(() -> {
@@ -137,14 +153,6 @@ public class GUIController {
                     }
                 }));
     }
-
-    private final Stage MainStage;
-    private Stage SettingsStage;
-    private Stage TableKTWStage;
-    private Stage LiveLoadPolandInputStage;
-    private TableKTWController tableKTWController;
-    private LiveLoadPolandInputController liveLoadPolandInputController;
-
     public void CreatSetting()
     {
         try {
@@ -202,13 +210,17 @@ public class GUIController {
             TableKTWStage.show();
             LocalDateTime LastDate = Settings.getInstance().getLastimportKTW();
             String LastDateText = LastDate != null ? LastDate.toString() : "Never";
+            String decription = "";
             try {
-                showMsgWarrning(Alert.AlertType.INFORMATION, "Record In Databas: " + DataBaseController.getInstance().getKtwCount() + "\n" +
-                        "Last Import KTW: " + LastDateText);
+                decription = "Record In Databas: " + DataBaseController.getInstance().getKtwCount() + "\n" +
+                        "Last Import KTW: " + LastDateText;
+
             } catch (SQLException e) {
-                showMsgWarrning(Alert.AlertType.INFORMATION, "Cannot Get Info From Data Base"+ "\n" +
-                        "Last Import KTW: " + LastDateText);
+                decription = "Cannot Get Info From Data Base" + "\n" +
+                        "Last Import KTW: " + LastDateText;
                 throw new RuntimeException(e);
+            } finally {
+                showInformDialog("Data Base Information", "", decription);
             }
         }
         else {
@@ -239,34 +251,49 @@ public class GUIController {
         tableKTWController.ImportKTW(null);
     }
 
-    private void CreateLiveLoadPolandInput(Stage ParentStage)
+    private void CreateLiveLoadPolandDialog(Stage ParentStage, AtomicReference<ArrayList<Pair<LocalDateTime, Integer>>> returnValue)
     {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/LiveLoadPolandInput.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/LiveLoadPolandDialog.fxml"));
             Parent root = fxmlLoader.load();
-            liveLoadPolandInputController = fxmlLoader.getController();
+            LiveLoadPolandDialogController liveLoadPolandDialogController = fxmlLoader.getController();
+
             Scene scene = new Scene(root);
             if (Settings.getInstance().isDarkMode()) scene.getStylesheets().add(getClass().getResource("/Dark.css").toExternalForm());
-            LiveLoadPolandInputStage = new Stage();
-            LiveLoadPolandInputStage.initModality(Modality.WINDOW_MODAL);
-            LiveLoadPolandInputStage.setScene(scene);
-            setDefaultStageProperty(LiveLoadPolandInputStage);
-            LiveLoadPolandInputStage.initOwner(ParentStage);
+            LiveLoadPolandDialogStage = new Stage();
+            LiveLoadPolandDialogStage.initModality(Modality.WINDOW_MODAL);
+            LiveLoadPolandDialogStage.setScene(scene);
+            setDefaultStageProperty(LiveLoadPolandDialogStage);
+            LiveLoadPolandDialogStage.initOwner(ParentStage);
+            LiveLoadPolandDialogStage.setOnCloseRequest(event -> returnValue.set(liveLoadPolandDialogController.getReturnValue()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
 
-    public ArrayList<Pair<LocalDateTime, Integer>> ShowLiveLoadPolandInput(Stage ParentStage)    {
-        AtomicReference<ArrayList<Pair<LocalDateTime, Integer>>> ret = new AtomicReference<>(new ArrayList<>());
+    }
+    public ArrayList<Pair<LocalDateTime, Integer>> ShowLiveLoadPolandDialog(Stage ParentStage)    {
+        AtomicReference<ArrayList<Pair<LocalDateTime, Integer>>> returnValue = new AtomicReference<>(new ArrayList<>());
+        final CountDownLatch latch = new CountDownLatch(1);
         if (Platform.isFxApplicationThread())
         {
-            CreateLiveLoadPolandInput(ParentStage);
-            LiveLoadPolandInputStage.setOnCloseRequest(event -> ret.set(liveLoadPolandInputController.getReturnValue()));
-            LiveLoadPolandInputStage.showAndWait();
+            CreateLiveLoadPolandDialog(ParentStage, returnValue);
+            LiveLoadPolandDialogStage.showAndWait();
+
         }else {
-         System.out.println("LiveLoadPolandInput call outside Fx Thread. It can't be handle");
+            Platform.runLater(()-> {
+                CreateLiveLoadPolandDialog(ParentStage, returnValue);
+                LiveLoadPolandDialogStage.showAndWait();
+                latch.countDown();
+            });
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
-        return ret.get();
+        return returnValue.get();
+    }
+    public Stage getMainStage() {
+        return MainStage;
     }
 }

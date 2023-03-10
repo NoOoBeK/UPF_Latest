@@ -17,7 +17,7 @@ public class ExcelController
         try {
             return WorkbookFactory.create(file);
         } catch (IOException e) {
-            GUIController.showMsgWarrning(Alert.AlertType.ERROR, "Opening Excel file ERROR", e.getLocalizedMessage());
+            GUIController.showErrorDialog("","Opening Excel file ERROR", e.getLocalizedMessage());
             e.printStackTrace();
         }
         return null;
@@ -27,15 +27,15 @@ public class ExcelController
         try {
             out = new FileOutputStream(Filepath);
         } catch (FileNotFoundException e) {
+            GUIController.showWarrningDialog("","File " + Filepath + " is open, close it and try again", e.getLocalizedMessage());
             e.printStackTrace();
-            GUIController.showMsgWarrning(Alert.AlertType.WARNING, "File " + Filepath + " is open, close it and try again");
             return;
         }
         try {
             book.write(out);
             out.close();
         } catch (IOException e) {
-            GUIController.showMsgWarrning(Alert.AlertType.ERROR, "Problem with saving File", e.getMessage());
+            GUIController.showErrorDialog("", "Problem with saving File", e.getLocalizedMessage());
             e.printStackTrace();
         }
     }

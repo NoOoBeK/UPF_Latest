@@ -7,17 +7,14 @@ import InWork.DataStructure.DataPP;
 import InWork.DataStructure.LiveLoadKTW;
 import InWork.DataStructure.LiveLoadPOL;
 import InWork.GUI.GUIController;
-import InWork.Operations.NumberHandler;
 import InWork.Settings;
 import javafx.concurrent.Task;
-import javafx.scene.control.Alert;
 import javafx.util.Pair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
-import javax.swing.*;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -33,15 +30,13 @@ public class LiveLoadKTWTask extends Task {
     private final File SourceFile;
     private int AllToHandle;
     private int Handle;
-    private final ArrayList<Pair<LocalDateTime, Integer>> palletToAdd;
 
-    public LiveLoadKTWTask (File SourceFile, boolean Ireland, boolean Plan, boolean Poland, ArrayList<Pair<LocalDateTime, Integer>> palletToAdd)
+    public LiveLoadKTWTask (File SourceFile, boolean Ireland, boolean Plan, boolean Poland)
     {
         this.Ireland = Ireland;
         this.Plan = Plan;
         this.Poland = Poland;
         this.SourceFile = SourceFile;
-        this.palletToAdd = palletToAdd;
         AllToHandle = 0;
         Handle = 0;
     }
@@ -122,7 +117,7 @@ public class LiveLoadKTWTask extends Task {
         for (DataPP danePP : data) {
             corrData = DataKTWList.getInstance().getKTW(danePP.getSKU());
             if (corrData == null) {
-                GUIController.showMsgWarrning(Alert.AlertType.WARNING, "SKU " + danePP.getSKU() + " not find in Data Base");
+                GUIController.showWarrningDialog("", "", "SKU " + danePP.getSKU() + " not find in Data Base");
                 return ret;
             }
             LiveLoadKTW newRecord = new LiveLoadKTW();
@@ -348,10 +343,15 @@ public class LiveLoadKTWTask extends Task {
     private ArrayList<LiveLoadPOL> CalculatPoland(ArrayList<LiveLoadKTW> list) {
         updateMessage("Calculate Poland");
         String input;
-        do {
-            input = JOptionPane.showInputDialog(null, "Podaj początkową ilość palet", 0);
-        } while (!NumberHandler.isInteger(input));
-        int PalletCount = Integer.parseInt(input);
+        ArrayList<Pair<LocalDateTime, Integer>> palletToAdd = GUIController.getInstance().ShowLiveLoadPolandDialog(GUIController.getInstance().getMainStage());
+        int PalletCount = 0;
+        for (Pair<LocalDateTime, Integer> pair : palletToAdd)
+        {
+            if (pair.getKey() == null) {
+                PalletCount = pair.getValue();
+                break;
+            }
+        }
         ArrayList<LiveLoadPOL> ret = new ArrayList<>();
         LocalDateTime Now = LocalDateTime.now();
         Now.minus(Now.getSecond(), ChronoUnit.SECONDS);
@@ -394,8 +394,10 @@ public class LiveLoadKTWTask extends Task {
 
             for (Pair<LocalDateTime, Integer> pair : palletToAdd)
             {
-                double checkedTime = DateUtil.getExcelDate(pair.getKey());
-                if (checkedTime >= Start && checkedTime < (Start + TimeLenght)) PalletCount += pair.getValue();
+                if (pair.getKey() != null) {
+                    double checkedTime = DateUtil.getExcelDate(pair.getKey());
+                    if (checkedTime >= Start && checkedTime < (Start + TimeLenght)) PalletCount += pair.getValue();
+                }
             }
 
             for (LiveLoadKTW dane : list)
@@ -457,7 +459,7 @@ public class LiveLoadKTWTask extends Task {
     protected Object call() {
         if (!Ireland && !Plan && !Poland)
         {
-            GUIController.showMsgWarrning(Alert.AlertType.WARNING,"None Selected Skip Live Load");
+            GUIController.showWarrningDialog("","","None check box selected skip Live Load");
             updateProgress(0,1);
             updateMessage("Live Load Cancell");
             return null;
@@ -472,7 +474,7 @@ public class LiveLoadKTWTask extends Task {
             {
                 ExtendetInfo.append("SKU: ").append(var.getSku()).append(" Destination").append(var.getDest()).append("\n");
             }
-            GUIController.showMsgWarrning(Alert.AlertType.WARNING, "Don't recognized some Destination", ExtendetInfo.toString());
+            GUIController.showWarrningDialog("", "Don't recognized some Destination", ExtendetInfo.toString());
         }
         AllToHandle *= 2;
         AllToHandle /= 3;

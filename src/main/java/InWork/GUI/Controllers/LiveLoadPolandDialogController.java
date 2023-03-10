@@ -1,6 +1,9 @@
 package InWork.GUI.Controllers;
 
 import InWork.GUI.GUIController;
+import InWork.Operations.NumberHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,7 +12,6 @@ import javafx.util.Pair;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LocalTimeStringConverter;
 
-import javax.swing.plaf.metal.MetalBorders;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,11 +19,13 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class LiveLoadPolandInputController implements Initializable {
+public class LiveLoadPolandDialogController implements Initializable {
     @FXML
     private TreeView<String> Tree;
     @FXML
     private TextField PaletCount;
+    @FXML
+    private TextField StartingPalet;
     @FXML
     private DatePicker SelectedDate;
     @FXML
@@ -93,7 +97,7 @@ public class LiveLoadPolandInputController implements Initializable {
                 else toRemove.add(node);
             }
         }
-        if (toRemove.size() < 1) GUIController.showMsgWarrning(Alert.AlertType.INFORMATION, "Select in Tree View to Remove");
+        if (toRemove.size() < 1) GUIController.showInformDialog("", "", "Select in Tree View to Remove");
 
         for (TreeItem<String> node : toRemove)
         {
@@ -103,7 +107,7 @@ public class LiveLoadPolandInputController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TreeItem<String> root = new TreeItem<>("Pallet To Add");
+        TreeItem<String> root = new TreeItem<>("Starting Pallet = 0");
         Tree.setRoot(root);
         SelectedDate.setShowWeekNumbers(true);
         SelectedDate.setValue(LocalDate.now());
@@ -111,10 +115,19 @@ public class LiveLoadPolandInputController implements Initializable {
         PaletCount.setText("0");
         SelectedTime.setTextFormatter(new TextFormatter<>(new LocalTimeStringConverter()));
         SelectedTime.setText("00:00");
+        StartingPalet.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
+        StartingPalet.setText("0");
+        StartingPalet.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (NumberHandler.isInteger(newValue)) Tree.getRoot().setValue("Starting Pallet = " + newValue);
+            }
+        });
     }
 
     public ArrayList<Pair<LocalDateTime, Integer>> getReturnValue() {
         ArrayList<Pair<LocalDateTime, Integer>> ret = new ArrayList<>();
+        ret.add(new Pair<>(null, Integer.parseInt(StartingPalet.getText())));
         LocalTime newLocalTime;
         LocalDate newLocalDate;
         int newCount;

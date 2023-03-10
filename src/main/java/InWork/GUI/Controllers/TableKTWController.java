@@ -60,7 +60,7 @@ public class TableKTWController implements Initializable {
             Thread BackGroundTask = new Thread(task);
             BackGroundTask.setDaemon(true);
             BackGroundTask.start();
-        } else GUIController.showMsgWarrning(Alert.AlertType.WARNING, "Import KTW In Progress");
+        } else GUIController.showWarrningDialog("", "", "Import KTW In Progress");
     }
 
     @Override

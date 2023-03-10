@@ -47,23 +47,20 @@ public class SelectFactoryController implements Initializable {
         if (!LiveLoadRunning.getValue())
         {
             File SouceFile = GUIController.ChoseExcelFile("Select Katowice Data Excel", (Stage)LiveLoadIreland.getScene().getWindow());
+            if(SouceFile == null) return;
             if (!SouceFile.exists())
             {
-                GUIController.showMsgWarrning(Alert.AlertType.WARNING, "File " + SouceFile.toString() + " not exist");
+                GUIController.showWarrningDialog("", "", "File " + SouceFile.toString() + " not exist");
                 return;
             } if (!SouceFile.canRead())
         {
-            GUIController.showMsgWarrning(Alert.AlertType.WARNING, "File " + SouceFile.toString() + " can't be Read");
+            GUIController.showWarrningDialog("", "", "File " + SouceFile.toString() + " can't be Read");
             return;
         }
-            ArrayList<Pair<LocalDateTime, Integer>> PalletToAdd = new ArrayList<>();
-            if(LiveLoadPoland.isSelected()) PalletToAdd = GUIController.getInstance().ShowLiveLoadPolandInput((Stage)LiveLoadProgressBar.getScene().getWindow());
-
             LiveLoadRunning.unbind();
             LiveLoadRunning.setValue(true);
 
-
-            LiveLoadKTWTask task = new LiveLoadKTWTask(SouceFile, LiveLoadIreland.isSelected(), LiveLoadPlan.isSelected(), LiveLoadPoland.isSelected(), PalletToAdd);
+            LiveLoadKTWTask task = new LiveLoadKTWTask(SouceFile, LiveLoadIreland.isSelected(), LiveLoadPlan.isSelected(), LiveLoadPoland.isSelected());
             LiveLoadProgressBar.progressProperty().unbind();
             LiveLoadProgressBar.progressProperty().bind(task.progressProperty());
             LiveLoadRunning.unbind();
@@ -73,7 +70,7 @@ public class SelectFactoryController implements Initializable {
             Thread BackGroundTask = new Thread(task);
             BackGroundTask.setDaemon(true);
             BackGroundTask.start();
-        } else GUIController.showMsgWarrning(Alert.AlertType.WARNING, "LiveLoadKTW in Progress");
+        } else GUIController.showWarrningDialog("", "", "LiveLoadKTW in Progress");
     }
     @FXML
     void OpenSettings(ActionEvent event) {

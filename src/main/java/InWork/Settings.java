@@ -71,7 +71,7 @@ public class Settings {
                 fileReader.close();
             }
         } catch (FileNotFoundException e) {
-            if (ShowInfo) GUIController.showMsgWarrning(Alert.AlertType.INFORMATION, "Can't find Settings, load default settings");
+            if (ShowInfo) GUIController.showInformDialog("", "", "Can't find Settings, load default settings");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,7 +94,7 @@ public class Settings {
             fileWriter.write("LiveLoadKTWMinPaletValueNoSkip=" + LiveLoadKTWMinPaletValueNoSkip.getValue() + "\n");
             fileWriter.close();
         } catch (IOException e) {
-            GUIController.showMsgWarrning(Alert.AlertType.WARNING,"Save Settings Error", e.getMessage());
+            GUIController.showWarrningDialog("","Save Settings Error", e.getMessage());
             e.printStackTrace();
         }
     }

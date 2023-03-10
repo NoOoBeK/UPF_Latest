@@ -140,7 +140,7 @@ public class ImportKTWTask extends Task<Boolean>{
                     }
                 }
                 if (!find) {
-                    if (!DataBase.delateKTW(Record)) GUIController.showMsgWarrning(Alert.AlertType.ERROR, "Failed removal of SKU " + Record.getSKU() + " from the database");
+                    if (!DataBase.delateKTW(Record)) GUIController.showErrorDialog("", "", "Failed removal of SKU " + Record.getSKU() + " from the database");
                     else DataList.remove(i);
                 }
                 Handle++;
@@ -165,7 +165,7 @@ public class ImportKTWTask extends Task<Boolean>{
                 updateProgress(Handle, AllToHandle);
             }
         } catch (SQLException e) {
-            GUIController.showMsgWarrning(Alert.AlertType.WARNING, "DataBase Error", e.getMessage());
+            GUIController.showErrorDialog("","DataBase Error", e.getMessage());
             updateMessage("Error");
             e.printStackTrace();
             return false;
