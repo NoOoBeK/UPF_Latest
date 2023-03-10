@@ -9,4 +9,8 @@ public class MainFx extends Application {
     public void start(Stage stage) {
         GUIController.StartGUI(stage);
     }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
