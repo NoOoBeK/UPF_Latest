@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="234.0" prefWidth="488.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InWork.GUI.Controllers.KatowiceTabController">
+   <children>
+      <Button layoutX="25.0" layoutY="24.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ViewDataKTW" text="View Data KTW" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="14.0" />
+      <Button layoutX="149.0" layoutY="61.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#LiveLoadKTW" text="Live Load Factory" AnchorPane.leftAnchor="139.0" AnchorPane.topAnchor="51.0" />
+      <Separator layoutX="10.0" layoutY="60.0" maxHeight="1.0" maxWidth="1.7976931348623157E308" minHeight="0.0" prefHeight="0.0" prefWidth="335.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+      <Button layoutX="149.0" layoutY="24.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ImportKTW" text="Import Data KTW" AnchorPane.leftAnchor="139.0" AnchorPane.topAnchor="14.0" />
+      <CheckBox fx:id="LiveLoadIreland" layoutX="24.0" layoutY="65.0" mnemonicParsing="false" text="Ireland" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="55.0" />
+      <CheckBox fx:id="LiveLoadPlan" layoutX="24.0" layoutY="95.0" mnemonicParsing="false" text="Plan" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="85.0" />
+      <CheckBox fx:id="LiveLoadPoland" layoutX="24.0" layoutY="125.0" mnemonicParsing="false" text="Poland" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="115.0" />
+      <Label fx:id="LiveLoadProgressText" layoutX="123.0" layoutY="95.0" AnchorPane.leftAnchor="113.0" AnchorPane.topAnchor="85.0" />
+      <ProgressBar fx:id="LiveLoadProgressBar" layoutX="123.0" layoutY="125.0" prefHeight="18.0" prefWidth="181.0" progress="0.0" AnchorPane.leftAnchor="113.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="115.0" />
+      <Separator layoutX="10.0" layoutY="160.0" maxHeight="1.0" maxWidth="1.7976931348623157E308" minHeight="0.0" prefHeight="0.0" prefWidth="335.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0" />
+   </children>
+</AnchorPane>

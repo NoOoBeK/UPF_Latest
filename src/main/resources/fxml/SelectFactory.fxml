@@ -1,39 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="InWork.GUI.Controllers.SelectFactoryController">
    <center>
       <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="335.0" styleClass="root" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-            <Tab text="Katowice">
-               <content>
-                  <AnchorPane>
-                     <children>
-                        <Button layoutX="15.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ViewDataKTW" text="View Data KTW" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="14.0" />
-                        <Button layoutX="139.0" layoutY="51.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#LiveLoadKTW" text="Live Load Factory" AnchorPane.leftAnchor="139.0" AnchorPane.topAnchor="51.0" />
-                        <Separator layoutX="9.0" layoutY="63.0" maxHeight="1.0" maxWidth="1.7976931348623157E308" minHeight="0.0" prefHeight="0.0" prefWidth="335.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
-                        <Button layoutX="139.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#ImportKTW" text="Import Data KTW" AnchorPane.leftAnchor="139.0" AnchorPane.topAnchor="14.0" />
-                        <CheckBox fx:id="LiveLoadIreland" layoutX="14.0" layoutY="53.0" mnemonicParsing="false" text="Ireland" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="55.0" />
-                        <CheckBox fx:id="LiveLoadPlan" layoutX="14.0" layoutY="78.0" mnemonicParsing="false" text="Plan" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="85.0" />
-                        <CheckBox fx:id="LiveLoadPoland" layoutX="14.0" layoutY="105.0" mnemonicParsing="false" text="Poland" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="115.0" />
-                        <Label fx:id="LiveLoadProgressText" layoutX="113.0" layoutY="85.0" text="Label" AnchorPane.leftAnchor="113.0" AnchorPane.topAnchor="85.0" />
-                        <ProgressBar fx:id="LiveLoadProgressBar" layoutX="113.0" layoutY="115.0" prefHeight="18.0" prefWidth="181.0" progress="0.0" AnchorPane.leftAnchor="113.0" AnchorPane.topAnchor="115.0" />
-                        <Separator layoutX="19.0" layoutY="73.0" maxHeight="1.0" maxWidth="1.7976931348623157E308" minHeight="0.0" prefHeight="0.0" prefWidth="335.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0" />
-                     </children>
-                  </AnchorPane>
-               </content>
+            <Tab fx:id="KatowiceTab" text="Katowice">
+                <content>
+                    <fx:include source="KatowiceTab.fxml"/>
+                </content>
             </Tab>
-          <Tab text="Logistic" />
+            <Tab fx:id="LogisticTab" text="Logistic">
+                <content>
+                    <fx:include source="LogisticTab.fxml"/>
+                </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>

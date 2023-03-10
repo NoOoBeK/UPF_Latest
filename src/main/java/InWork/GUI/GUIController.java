@@ -29,7 +29,7 @@ public class GUIController {
 
     static private Alert CreatAlert(Alert.AlertType alertType, String Title, String Header, String Description) {
         Alert alert = new Alert(alertType);
-        if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object() {}.getClass().getResource("Dark.css").toExternalForm());
+        if (Settings.getInstance().isDarkMode()) alert.getDialogPane().getStylesheets().add(new Object() {}.getClass().getResource("/Dark.css").toExternalForm());
         if (!Title.equals("")) alert.setTitle(Title);
         if (!Header.equals("")) alert.setHeaderText(Header);
         if (!Description.equals("")) alert.getDialogPane().setExpandableContent(new ScrollPane(new TextArea(Description)));

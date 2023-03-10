@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LiveLoadKTWTask extends Task {
+public class LiveLoadKTWTask extends Task<Boolean> {
     private final boolean Ireland;
     private final boolean Plan;
     private final boolean Poland;
@@ -456,13 +456,13 @@ public class LiveLoadKTWTask extends Task {
     }
 
     @Override
-    protected Object call() {
+    protected Boolean call() {
         if (!Ireland && !Plan && !Poland)
         {
             GUIController.showWarrningDialog("","","None check box selected skip Live Load");
             updateProgress(0,1);
             updateMessage("Live Load Cancell");
-            return null;
+            return false;
         }
 
         ArrayList<ArrayList<LiveLoadKTW>> DataLiveLoad = ConvertPPdata(ImportExcelFile());
@@ -498,6 +498,6 @@ public class LiveLoadKTWTask extends Task {
         }
         updateProgress(1,1);
         updateMessage("Live Load Complet");
-        return null;
+        return true;
     }
 }
