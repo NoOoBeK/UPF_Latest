@@ -15,7 +15,6 @@
    <center>
       <TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="335.0" styleClass="root" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab text="Kleve" />
             <Tab text="Katowice">
                <content>
                   <AnchorPane>
@@ -34,7 +33,6 @@
                   </AnchorPane>
                </content>
             </Tab>
-            <Tab text="Pratau" />
           <Tab text="Logistic" />
         </tabs>
       </TabPane>
